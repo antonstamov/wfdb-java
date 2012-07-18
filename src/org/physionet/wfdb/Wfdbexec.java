@@ -34,20 +34,16 @@
 package org.physionet.wfdb;
 
 import java.io.BufferedReader;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
-
-import org.physionet.wfdb.rdsamp.Arguments;
 
 public class Wfdbexec {
 
-	private String TAG;
+	private String commandName;
 	protected static String WFDB_HOME;
 	private static String os_arch;
 	public static final String WFDB_JAVA_VERSION="Beta";
@@ -77,7 +73,7 @@ public class Wfdbexec {
 	}
 
 	protected void setExecName(String execName) {
-		TAG = execName;
+		commandName = execName;
 	}
 	/**
 	 * @return the commandInput
@@ -116,10 +112,8 @@ public class Wfdbexec {
 				results +=line +"\n";
 			p.waitFor();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return results;
@@ -129,17 +123,21 @@ public class Wfdbexec {
 	private void gen_exec_arguments() {
 		// Generates a list to be passed to the process builder that
 		// will eventually execute the code
-		commandInput.add(WFDB_HOME + TAG);
+		commandInput.add(WFDB_HOME + commandName);
 		for (String key : argumentLabels.keySet()) {
 			if(argumentValues.get(key).isEmpty()){
 				commandInput.add(argumentLabels.get(key));
 			}else{
-				commandInput.add(argumentLabels.get(key));
+				if(!argumentLabels.get(key).isEmpty()){
+					//Some arguments do not have a WFDB Flag
+					//but still have parameters, such as record name in Wfdbdesc
+					commandInput.add(argumentLabels.get(key));
+				}
 				commandInput.add(argumentValues.get(key));
 			}
 		}
 	}
-
+	
 	protected int get_num_arguments() {
 		return argumentLabels.size();
 	}
@@ -152,10 +150,6 @@ public class Wfdbexec {
 		return commandLine;
 	}
 	
-	public String getArgumentValue(Arguments arg) {
-		return this.argumentValues.get(arg.label);
-	}
-
 	public String exec() {
 		gen_exec_arguments();
 		ProcessBuilder launcher = new ProcessBuilder();

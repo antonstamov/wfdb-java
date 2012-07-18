@@ -33,14 +33,6 @@
  */
 package org.physionet.wfdb;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 /**
  * @author Ikaro Silva
  * 
@@ -48,9 +40,6 @@ import java.util.Map;
 public class Wrsamp extends Wfdbexec {
 
 	private static final String TAG = "wrsamp";
-	private Map<String, String> argumentLabels = new HashMap<String, String>();
-	private Map<String, String> argumentValues = new HashMap<String, String>();
-	private List<String> commandInput = new ArrayList<String>();
 
 	public static enum Arguments {
 		//Define input arguments syntax is:
@@ -80,42 +69,10 @@ public class Wrsamp extends Wfdbexec {
 		}
 	}
 
-	private void gen_exec_arguments() {
-		// Generates a list to be passed to the process builder that
-		// will eventually execute the code
-		commandInput.add(WFDB_HOME + TAG);
-		for (String key : argumentLabels.keySet()) {
-			if(argumentValues.get(key).isEmpty()){
-				commandInput.add(argumentLabels.get(key));
-			}else{
-				commandInput.add(argumentLabels.get(key));
-				commandInput.add(argumentValues.get(key));
-			}
-		}
+	public Wrsamp() {
+		setExecName(TAG);
 	}
-
-	public String exec() {
-		gen_exec_arguments();
-		ProcessBuilder launcher = new ProcessBuilder();
-		launcher.redirectErrorStream(true);
-		String results = "";
-		launcher.command(commandInput);
-		try {
-			Process p = launcher.start();
-			BufferedReader output = new BufferedReader(new InputStreamReader(
-					p.getInputStream()));
-			String line;
-			while ((line = output.readLine()) != null)
-				results += line + "\n";
-			p.waitFor();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		return results;
-	}
-
+	
 	public String getArgumentValue(Arguments arg) {
 		return this.argumentValues.get(arg.label);
 	}
