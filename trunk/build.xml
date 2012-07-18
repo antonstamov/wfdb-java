@@ -1,0 +1,67 @@
+<project name="wfdb" basedir="." default="jar">
+  <property name="src.dir"     value="src"/>
+  <property name="test.src.dir"     value="test"/>
+  <property name="build.dir"   value="build"/>
+  <property name="test.build.dir"   value="${build.dir}/test"/>
+  <property name="classes.dir" value="${build.dir}/classes"/>
+  <property name="jar.dir"     value="${build.dir}/jar"/>
+  <property name="report.dir"  value="${build.dir}/junitreport"/>
+
+  <target name="clean">
+    <delete dir="${build.dir}"/>
+  </target>
+
+  <target name="compile">
+    <mkdir dir="${classes.dir}"/>
+    <javac srcdir="${src.dir}" destdir="${classes.dir}" includeantruntime="yes"/>
+  </target>
+
+  <target name="jar" depends="compile">
+    <mkdir dir="${jar.dir}"/>
+    <jar destfile="${jar.dir}/wfdb.jar" basedir="${classes.dir}">
+      <manifest>
+        <attribute name="Main-Class" value="org.physionet.wfdb.rdsamp"/>
+      </manifest>
+    </jar>
+  </target>
+
+  <target name="compile-tests" depends="compile">
+    <mkdir dir="${test.build.dir}"/>
+    <javac srcdir="test" destdir="${test.build.dir}"
+           includeantruntime="true">
+      <classpath>
+        <dirset dir="${build.dir}"/>
+      </classpath>
+    </javac>
+  </target>
+
+  <target name="run">
+    <java jar="${jar.dir}/wfdb.jar" fork="true">
+      <arg value="-r 'mitdb/100' -t s10"/>
+    </java>
+  </target>
+
+  <target name="test" depends="compile-tests">
+    <mkdir dir="${report.dir}"/>
+    <junit printsummary="yes">
+      <classpath>
+        <dirset dir="${build.dir}"/>
+      </classpath>
+      <formatter type="plain"/>
+      <formatter type="xml"/>
+      <batchtest fork="no" todir="${report.dir}">
+        <fileset dir="test">
+          <include name="**/*Test*.java"/>
+        </fileset>
+      </batchtest>
+    </junit>
+  </target>
+
+  <target name="junitreport" depends="test">
+    <junitreport todir="${report.dir}">
+      <fileset dir="${report.dir}" includes="TEST-*.xml"/>
+      <report todir="${report.dir}"/>
+    </junitreport>
+  </target>
+
+</project>
