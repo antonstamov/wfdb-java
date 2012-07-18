@@ -33,6 +33,9 @@
  */ 
 package org.physionet.wfdb;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author ikaro
  *
@@ -45,8 +48,11 @@ public class wfdbdesc extends wfdbexec {
     	//Initialize base class
     	wfdbdesc my_wfdbdesc=new wfdbdesc();	
     	//Run executable
-    	System.out.println(my_wfdbdesc.output(TAG,args[0]));
+    	List<String> inputs = new ArrayList<String>();
+    	for(int i=0;i<args.length;i++)
+    		inputs.add(args[i]);
+    	System.out.println(my_wfdbdesc.exec(TAG,inputs));
     }
-
-
 }
+
+
