@@ -37,17 +37,15 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 
 /**
  * @author Ikaro Silva
  * 
  */
-public class rdsamp extends wfdbexec {
+public class Rdsamp extends wfdbexec {
 
 	private static final String TAG = "rdsamp";
 	private Map<String, String> argumentLabels = new HashMap<String, String>();
@@ -167,17 +165,4 @@ public class rdsamp extends wfdbexec {
 		this.argumentLabels.put("printTextFormat", ptf.label);
 	}
 
-	/**
-	 * @param args
-	 * @throws InterruptedException
-	 * @throws IOException
-	 */
-	public static void main(String[] args) {
-		// Simple test of for the class
-		rdsamp rdsampexec = new rdsamp();
-		rdsampexec.setArgumentValue(rdsamp.Arguments.stopTime, "10s");
-		rdsampexec.setArgumentValue(rdsamp.PrintTimeFormatLabel.p);
-		rdsampexec.setArgumentValue(rdsamp.Arguments.recordName, "mitdb/100");
-		System.out.println(rdsampexec.exec());
-	}
 }
