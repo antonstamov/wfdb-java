@@ -45,9 +45,9 @@ import java.util.Map;
  * @author Ikaro Silva
  * 
  */
-public class Wfdbconfig extends wfdbexec {
+public class Wrann extends wfdbexec {
 
-	private static final String TAG = "wfdb-config";
+	private static final String TAG = "wrann";
 	private Map<String, String> argumentLabels = new HashMap<String, String>();
 	private Map<String, String> argumentValues = new HashMap<String, String>();
 	private List<String> commandInput = new ArrayList<String>();
@@ -55,9 +55,8 @@ public class Wfdbconfig extends wfdbexec {
 	public static enum Arguments {
 		//Define input arguments syntax is:
 		// argumentName(number of parameters,is optional,WDFD command string)
-		cflags(0, true, "--cflags"),
-		libs(0, true, "--libs"),
-		version(0, true, "--version");
+		recordName(1, false, "-r"),
+		annotatorName(1,false, "-a");
 		public int parameters;
 		public boolean optional;
 		public String label;
@@ -67,7 +66,6 @@ public class Wfdbconfig extends wfdbexec {
 			this.label = label;
 		}
 	}
-
 	private void gen_exec_arguments() {
 		// Generates a list to be passed to the process builder that
 		// will eventually execute the code
@@ -109,8 +107,12 @@ public class Wfdbconfig extends wfdbexec {
 		return this.argumentValues.get(arg.label);
 	}
 
-	public void setArgumentValue(Arguments arg) {
-		this.argumentValues.put(arg.name(), "");
+	public void setArgumentValue(Arguments arg, String value) {
+		if (arg.parameters > 0) {
+			this.argumentValues.put(arg.name(), value);
+		} else {
+			this.argumentValues.put(arg.name(), "");
+		}
 		this.argumentLabels.put(arg.name(), arg.label);
 	}
 
