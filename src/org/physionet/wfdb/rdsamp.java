@@ -39,7 +39,7 @@ import java.io.IOException;
  * @author Ikaro Silva
  * 
  */
-public class rdsamp extends wfdbexec {
+public class rdsamp extends Wfdbexec {
 
 	public rdsamp() {
 		setExecName("rdsamp");

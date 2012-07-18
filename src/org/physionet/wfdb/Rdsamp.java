@@ -45,7 +45,7 @@ import java.util.Map;
  * @author Ikaro Silva
  * 
  */
-public class Rdsamp extends wfdbexec {
+public class Rdsamp extends Wfdbexec {
 
 	private static final String TAG = "rdsamp";
 	private Map<String, String> argumentLabels = new HashMap<String, String>();

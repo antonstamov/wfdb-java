@@ -2,7 +2,7 @@ package org.physionet.wfdb;
 
 import java.io.IOException;
 
-public class rdann extends wfdbexec {
+public class rdann extends Wfdbexec {
 
 	public rdann() {
 		setExecName("rdann");

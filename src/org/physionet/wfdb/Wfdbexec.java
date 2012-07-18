@@ -45,7 +45,7 @@ import java.util.Properties;
 
 import org.physionet.wfdb.rdsamp.Arguments;
 
-public class wfdbexec {
+public class Wfdbexec {
 
 	private String TAG;
 	protected static String WFDB_HOME;
@@ -62,7 +62,7 @@ public class wfdbexec {
 	}
 
 	//Public Methods
-	public wfdbexec(){
+	public Wfdbexec(){
 		WFDB_HOME="/afs/ecg.mit.edu/software/wfdb/amd64_linux26/current/bin/";
 		set_os_arch();
 	}
@@ -104,7 +104,7 @@ public class wfdbexec {
 
 		ProcessBuilder launcher=new ProcessBuilder();
 		launcher.redirectErrorStream(true);
-		inputs.add(0,wfdbexec.get_WFDB_HOME() + command);
+		inputs.add(0,Wfdbexec.get_WFDB_HOME() + command);
 		launcher.command(inputs);
 		String results="";
 		try {
@@ -126,7 +126,7 @@ public class wfdbexec {
 
 	}
 
-	protected void gen_exec_arguments() {
+	private void gen_exec_arguments() {
 		// Generates a list to be passed to the process builder that
 		// will eventually execute the code
 		commandInput.add(WFDB_HOME + TAG);
