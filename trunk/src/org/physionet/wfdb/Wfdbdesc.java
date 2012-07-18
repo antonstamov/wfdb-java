@@ -45,7 +45,7 @@ import java.util.Map;
 	 * @author Ikaro Silva
 	 * 
 	 */
-	public class Wfdbdesc extends wfdbexec {
+	public class Wfdbdesc extends Wfdbexec {
 
 		private static final String TAG = "wfdbdesc";
 		private Map<String, String> argumentLabels = new HashMap<String, String>();
