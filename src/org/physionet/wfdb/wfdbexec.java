@@ -37,15 +37,23 @@ import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
+
+import org.physionet.wfdb.rdsamp.Arguments;
 
 public class wfdbexec {
 
-	private static final String TAG="wfdbexec";
+	private String TAG;
 	protected static String WFDB_HOME;
 	private static String os_arch;
 	public static final String WFDB_JAVA_VERSION="Beta";
+	private List<String> commandInput = new ArrayList<String>();
+	protected Map<String, String> argumentLabels = new HashMap<String, String>();
+	protected Map<String, String> argumentValues = new HashMap<String, String>();
 	
 	
 	//Abstracts be implemented by inherited classes
@@ -66,6 +74,30 @@ public class wfdbexec {
 	}
 	public static String get_os_arch() {
 		return os_arch;
+	}
+
+	protected void setExecName(String execName) {
+		TAG = execName;
+	}
+	/**
+	 * @return the commandInput
+	 */
+	public List<String> getCommandInput() {
+		return commandInput;
+	}
+
+	/**
+	 * @return the argumentLabels
+	 */
+	public Map<String, String> getArgumentLabels() {
+		return argumentLabels;
+	}
+
+	/**
+	 * @return the argumentValues
+	 */
+	public Map<String, String> getArgumentValues() {
+		return argumentValues;
 	}
 
 	public String exec(String command,List<String> inputs){
@@ -92,6 +124,61 @@ public class wfdbexec {
 		}
 		return results;
 
+	}
+
+	protected void gen_exec_arguments() {
+		// Generates a list to be passed to the process builder that
+		// will eventually execute the code
+		commandInput.add(WFDB_HOME + TAG);
+		for (String key : argumentLabels.keySet()) {
+			if(argumentValues.get(key).isEmpty()){
+				commandInput.add(argumentLabels.get(key));
+			}else{
+				commandInput.add(argumentLabels.get(key));
+				commandInput.add(argumentValues.get(key));
+			}
+		}
+	}
+
+	protected int get_num_arguments() {
+		return argumentLabels.size();
+	}
+	
+	public String get_command_line() {
+		String commandLine = "";
+		for(String argument: commandInput) {
+			commandLine += argument + " ";
+		}
+		return commandLine;
+	}
+	
+	public String getArgumentValue(Arguments arg) {
+		return this.argumentValues.get(arg.label);
+	}
+
+	public String exec() {
+		gen_exec_arguments();
+		ProcessBuilder launcher = new ProcessBuilder();
+		launcher.redirectErrorStream(true);
+		String results = "";
+	
+		Map<String,String> env = launcher.environment();
+		env.put("LD_LIBRARY_PATH", "/afs/ecg.mit.edu/software/wfdb/@sys/current/lib64");
+		launcher.command(getCommandInput());
+		try {
+			Process p = launcher.start();
+			BufferedReader output = new BufferedReader(new InputStreamReader(
+					p.getInputStream()));
+			String line;
+			while ((line = output.readLine()) != null)
+				results += line + "\n";
+			p.waitFor();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		return results;
 	}
 
 	//Private Methods
