@@ -1,0 +1,3 @@
+setenv WFDB ". ${HOME}/database /afs/.ecg.mit.edu/software/wfdb/i386_linux26/wfdb_v10.5.4/database /cdrom http://www.physionet.org/physiobank/database"
+# Change www.physionet.org above to your favorite mirror if you wish
+setenv WFDBCAL wfdbcal
