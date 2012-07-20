@@ -36,6 +36,8 @@ package org.physionet.wfdb;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -43,9 +45,14 @@ import java.util.Map;
 
 public class Wfdbexec {
 
+	private static final String TAG="Wfdbexec";
+	private static final String WFDB_NATIVE_BIN_FOLDER="nativelibs";
 	private String commandName;
-	protected static String WFDB_HOME;
-	private static String os_arch;
+	protected static String WFDB_JAVA_HOME;
+	protected static String WFDB_NATIVE_BIN;
+	private static String osArch;
+	private static String osName;
+	private static String fileSeparator;
 	public static final String WFDB_JAVA_VERSION="Beta";
 	private List<String> commandInput = new ArrayList<String>();
 	protected Map<String, String> argumentLabels = new HashMap<String, String>();
@@ -59,19 +66,8 @@ public class Wfdbexec {
 
 	//Public Methods
 	public Wfdbexec(){
-		WFDB_HOME="/afs/ecg.mit.edu/software/wfdb/amd64_linux26/current/bin/";
-		set_os_arch();
+		set_environment();
 	}
-	public static void set_WFDB_HOME(String str){
-		WFDB_HOME=str;
-	}
-	public static String get_WFDB_HOME(){
-		return WFDB_HOME;
-	}
-	public static String get_os_arch() {
-		return os_arch;
-	}
-
 	protected void setExecName(String execName) {
 		commandName = execName;
 	}
@@ -100,7 +96,7 @@ public class Wfdbexec {
 
 		ProcessBuilder launcher=new ProcessBuilder();
 		launcher.redirectErrorStream(true);
-		inputs.add(0,Wfdbexec.get_WFDB_HOME() + command);
+		inputs.add(0,Wfdbexec.WFDB_NATIVE_BIN + command);
 		launcher.command(inputs);
 		String results="";
 		try {
@@ -111,11 +107,12 @@ public class Wfdbexec {
 			while ((line = output.readLine()) != null)
 				results +=line +"\n";
 			p.waitFor();
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
-		}
+		} 
 		return results;
 
 	}
@@ -123,7 +120,7 @@ public class Wfdbexec {
 	private void gen_exec_arguments() {
 		// Generates a list to be passed to the process builder that
 		// will eventually execute the code
-		commandInput.add(WFDB_HOME + commandName);
+		commandInput.add(WFDB_NATIVE_BIN + commandName);
 		for (String key : argumentLabels.keySet()) {
 			if(argumentValues.get(key).isEmpty()){
 				commandInput.add(argumentLabels.get(key));
@@ -156,8 +153,8 @@ public class Wfdbexec {
 		launcher.redirectErrorStream(true);
 		String results = "";
 	
-		Map<String,String> env = launcher.environment();
-		env.put("LD_LIBRARY_PATH", "/afs/ecg.mit.edu/software/wfdb/@sys/current/lib64");
+		//Map<String,String> env = launcher.environment();
+		//env.put("LD_LIBRARY_PATH", "/afs/ecg.mit.edu/software/wfdb/@sys/current/lib64");
 		launcher.command(getCommandInput());
 		try {
 			Process p = launcher.start();
@@ -176,9 +173,31 @@ public class Wfdbexec {
 	}
 
 	//Private Methods
-	private static void set_os_arch() {
-		os_arch = System.getProperty("os.arch");
+	private static void set_environment() {
+		osArch = System.getProperty("os.arch");
+		fileSeparator=System.getProperty("file.separator");
+		osName=System.getProperty("os.name");
+		String jar_bin_dir;
+		String path = Wfdbexec.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+		try {
+			jar_bin_dir=URLDecoder.decode(path, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			jar_bin_dir="";
+			e.printStackTrace();
+		}
+
+		//Remove the /bin/ from the Eclipse project to get the WFDB-Java 
+		//root directory
+		int endIndex=jar_bin_dir.lastIndexOf(fileSeparator+"bin"+fileSeparator);
+		WFDB_JAVA_HOME= jar_bin_dir.substring(0, endIndex)+fileSeparator;
+		
+		//Set path to executables based on system/arch
+		WFDB_NATIVE_BIN= WFDB_JAVA_HOME + WFDB_NATIVE_BIN_FOLDER + fileSeparator + 
+						 osName.toLowerCase() + osArch.toLowerCase() 
+						 + fileSeparator + "bin" + fileSeparator; 
 	}
+	
 
 
 }
