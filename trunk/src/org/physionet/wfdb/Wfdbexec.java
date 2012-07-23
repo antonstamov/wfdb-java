@@ -198,10 +198,15 @@ public class Wfdbexec {
 		WFDB_NATIVE_BIN= WFDB_JAVA_HOME + WFDB_NATIVE_BIN_FOLDER + fileSeparator + 
 						 osName.toLowerCase() + osArch.toLowerCase() 
 						 + fileSeparator + "bin" + fileSeparator;
-		 arch_library_path= WFDB_JAVA_HOME + WFDB_NATIVE_BIN_FOLDER + fileSeparator + 
+		 
+		arch_library_path= WFDB_JAVA_HOME + WFDB_NATIVE_BIN_FOLDER + fileSeparator + 
 		 osName.toLowerCase() + osArch.toLowerCase() 
 		 + fileSeparator + "lib" + fileSeparator;
-		 //arch_library_path="/afs/ecg.mit.edu/software/wfdb/@sys/current/lib64";
+		
+		arch_library_path= arch_library_path + ":" + WFDB_JAVA_HOME + WFDB_NATIVE_BIN_FOLDER + fileSeparator + 
+		 osName.toLowerCase() + osArch.toLowerCase() 
+		 + fileSeparator + "lib64" + fileSeparator;
+		//arch_library_path="/afs/ecg.mit.edu/software/wfdb/@sys/current/lib64";
 		 LIBRARY_PATH="LD_LIBRARY_PATH";
 	}
 	
