@@ -1,0 +1,423 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>stringprep</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.73.2">
+<link rel="start" href="index.html" title="GNU Libidn API Reference Manual">
+<link rel="up" href="ch01.html" title="GNU Libidn API Reference Manual">
+<link rel="prev" href="libidn-tld.html" title="tld">
+<meta name="generator" content="GTK-Doc V1.10 (XML mode)">
+<link rel="stylesheet" href="style.css" type="text/css">
+<link rel="chapter" href="ch01.html" title="GNU Libidn API Reference Manual">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="2">
+<tr valign="middle">
+<td><a accesskey="p" href="libidn-tld.html"><img src="left.png" width="24" height="24" border="0" alt="Prev"></a></td>
+<td><a accesskey="u" href="ch01.html"><img src="up.png" width="24" height="24" border="0" alt="Up"></a></td>
+<td><a accesskey="h" href="index.html"><img src="home.png" width="24" height="24" border="0" alt="Home"></a></td>
+<th width="100%" align="center">GNU Libidn API Reference Manual</th>
+<td> </td>
+</tr>
+<tr><td colspan="5" class="shortcuts"><nobr><a href="#libidn-stringprep.synopsis" class="shortcut">Top</a>
+                   | 
+                  <a href="#libidn-stringprep.description" class="shortcut">Description</a></nobr></td></tr>
+</table>
+<div class="refentry" lang="en">
+<a name="libidn-stringprep"></a><div class="titlepage"></div>
+<div class="refnamediv"><table width="100%"><tr>
+<td valign="top">
+<h2><span class="refentrytitle"><a name="libidn-stringprep.top_of_page"></a>stringprep</span></h2>
+<p>stringprep</p>
+</td>
+<td valign="top" align="right"></td>
+</tr></table></div>
+<div class="refsynopsisdiv">
+<a name="libidn-stringprep.synopsis"></a><h2>Synopsis</h2>
+<pre class="synopsis">
+#define             <a class="link" href="libidn-idna.html#IDNA-API:CAPS" title="IDNA_API">IDNA_API</a>
+#define             <a class="link" href="libidn-stringprep.html#STRINGPREP-VERSION:CAPS" title="STRINGPREP_VERSION">STRINGPREP_VERSION</a>
+enum                <a class="link" href="libidn-stringprep.html#Stringprep-rc" title="enum Stringprep_rc">Stringprep_rc</a>;
+enum                <a class="link" href="libidn-stringprep.html#Stringprep-profile-flags" title="enum Stringprep_profile_flags">Stringprep_profile_flags</a>;
+enum                <a class="link" href="libidn-stringprep.html#Stringprep-profile-steps" title="enum Stringprep_profile_steps">Stringprep_profile_steps</a>;
+#define             <a class="link" href="libidn-stringprep.html#STRINGPREP-MAX-MAP-CHARS:CAPS" title="STRINGPREP_MAX_MAP_CHARS">STRINGPREP_MAX_MAP_CHARS</a>
+typedef             <a class="link" href="libidn-stringprep.html#Stringprep-table-element" title="Stringprep_table_element">Stringprep_table_element</a>;
+typedef             <a class="link" href="libidn-stringprep.html#Stringprep-profile" title="Stringprep_profile">Stringprep_profile</a>;
+typedef             <a class="link" href="libidn-stringprep.html#Stringprep-profiles" title="Stringprep_profiles">Stringprep_profiles</a>;
+#define             <a class="link" href="libidn-stringprep.html#stringprep-nameprep" title="stringprep_nameprep()">stringprep_nameprep</a>                 (in, maxlen)
+#define             <a class="link" href="libidn-stringprep.html#stringprep-nameprep-no-unassigned" title="stringprep_nameprep_no_unassigned()">stringprep_nameprep_no_unassigned</a>   (in, maxlen)
+#define             <a class="link" href="libidn-stringprep.html#stringprep-plain" title="stringprep_plain()">stringprep_plain</a>                    (in, maxlen)
+#define             <a class="link" href="libidn-stringprep.html#stringprep-kerberos5" title="stringprep_kerberos5()">stringprep_kerberos5</a>                (in, maxlen)
+#define             <a class="link" href="libidn-stringprep.html#stringprep-xmpp-nodeprep" title="stringprep_xmpp_nodeprep()">stringprep_xmpp_nodeprep</a>            (in, maxlen)
+#define             <a class="link" href="libidn-stringprep.html#stringprep-xmpp-resourceprep" title="stringprep_xmpp_resourceprep()">stringprep_xmpp_resourceprep</a>        (in, maxlen)
+#define             <a class="link" href="libidn-stringprep.html#stringprep-iscsi" title="stringprep_iscsi()">stringprep_iscsi</a>                    (in, maxlen)
+</pre>
+</div>
+<div class="refsect1" lang="en">
+<a name="libidn-stringprep.description"></a><h2>Description</h2>
+<p>
+A longer description goes here.
+</p>
+</div>
+<div class="refsect1" lang="en">
+<a name="libidn-stringprep.details"></a><h2>Details</h2>
+<div class="refsect2" lang="en">
+<a name="IDNA-API:CAPS"></a><h3>IDNA_API</h3>
+<pre class="programlisting">#define             IDNA_API</pre>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="STRINGPREP-VERSION:CAPS"></a><h3>STRINGPREP_VERSION</h3>
+<pre class="programlisting"># define STRINGPREP_VERSION "1.12"
+</pre>
+<p>
+String defined via CPP denoting the header file version number.
+Used together with <code class="function">stringprep_check_version()</code> to verify header file
+and run-time library consistency.</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="Stringprep-rc"></a><h3>enum Stringprep_rc</h3>
+<pre class="programlisting">  typedef enum
+  {
+    STRINGPREP_OK = 0,
+    /* Stringprep errors. */
+    STRINGPREP_CONTAINS_UNASSIGNED = 1,
+    STRINGPREP_CONTAINS_PROHIBITED = 2,
+    STRINGPREP_BIDI_BOTH_L_AND_RAL = 3,
+    STRINGPREP_BIDI_LEADTRAIL_NOT_RAL = 4,
+    STRINGPREP_BIDI_CONTAINS_PROHIBITED = 5,
+    /* Error in calling application. */
+    STRINGPREP_TOO_SMALL_BUFFER = 100,
+    STRINGPREP_PROFILE_ERROR = 101,
+    STRINGPREP_FLAG_ERROR = 102,
+    STRINGPREP_UNKNOWN_PROFILE = 103,
+    /* Internal errors. */
+    STRINGPREP_NFKC_FAILED = 200,
+    STRINGPREP_MALLOC_ERROR = 201
+  } Stringprep_rc;
+</pre>
+<p>
+Enumerated return codes of <code class="function">stringprep()</code>, <code class="function">stringprep_profile()</code>
+functions (and macros using those functions).  The value 0 is
+guaranteed to always correspond to success.</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><a name="STRINGPREP-OK:CAPS"></a><span class="term"><code class="literal">STRINGPREP_OK</code></span></p></td>
+<td> Successful operation.  This value is guaranteed to
+  always be zero, the remaining ones are only guaranteed to hold
+  non-zero values, for logical comparison purposes.
+</td>
+</tr>
+<tr>
+<td><p><a name="STRINGPREP-CONTAINS-UNASSIGNED:CAPS"></a><span class="term"><code class="literal">STRINGPREP_CONTAINS_UNASSIGNED</code></span></p></td>
+<td> String contain unassigned Unicode
+  code points, which is forbidden by the profile.
+</td>
+</tr>
+<tr>
+<td><p><a name="STRINGPREP-CONTAINS-PROHIBITED:CAPS"></a><span class="term"><code class="literal">STRINGPREP_CONTAINS_PROHIBITED</code></span></p></td>
+<td> String contain code points
+  prohibited by the profile.
+</td>
+</tr>
+<tr>
+<td><p><a name="STRINGPREP-BIDI-BOTH-L-AND-RAL:CAPS"></a><span class="term"><code class="literal">STRINGPREP_BIDI_BOTH_L_AND_RAL</code></span></p></td>
+<td> String contain code points with
+  conflicting bidirection category.
+</td>
+</tr>
+<tr>
+<td><p><a name="STRINGPREP-BIDI-LEADTRAIL-NOT-RAL:CAPS"></a><span class="term"><code class="literal">STRINGPREP_BIDI_LEADTRAIL_NOT_RAL</code></span></p></td>
+<td> Leading and trailing character
+  in string not of proper bidirectional category.
+</td>
+</tr>
+<tr>
+<td><p><a name="STRINGPREP-BIDI-CONTAINS-PROHIBITED:CAPS"></a><span class="term"><code class="literal">STRINGPREP_BIDI_CONTAINS_PROHIBITED</code></span></p></td>
+<td> Contains prohibited code
+  points detected by bidirectional code.
+</td>
+</tr>
+<tr>
+<td><p><a name="STRINGPREP-TOO-SMALL-BUFFER:CAPS"></a><span class="term"><code class="literal">STRINGPREP_TOO_SMALL_BUFFER</code></span></p></td>
+<td> Buffer handed to function was too
+  small.  This usually indicate a problem in the calling
+  application.
+</td>
+</tr>
+<tr>
+<td><p><a name="STRINGPREP-PROFILE-ERROR:CAPS"></a><span class="term"><code class="literal">STRINGPREP_PROFILE_ERROR</code></span></p></td>
+<td> The stringprep profile was inconsistent.
+  This usually indicate an internal error in the library.
+</td>
+</tr>
+<tr>
+<td><p><a name="STRINGPREP-FLAG-ERROR:CAPS"></a><span class="term"><code class="literal">STRINGPREP_FLAG_ERROR</code></span></p></td>
+<td> The supplied flag conflicted with profile.
+  This usually indicate a problem in the calling application.
+</td>
+</tr>
+<tr>
+<td><p><a name="STRINGPREP-UNKNOWN-PROFILE:CAPS"></a><span class="term"><code class="literal">STRINGPREP_UNKNOWN_PROFILE</code></span></p></td>
+<td> The supplied profile name was not
+  known to the library.
+</td>
+</tr>
+<tr>
+<td><p><a name="STRINGPREP-NFKC-FAILED:CAPS"></a><span class="term"><code class="literal">STRINGPREP_NFKC_FAILED</code></span></p></td>
+<td> The Unicode NFKC operation failed.  This
+  usually indicate an internal error in the library.
+</td>
+</tr>
+<tr>
+<td><p><a name="STRINGPREP-MALLOC-ERROR:CAPS"></a><span class="term"><code class="literal">STRINGPREP_MALLOC_ERROR</code></span></p></td>
+<td> The <code class="function">malloc()</code> was out of memory.  This is
+  usually a fatal error.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="Stringprep-profile-flags"></a><h3>enum Stringprep_profile_flags</h3>
+<pre class="programlisting">  typedef enum
+  {
+    STRINGPREP_NO_NFKC = 1,
+    STRINGPREP_NO_BIDI = 2,
+    STRINGPREP_NO_UNASSIGNED = 4
+  } Stringprep_profile_flags;
+</pre>
+<p>
+Stringprep profile flags.</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><a name="STRINGPREP-NO-NFKC:CAPS"></a><span class="term"><code class="literal">STRINGPREP_NO_NFKC</code></span></p></td>
+<td> Disable the NFKC normalization, as well as
+  selecting the non-NFKC case folding tables.  Usually the profile
+  specifies BIDI and NFKC settings, and applications should not
+  override it unless in special situations.
+</td>
+</tr>
+<tr>
+<td><p><a name="STRINGPREP-NO-BIDI:CAPS"></a><span class="term"><code class="literal">STRINGPREP_NO_BIDI</code></span></p></td>
+<td> Disable the BIDI step.  Usually the profile
+  specifies BIDI and NFKC settings, and applications should not
+  override it unless in special situations.
+</td>
+</tr>
+<tr>
+<td><p><a name="STRINGPREP-NO-UNASSIGNED:CAPS"></a><span class="term"><code class="literal">STRINGPREP_NO_UNASSIGNED</code></span></p></td>
+<td> Make the library return with an error if
+  string contains unassigned characters according to profile.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="Stringprep-profile-steps"></a><h3>enum Stringprep_profile_steps</h3>
+<pre class="programlisting">  typedef enum
+  {
+    STRINGPREP_NFKC = 1,
+    STRINGPREP_BIDI = 2,
+    STRINGPREP_MAP_TABLE = 3,
+    STRINGPREP_UNASSIGNED_TABLE = 4,
+    STRINGPREP_PROHIBIT_TABLE = 5,
+    STRINGPREP_BIDI_PROHIBIT_TABLE = 6,
+    STRINGPREP_BIDI_RAL_TABLE = 7,
+    STRINGPREP_BIDI_L_TABLE = 8
+  } Stringprep_profile_steps;
+</pre>
+<p>
+Various steps in the stringprep algorithm.  You really want to
+study the source code to understand this one.  Only useful if you
+want to add another profile.</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="STRINGPREP-MAX-MAP-CHARS:CAPS"></a><h3>STRINGPREP_MAX_MAP_CHARS</h3>
+<pre class="programlisting"># define STRINGPREP_MAX_MAP_CHARS 4
+</pre>
+<p>
+Maximum number of code points that can replace a single code point,
+during stringprep mapping.</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="Stringprep-table-element"></a><h3>Stringprep_table_element</h3>
+<pre class="programlisting">  typedef struct Stringprep_table_element Stringprep_table_element;
+</pre>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="Stringprep-profile"></a><h3>Stringprep_profile</h3>
+<pre class="programlisting">  typedef struct Stringprep_table Stringprep_profile;
+</pre>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="Stringprep-profiles"></a><h3>Stringprep_profiles</h3>
+<pre class="programlisting">  typedef struct Stringprep_profiles Stringprep_profiles;
+</pre>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="stringprep-nameprep"></a><h3>stringprep_nameprep()</h3>
+<pre class="programlisting">#define             stringprep_nameprep(in, maxlen)</pre>
+<p>
+Prepare the input UTF-8 string according to the nameprep profile.
+The AllowUnassigned flag is true, use
+<a class="link" href="libidn-stringprep.html#stringprep-nameprep-no-unassigned" title="stringprep_nameprep_no_unassigned()"><code class="function">stringprep_nameprep_no_unassigned()</code></a> if you want a false
+AllowUnassigned.  Returns 0 iff successful, or an error code.</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>in</code></em> :</span></p></td>
+<td> input/ouput array with string to prepare.
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>maxlen</code></em> :</span></p></td>
+<td> maximum length of input/output array.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="stringprep-nameprep-no-unassigned"></a><h3>stringprep_nameprep_no_unassigned()</h3>
+<pre class="programlisting">#define             stringprep_nameprep_no_unassigned(in, maxlen)</pre>
+<p>
+Prepare the input UTF-8 string according to the nameprep profile.
+The AllowUnassigned flag is false, use <a class="link" href="libidn-stringprep.html#stringprep-nameprep" title="stringprep_nameprep()"><code class="function">stringprep_nameprep()</code></a> for
+true AllowUnassigned.  Returns 0 iff successful, or an error code.</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>in</code></em> :</span></p></td>
+<td> input/ouput array with string to prepare.
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>maxlen</code></em> :</span></p></td>
+<td> maximum length of input/output array.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="stringprep-plain"></a><h3>stringprep_plain()</h3>
+<pre class="programlisting">#define             stringprep_plain(in, maxlen)</pre>
+<p>
+Prepare the input UTF-8 string according to the draft SASL
+ANONYMOUS profile.  Returns 0 iff successful, or an error code.</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>in</code></em> :</span></p></td>
+<td> input/ouput array with string to prepare.
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>maxlen</code></em> :</span></p></td>
+<td> maximum length of input/output array.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="stringprep-kerberos5"></a><h3>stringprep_kerberos5()</h3>
+<pre class="programlisting">#define             stringprep_kerberos5(in, maxlen)</pre>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="stringprep-xmpp-nodeprep"></a><h3>stringprep_xmpp_nodeprep()</h3>
+<pre class="programlisting">#define             stringprep_xmpp_nodeprep(in, maxlen)</pre>
+<p>
+Prepare the input UTF-8 string according to the draft XMPP node
+identifier profile.  Returns 0 iff successful, or an error code.</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>in</code></em> :</span></p></td>
+<td> input/ouput array with string to prepare.
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>maxlen</code></em> :</span></p></td>
+<td> maximum length of input/output array.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="stringprep-xmpp-resourceprep"></a><h3>stringprep_xmpp_resourceprep()</h3>
+<pre class="programlisting">#define             stringprep_xmpp_resourceprep(in, maxlen)</pre>
+<p>
+Prepare the input UTF-8 string according to the draft XMPP resource
+identifier profile.  Returns 0 iff successful, or an error code.</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>in</code></em> :</span></p></td>
+<td> input/ouput array with string to prepare.
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>maxlen</code></em> :</span></p></td>
+<td> maximum length of input/output array.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="stringprep-iscsi"></a><h3>stringprep_iscsi()</h3>
+<pre class="programlisting">#define             stringprep_iscsi(in, maxlen)</pre>
+<p>
+Prepare the input UTF-8 string according to the draft iSCSI
+stringprep profile.  Returns 0 iff successful, or an error code.</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>in</code></em> :</span></p></td>
+<td> input/ouput array with string to prepare.
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>maxlen</code></em> :</span></p></td>
+<td> maximum length of input/output array.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+</div>
+<div class="footer">
+<hr>
+          Generated by GTK-Doc V1.10</div>
+</body>
+</html>

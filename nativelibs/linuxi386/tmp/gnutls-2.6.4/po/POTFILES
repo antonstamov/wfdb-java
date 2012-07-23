@@ -1,0 +1,4 @@
+     ../lib/gnutls_errors.c \
+     ../lib/gnutls_alert.c \
+     ../lib/x509/output.c \
+     ../lib/openpgp/output.c
