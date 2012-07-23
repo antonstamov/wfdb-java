@@ -1,35 +1,31 @@
 #!/bin/bash
 # build_wfdbjava.sh
-# download and build all of the native libraries to support wfdbjava;
+# download and build all of the native libraries to support wfdb;
 # only tested on gnu/linux
-# FIXME: include -fno-stack-protector
 
 
-#
-#
-#
+
 if [ ! -n "$1" ] || [ ! -n "$2" ]
 then
-    echo "Usage: $0 <install_dir> <java_home>"
+    echo "Usage: $0 <install_dir>"
 fi
 
-JAVA_HOME="$2"
+# FIXME: the version number changes!
+WFDB_VER="wfdb-10.5.13"
 
 
-#
-#
-#
 cd $1
 mkdir tmp
 cd tmp
 
-
 #
 # build libgpg-error
 #
-wget ftp://ftp.gnupg.org/gcrypt/libgpg-error/libgpg-error-1.7.tar.bz2
-tar xvfj libgpg-error-1.7.tar.bz2
-cd libgpg-error-1.7
+#WGET may not work, depending on firewall settings
+#wget ftp://ftp.gnupg.org/gcrypt/libgpg-error/libgpg-error-1.10.tar.bz2
+cp /home/ikaro/workspace/wfdb-java/nativelibs/tarballs/libgpg-error-1.10.tar.bz2 $1/tmp/
+tar xvfj libgpg-error-1.10.tar.bz2
+cd libgpg-error-1.10
 ./configure --prefix=$1
 make
 make install
@@ -39,7 +35,8 @@ cd ..
 #
 # build libidn
 #
-wget ftp://aeneas.mit.edu/pub/gnu/libidn/libidn-1.12.tar.gz
+#wget ftp://aeneas.mit.edu/pub/gnu/libidn/libidn-1.12.tar.gz
+cp /home/ikaro/workspace/wfdb-java/nativelibs/tarballs/libidn-1.12.tar.gz $1/tmp/
 tar xvfz libidn-1.12.tar.gz
 cd libidn-1.12
 ./configure --prefix=$1
@@ -51,7 +48,8 @@ cd ..
 #
 # build libgcrypt
 #
-wget ftp://ftp.gnupg.org/gcrypt/libgcrypt/libgcrypt-1.4.4.tar.bz2
+#wget ftp://ftp.gnupg.org/gcrypt/libgcrypt/libgcrypt-1.4.4.tar.bz2
+cp /home/ikaro/workspace/wfdb-java/nativelibs/tarballs/libgcrypt-1.4.4.tar.bz2 $1/tmp/
 tar xvfj libgcrypt-1.4.4.tar.bz2
 cd libgcrypt-1.4.4
 ./configure --prefix=$1 --with-gpg-error-prefix=$1
@@ -63,7 +61,8 @@ cd ..
 #
 # build gnutls
 #
-wget http://ftp.gnu.org/pub/gnu/gnutls/gnutls-2.6.4.tar.bz2
+#wget http://ftp.gnu.org/pub/gnu/gnutls/gnutls-2.6.4.tar.bz2
+cp /home/ikaro/workspace/wfdb-java/nativelibs/tarballs/gnutls-2.6.4.tar.bz2 $1/tmp/
 tar xvfj gnutls-2.6.4.tar.bz2
 cd gnutls-2.6.4
 ./configure --prefix=$1 --with-libgcrypt-prefix=$1 --without-zlib
@@ -75,7 +74,8 @@ cd ..
 #
 # build curl
 #
-wget http://curl.hoxt.com/download/curl-7.19.3.tar.bz2
+#wget http://curl.haxx.se/download/curl-7.19.3.tar.bz2
+cp /home/ikaro/workspace/wfdb-java/nativelibs/tarballs/curl-7.19.3.tar.bz2 $1/tmp/
 tar xvfj curl-7.19.3.tar.bz2
 cd curl-7.19.3
 ./configure --prefix=$1 --with-gnutls=$1 --with-libidn=$1 \
@@ -87,11 +87,10 @@ cd ..
 
 #
 # build wfdb
-# FIXME: the version number changes!
-#
-wget http://www.physionet.org/physiotools/wfdb.tar.gz
+#wget http://www.physionet.org/physiotools/wfdb.tar.gz
+cp /home/ikaro/workspace/wfdb-java/nativelibs/tarballs/wfdb.tar.gz $1/tmp/
 tar xvfz wfdb.tar.gz
-cd wfdb-10.4.17
+cd $WFDB_VER
 PATH=$1/bin:$PATH ./configure --prefix=$1 --with-libcurl
 PATH=$1/bin:$PATH make
 PATH=$1/bin:$PATH make install
