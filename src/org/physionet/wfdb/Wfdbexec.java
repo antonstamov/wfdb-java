@@ -57,8 +57,10 @@ public class Wfdbexec {
 	private List<String> commandInput = new ArrayList<String>();
 	protected Map<String, String> argumentLabels = new HashMap<String, String>();
 	protected Map<String, String> argumentValues = new HashMap<String, String>();
-	
-	
+	protected static Map<String,String> env;
+	protected static String LIBRARY_PATH;
+	protected static String arch_library_path;
+		
 	//Abstracts be implemented by inherited classes
 	public String help() {
 		return null;
@@ -153,8 +155,8 @@ public class Wfdbexec {
 		launcher.redirectErrorStream(true);
 		String results = "";
 	
-		//Map<String,String> env = launcher.environment();
-		//env.put("LD_LIBRARY_PATH", "/afs/ecg.mit.edu/software/wfdb/@sys/current/lib64");
+		env = launcher.environment();
+		env.put(LIBRARY_PATH,arch_library_path);
 		launcher.command(getCommandInput());
 		try {
 			Process p = launcher.start();
@@ -195,9 +197,14 @@ public class Wfdbexec {
 		//Set path to executables based on system/arch
 		WFDB_NATIVE_BIN= WFDB_JAVA_HOME + WFDB_NATIVE_BIN_FOLDER + fileSeparator + 
 						 osName.toLowerCase() + osArch.toLowerCase() 
-						 + fileSeparator + "bin" + fileSeparator; 
+						 + fileSeparator + "bin" + fileSeparator;
+		 arch_library_path= WFDB_JAVA_HOME + WFDB_NATIVE_BIN_FOLDER + fileSeparator + 
+		 osName.toLowerCase() + osArch.toLowerCase() 
+		 + fileSeparator + "lib" + fileSeparator;
+		 LIBRARY_PATH="LD_LIBRARY_PATH";
 	}
+	
 	
 
 
-}
+} //Of class
