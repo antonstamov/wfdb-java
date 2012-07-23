@@ -1,0 +1,6 @@
+     ../lib/strerror-idna.c \
+     ../lib/strerror-pr29.c \
+     ../lib/strerror-punycode.c \
+     ../lib/strerror-stringprep.c \
+     ../lib/strerror-tld.c \
+     ../src/idn.c

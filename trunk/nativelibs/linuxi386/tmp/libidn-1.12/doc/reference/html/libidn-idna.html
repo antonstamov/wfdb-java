@@ -1,0 +1,208 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>idna</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.73.2">
+<link rel="start" href="index.html" title="GNU Libidn API Reference Manual">
+<link rel="up" href="ch01.html" title="GNU Libidn API Reference Manual">
+<link rel="prev" href="ch01.html" title="GNU Libidn API Reference Manual">
+<link rel="next" href="libidn-pr29.html" title="pr29">
+<meta name="generator" content="GTK-Doc V1.10 (XML mode)">
+<link rel="stylesheet" href="style.css" type="text/css">
+<link rel="chapter" href="ch01.html" title="GNU Libidn API Reference Manual">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="2">
+<tr valign="middle">
+<td><a accesskey="p" href="ch01.html"><img src="left.png" width="24" height="24" border="0" alt="Prev"></a></td>
+<td><a accesskey="u" href="ch01.html"><img src="up.png" width="24" height="24" border="0" alt="Up"></a></td>
+<td><a accesskey="h" href="index.html"><img src="home.png" width="24" height="24" border="0" alt="Home"></a></td>
+<th width="100%" align="center">GNU Libidn API Reference Manual</th>
+<td><a accesskey="n" href="libidn-pr29.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
+</tr>
+<tr><td colspan="5" class="shortcuts"><nobr><a href="#libidn-idna.synopsis" class="shortcut">Top</a>
+                   | 
+                  <a href="#libidn-idna.description" class="shortcut">Description</a></nobr></td></tr>
+</table>
+<div class="refentry" lang="en">
+<a name="libidn-idna"></a><div class="titlepage"></div>
+<div class="refnamediv"><table width="100%"><tr>
+<td valign="top">
+<h2><span class="refentrytitle"><a name="libidn-idna.top_of_page"></a>idna</span></h2>
+<p>idna</p>
+</td>
+<td valign="top" align="right"></td>
+</tr></table></div>
+<div class="refsynopsisdiv">
+<a name="libidn-idna.synopsis"></a><h2>Synopsis</h2>
+<pre class="synopsis">
+#define             <a class="link" href="libidn-idna.html#IDNA-API:CAPS" title="IDNA_API">IDNA_API</a>
+enum                <a class="link" href="libidn-idna.html#Idna-rc" title="enum Idna_rc">Idna_rc</a>;
+enum                <a class="link" href="libidn-idna.html#Idna-flags" title="enum Idna_flags">Idna_flags</a>;
+#define             <a class="link" href="libidn-idna.html#IDNA-ACE-PREFIX:CAPS" title="IDNA_ACE_PREFIX">IDNA_ACE_PREFIX</a>
+</pre>
+</div>
+<div class="refsect1" lang="en">
+<a name="libidn-idna.description"></a><h2>Description</h2>
+<p>
+A longer description goes here.
+</p>
+</div>
+<div class="refsect1" lang="en">
+<a name="libidn-idna.details"></a><h2>Details</h2>
+<div class="refsect2" lang="en">
+<a name="IDNA-API:CAPS"></a><h3>IDNA_API</h3>
+<pre class="programlisting">#define             IDNA_API</pre>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="Idna-rc"></a><h3>enum Idna_rc</h3>
+<pre class="programlisting">  typedef enum
+  {
+    IDNA_SUCCESS = 0,
+    IDNA_STRINGPREP_ERROR = 1,
+    IDNA_PUNYCODE_ERROR = 2,
+    IDNA_CONTAINS_NON_LDH = 3,
+    /* Workaround typo in earlier versions. */
+    IDNA_CONTAINS_LDH = IDNA_CONTAINS_NON_LDH,
+    IDNA_CONTAINS_MINUS = 4,
+    IDNA_INVALID_LENGTH = 5,
+    IDNA_NO_ACE_PREFIX = 6,
+    IDNA_ROUNDTRIP_VERIFY_ERROR = 7,
+    IDNA_CONTAINS_ACE_PREFIX = 8,
+    IDNA_ICONV_ERROR = 9,
+    /* Internal errors. */
+    IDNA_MALLOC_ERROR = 201,
+    IDNA_DLOPEN_ERROR = 202
+  } Idna_rc;
+</pre>
+<p>
+Enumerated return codes of <code class="function">idna_to_ascii_4i()</code>,
+<code class="function">idna_to_unicode_44i()</code> functions (and functions derived from those
+functions).  The value 0 is guaranteed to always correspond to
+success.</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><a name="IDNA-SUCCESS:CAPS"></a><span class="term"><code class="literal">IDNA_SUCCESS</code></span></p></td>
+<td> Successful operation.  This value is guaranteed to
+  always be zero, the remaining ones are only guaranteed to hold
+  non-zero values, for logical comparison purposes.
+</td>
+</tr>
+<tr>
+<td><p><a name="IDNA-STRINGPREP-ERROR:CAPS"></a><span class="term"><code class="literal">IDNA_STRINGPREP_ERROR</code></span></p></td>
+<td>  Error during string preparation.
+</td>
+</tr>
+<tr>
+<td><p><a name="IDNA-PUNYCODE-ERROR:CAPS"></a><span class="term"><code class="literal">IDNA_PUNYCODE_ERROR</code></span></p></td>
+<td> Error during punycode operation.
+</td>
+</tr>
+<tr>
+<td><p><a name="IDNA-CONTAINS-NON-LDH:CAPS"></a><span class="term"><code class="literal">IDNA_CONTAINS_NON_LDH</code></span></p></td>
+<td> For IDNA_USE_STD3_ASCII_RULES, indicate that
+  the string contains non-LDH ASCII characters.
+</td>
+</tr>
+<tr>
+<td><p><a name="IDNA-CONTAINS-LDH:CAPS"></a><span class="term"><code class="literal">IDNA_CONTAINS_LDH</code></span></p></td>
+<td></td>
+</tr>
+<tr>
+<td><p><a name="IDNA-CONTAINS-MINUS:CAPS"></a><span class="term"><code class="literal">IDNA_CONTAINS_MINUS</code></span></p></td>
+<td> For IDNA_USE_STD3_ASCII_RULES, indicate that
+  the string contains a leading or trailing hyphen-minus (U+002D).
+</td>
+</tr>
+<tr>
+<td><p><a name="IDNA-INVALID-LENGTH:CAPS"></a><span class="term"><code class="literal">IDNA_INVALID_LENGTH</code></span></p></td>
+<td> The final output string is not within the
+  (inclusive) range 1 to 63 characters.
+</td>
+</tr>
+<tr>
+<td><p><a name="IDNA-NO-ACE-PREFIX:CAPS"></a><span class="term"><code class="literal">IDNA_NO_ACE_PREFIX</code></span></p></td>
+<td> The string does not contain the ACE prefix
+  (for ToUnicode).
+</td>
+</tr>
+<tr>
+<td><p><a name="IDNA-ROUNDTRIP-VERIFY-ERROR:CAPS"></a><span class="term"><code class="literal">IDNA_ROUNDTRIP_VERIFY_ERROR</code></span></p></td>
+<td> The ToASCII operation on output
+  string does not equal the input.
+</td>
+</tr>
+<tr>
+<td><p><a name="IDNA-CONTAINS-ACE-PREFIX:CAPS"></a><span class="term"><code class="literal">IDNA_CONTAINS_ACE_PREFIX</code></span></p></td>
+<td> The input contains the ACE prefix (for
+  ToASCII).
+</td>
+</tr>
+<tr>
+<td><p><a name="IDNA-ICONV-ERROR:CAPS"></a><span class="term"><code class="literal">IDNA_ICONV_ERROR</code></span></p></td>
+<td> Could not convert string in locale encoding.
+</td>
+</tr>
+<tr>
+<td><p><a name="IDNA-MALLOC-ERROR:CAPS"></a><span class="term"><code class="literal">IDNA_MALLOC_ERROR</code></span></p></td>
+<td> Could not allocate buffer (this is typically a
+  fatal error).
+</td>
+</tr>
+<tr>
+<td><p><a name="IDNA-DLOPEN-ERROR:CAPS"></a><span class="term"><code class="literal">IDNA_DLOPEN_ERROR</code></span></p></td>
+<td> Could not dlopen the libcidn DSO (only used
+  internally in libc).
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="Idna-flags"></a><h3>enum Idna_flags</h3>
+<pre class="programlisting">  typedef enum
+  {
+    IDNA_ALLOW_UNASSIGNED = 0x0001,
+    IDNA_USE_STD3_ASCII_RULES = 0x0002
+  } Idna_flags;
+</pre>
+<p>
+Flags to pass to <code class="function">idna_to_ascii_4i()</code>, <code class="function">idna_to_unicode_44i()</code> etc.</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><a name="IDNA-ALLOW-UNASSIGNED:CAPS"></a><span class="term"><code class="literal">IDNA_ALLOW_UNASSIGNED</code></span></p></td>
+<td> Don't reject strings containing unassigned
+  Unicode code points.
+</td>
+</tr>
+<tr>
+<td><p><a name="IDNA-USE-STD3-ASCII-RULES:CAPS"></a><span class="term"><code class="literal">IDNA_USE_STD3_ASCII_RULES</code></span></p></td>
+<td> Validate strings according to STD3
+  rules (i.e., normal host name rules).
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="IDNA-ACE-PREFIX:CAPS"></a><h3>IDNA_ACE_PREFIX</h3>
+<pre class="programlisting">#  define IDNA_ACE_PREFIX "xn--"
+</pre>
+<p>
+The IANA allocated prefix to use for IDNA. "xn--"</p>
+</div>
+</div>
+</div>
+<div class="footer">
+<hr>
+          Generated by GTK-Doc V1.10</div>
+</body>
+</html>

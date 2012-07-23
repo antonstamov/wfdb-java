@@ -1,0 +1,8 @@
+memxor.lo: memxor.c ../../config.h memxor.h \
+ /usr/lib/i386-linux-gnu/gcc/i686-linux-gnu/4.5.2/include/stddef.h
+
+../../config.h:
+
+memxor.h:
+
+/usr/lib/i386-linux-gnu/gcc/i686-linux-gnu/4.5.2/include/stddef.h:

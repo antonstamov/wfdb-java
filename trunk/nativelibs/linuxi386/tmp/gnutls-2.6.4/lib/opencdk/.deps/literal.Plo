@@ -1,0 +1,250 @@
+literal.lo: literal.c ../../config.h ../../lgl/stdio.h \
+ /usr/include/stdio.h /usr/include/features.h /usr/include/bits/predefs.h \
+ /usr/include/sys/cdefs.h /usr/include/bits/wordsize.h \
+ /usr/include/gnu/stubs.h /usr/include/gnu/stubs-32.h \
+ /usr/lib/i386-linux-gnu/gcc/i686-linux-gnu/4.5.2/include/stddef.h \
+ /usr/include/bits/types.h /usr/include/bits/typesizes.h \
+ /usr/include/libio.h /usr/include/_G_config.h /usr/include/wchar.h \
+ /usr/lib/i386-linux-gnu/gcc/i686-linux-gnu/4.5.2/include/stdarg.h \
+ /usr/include/bits/stdio_lim.h /usr/include/bits/sys_errlist.h \
+ /usr/include/bits/stdio.h /usr/include/bits/stdio2.h ../../lgl/time.h \
+ /usr/include/time.h /usr/include/bits/time.h /usr/include/xlocale.h \
+ opencdk.h ../../lib/gnutls_int.h ../../lgl/string.h \
+ /usr/include/string.h /usr/include/bits/string.h \
+ /usr/include/bits/string2.h /usr/include/endian.h \
+ /usr/include/bits/endian.h /usr/include/bits/byteswap.h \
+ ../../lgl/stdlib.h /usr/include/stdlib.h /usr/include/bits/string3.h \
+ /usr/include/bits/waitflags.h /usr/include/bits/waitstatus.h \
+ /usr/include/sys/types.h /usr/include/sys/select.h \
+ /usr/include/bits/select.h /usr/include/bits/sigset.h \
+ /usr/include/sys/sysmacros.h /usr/include/bits/pthreadtypes.h \
+ ../../lgl/alloca.h /usr/include/bits/stdlib.h /usr/include/ctype.h \
+ /usr/lib/i386-linux-gnu/gcc/i686-linux-gnu/4.5.2/include-fixed/limits.h \
+ /usr/lib/i386-linux-gnu/gcc/i686-linux-gnu/4.5.2/include-fixed/syslimits.h \
+ /usr/include/limits.h /usr/include/bits/posix1_lim.h \
+ /usr/include/bits/local_lim.h /usr/include/linux/limits.h \
+ /usr/include/bits/posix2_lim.h /usr/include/bits/xopen_lim.h \
+ /usr/lib/i386-linux-gnu/gcc/i686-linux-gnu/4.5.2/include/stdint.h \
+ /usr/include/stdint.h /usr/include/bits/wchar.h ../../lgl/unistd.h \
+ /usr/include/unistd.h /usr/include/bits/posix_opt.h \
+ /usr/include/bits/environments.h /usr/include/bits/confname.h \
+ /usr/include/getopt.h /usr/include/bits/unistd.h ../../lgl/sys/stat.h \
+ /usr/include/sys/stat.h /usr/include/bits/stat.h \
+ /usr/include/sys/socket.h /usr/include/sys/uio.h /usr/include/bits/uio.h \
+ /usr/include/bits/socket.h /usr/include/bits/sockaddr.h \
+ /usr/include/i386-linux-gnu/asm/socket.h \
+ /usr/include/asm-generic/socket.h \
+ /usr/include/i386-linux-gnu/asm/sockios.h \
+ /usr/include/asm-generic/sockios.h /usr/include/bits/socket2.h \
+ ../../includes/gnutls/gnutls.h ../../includes/gnutls/compat.h \
+ ../../includes/gnutls/extra.h ../../lib/gnutls_mem.h \
+ ../../lib/gnutls_mpi.h ../../lib/minitasn1/libtasn1.h \
+ ../../includes/gnutls/crypto.h ../../lib/gnutls_str.h \
+ ../../lib/gnutls_hash_int.h ../../lib/crypto.h \
+ ../../lib/gnutls_cipher_int.h ../../lib/gnutls_compress.h \
+ ../../lib/gnutls_cert.h ../../lib/gnutls_pk.h ../../lib/x509/x509_int.h \
+ ../../includes/gnutls/x509.h ../../includes/gnutls/pkcs12.h \
+ ../../includes/gnutls/openpgp.h ../../lib/gnutls_errors.h main.h types.h \
+ context.h filters.h
+
+../../config.h:
+
+../../lgl/stdio.h:
+
+/usr/include/stdio.h:
+
+/usr/include/features.h:
+
+/usr/include/bits/predefs.h:
+
+/usr/include/sys/cdefs.h:
+
+/usr/include/bits/wordsize.h:
+
+/usr/include/gnu/stubs.h:
+
+/usr/include/gnu/stubs-32.h:
+
+/usr/lib/i386-linux-gnu/gcc/i686-linux-gnu/4.5.2/include/stddef.h:
+
+/usr/include/bits/types.h:
+
+/usr/include/bits/typesizes.h:
+
+/usr/include/libio.h:
+
+/usr/include/_G_config.h:
+
+/usr/include/wchar.h:
+
+/usr/lib/i386-linux-gnu/gcc/i686-linux-gnu/4.5.2/include/stdarg.h:
+
+/usr/include/bits/stdio_lim.h:
+
+/usr/include/bits/sys_errlist.h:
+
+/usr/include/bits/stdio.h:
+
+/usr/include/bits/stdio2.h:
+
+../../lgl/time.h:
+
+/usr/include/time.h:
+
+/usr/include/bits/time.h:
+
+/usr/include/xlocale.h:
+
+opencdk.h:
+
+../../lib/gnutls_int.h:
+
+../../lgl/string.h:
+
+/usr/include/string.h:
+
+/usr/include/bits/string.h:
+
+/usr/include/bits/string2.h:
+
+/usr/include/endian.h:
+
+/usr/include/bits/endian.h:
+
+/usr/include/bits/byteswap.h:
+
+../../lgl/stdlib.h:
+
+/usr/include/stdlib.h:
+
+/usr/include/bits/string3.h:
+
+/usr/include/bits/waitflags.h:
+
+/usr/include/bits/waitstatus.h:
+
+/usr/include/sys/types.h:
+
+/usr/include/sys/select.h:
+
+/usr/include/bits/select.h:
+
+/usr/include/bits/sigset.h:
+
+/usr/include/sys/sysmacros.h:
+
+/usr/include/bits/pthreadtypes.h:
+
+../../lgl/alloca.h:
+
+/usr/include/bits/stdlib.h:
+
+/usr/include/ctype.h:
+
+/usr/lib/i386-linux-gnu/gcc/i686-linux-gnu/4.5.2/include-fixed/limits.h:
+
+/usr/lib/i386-linux-gnu/gcc/i686-linux-gnu/4.5.2/include-fixed/syslimits.h:
+
+/usr/include/limits.h:
+
+/usr/include/bits/posix1_lim.h:
+
+/usr/include/bits/local_lim.h:
+
+/usr/include/linux/limits.h:
+
+/usr/include/bits/posix2_lim.h:
+
+/usr/include/bits/xopen_lim.h:
+
+/usr/lib/i386-linux-gnu/gcc/i686-linux-gnu/4.5.2/include/stdint.h:
+
+/usr/include/stdint.h:
+
+/usr/include/bits/wchar.h:
+
+../../lgl/unistd.h:
+
+/usr/include/unistd.h:
+
+/usr/include/bits/posix_opt.h:
+
+/usr/include/bits/environments.h:
+
+/usr/include/bits/confname.h:
+
+/usr/include/getopt.h:
+
+/usr/include/bits/unistd.h:
+
+../../lgl/sys/stat.h:
+
+/usr/include/sys/stat.h:
+
+/usr/include/bits/stat.h:
+
+/usr/include/sys/socket.h:
+
+/usr/include/sys/uio.h:
+
+/usr/include/bits/uio.h:
+
+/usr/include/bits/socket.h:
+
+/usr/include/bits/sockaddr.h:
+
+/usr/include/i386-linux-gnu/asm/socket.h:
+
+/usr/include/asm-generic/socket.h:
+
+/usr/include/i386-linux-gnu/asm/sockios.h:
+
+/usr/include/asm-generic/sockios.h:
+
+/usr/include/bits/socket2.h:
+
+../../includes/gnutls/gnutls.h:
+
+../../includes/gnutls/compat.h:
+
+../../includes/gnutls/extra.h:
+
+../../lib/gnutls_mem.h:
+
+../../lib/gnutls_mpi.h:
+
+../../lib/minitasn1/libtasn1.h:
+
+../../includes/gnutls/crypto.h:
+
+../../lib/gnutls_str.h:
+
+../../lib/gnutls_hash_int.h:
+
+../../lib/crypto.h:
+
+../../lib/gnutls_cipher_int.h:
+
+../../lib/gnutls_compress.h:
+
+../../lib/gnutls_cert.h:
+
+../../lib/gnutls_pk.h:
+
+../../lib/x509/x509_int.h:
+
+../../includes/gnutls/x509.h:
+
+../../includes/gnutls/pkcs12.h:
+
+../../includes/gnutls/openpgp.h:
+
+../../lib/gnutls_errors.h:
+
+main.h:
+
+types.h:
+
+context.h:
+
+filters.h:

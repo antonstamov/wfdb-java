@@ -1,0 +1,886 @@
+WAVE: Waveform Analyzer, Viewer, and Editor
+
+Copyright (C) 1990-2010 George B. Moody
+
+WAVE is an extensible interactive graphical environment for manipulating sets
+of digitized signals with optional annotations.  WAVE is built using the WFDB
+library developed for physiologic signal processing, so it can be applied to
+any of a wide variety of data formats supported by the WFDB library.  WAVE can
+run on FreeBSD, GNU/Linux, Mac OS X, MS-Windows with Cygwin, Solaris, and
+other platforms that support the X Window System and the free XView toolkit.
+
+Among WAVE's capabilities are:
+ - fast display of waveforms and annotations at various calibrated scales
+ - fast access to any portion of a recording, with caching and `read-ahead'
+   heuristics to improve efficiency and reduce network traffic
+ - forward and backward searches for annotation patterns
+ - graphical annotation editing using standard or user-defined annotations
+ - variable-speed superimposition display (simulation of triggered oscilloscope
+   display with persistence;  can be run forward or backward)
+ - high-resolution printing of user-selected signal segments
+ - extremely flexible control of external signal-processing and analysis
+   programs (menus may be reconfigured by the user while WAVE is running)
+ - on-line `spot' help for all controls, with additional topic-oriented on-line
+   help
+
+Move the mouse pointer over any control and press the HELP key (or F1 if there
+is no HELP key) for information about that control.  (If your window manager
+does not cooperate, this may not work;  in that case, select `Buttons' from the
+`Help Topics' panel for information about controls.)
+
+The answers to many frequently asked questions about WAVE can be found in
+the WAVE FAQ (http://www.physionet.org/physiotools/wug/wave-faq.htm), which
+is part of the WAVE User's Guide (http://www.physionet.org/physiotools/wug/),
+a book-length tutorial and reference manual for WAVE.
+
+This program is free software; you can redistribute it and/or modify it under
+the terms of the GNU General Public License as published by the Free Software
+Foundation; either version 2 of the License, or (at your option) any later
+version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with
+this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+Place - Suite 330, Boston, MA 02111-1307, USA.
+
+Your comments and suggestions are welcome!  Please send them by e-mail to
+george@mit.edu, or by postal mail to:
+    George B. Moody
+    MIT Room E25-505A
+    Cambridge, MA 02139 USA
+For updates to this software, please visit http://www.physionet.org/.
+
+Contents
+========
+ . Before You Begin
+ . Starting WAVE
+   . Options
+   . Examples
+ . Using WAVE
+   . WAVE controls
+   . Annotation and Marker Editing
+   . Analyzing Data with WAVE
+   . WAVE Logs
+   . Printing
+ . Setting WAVE Resources
+
+Before You Begin
+================
+
+WAVE is a very powerful and flexible tool with a user interface that is easy
+to learn once you are familiar with the style of interaction common to other X
+applications.  To a significant extent, the "look and feel" of WAVE is
+determined by your choice of window manager and preferences.  If you have not
+used the X Window System before, you should study the documentation that
+describes your system's X server and window manager.  You should also find out
+how to simulate the possible actions of a three-button mouse if you do not
+have one (servers often provide keyboard/mouse combinations for this purpose).
+The remainder of this guide assumes that you know:
+ - how to log onto a system on which WAVE has already been installed;
+ - how to start an X application; and
+ - how to use the mouse.
+
+If you are planning to run WAVE remotely (i.e., if the display and
+keyboard in front of you do not belong to the system on which WAVE runs,
+but instead belong to another system on the same network), you may need
+to perform a few preparatory steps.  See `How can I use WAVE from an X
+terminal/PC/Mac/etc?' in the WAVE FAQ for details.
+
+Before running WAVE for the first time with a given X server, you may wish to
+calibrate your display so that WAVE can draw signals at the proper scales.
+See `How can I get correct display scales?' in the WAVE FAQ for details.
+
+In common with other WFDB applications, WAVE locates signal, annotation, and
+header files by searching for them in a user-definable sequence of locations
+(the WFDB path).  By default, the WFDB path includes the current directory,
+/usr/database, and http://www.physionet.org/physiobank/database (PhysioBank).
+If you keep data files that you wish to read using WAVE in other locations,
+be sure to set the WFDB path appropriately.  Bourne shell, Korn shell, and
+`bash' users can often do so by typing `. setwfdb';  C-shell users should type
+`source /PATH/TO/cshsetwfdb' (where /PATH/TO is usually one of the directories
+in the shell's own PATH, often /usr/bin or /usr/local/bin).  See the WFDB
+Programmer's Guide or the WFDB Applications Guide, or type `man setwfdb' for
+details.
+
+Starting WAVE
+=============
+
+From within a terminal window for the system on which WAVE resides, type:
+	wave -r RECORD OPTIONS
+where RECORD is the WFDB record name and OPTIONS can include any of the
+optional arguments listed below, or none of them.  Separate arguments
+with spaces, and execute the command by pressing RETURN (or ENTER, etc.).
+
+Options:
+--------
+ -a ANNOTATOR		Open the specified annotation file for the previously
+			specified RECORD.
+ -dpi XX[xYY]		Calibrate WAVE for a display with a resolution of
+			XX (by YY) dots per inch.
+ -f TIME		Open the previously specified RECORD at TIME.
+ -g			Use shades of grey only (even on a color monitor).
+ -m			Use black and white only (even on color or grayscale
+			monitors).
+ -O			Use overlay graphics (for the fastest and best-quality
+			graphics on displays that support this mode)
+ -s SIGNAL [SIGNAL ...] Initialize the signal list to the specified SIGNAL(s).
+ -S			Use the standard (shared) color palette (even if it
+			is possible to modify the palette).
+ -D LOGFILE		Start WAVE in `demo' mode (see below).
+ -V...			Specify initial values for the settings controlled
+			from the `View' panel (see `Resources' for details).
+Examples:
+---------
+ wave -r 200 -a atr		Open record 200, and show annotations from
+				the reference annotation file (200.atr)
+
+ wave -r 100 -g -dpi 65x70	Open record 100, and use shades of grey only
+				on a display that has a resolution of 65 dpi
+				horizontally by 70 dpi vertically
+
+WAVE queries the X server to determine the display capabilities and resolution;
+it is not necessary to use the -g, -m, or -S options unless you wish to
+restrict WAVE's use of the available capabilities.  The -O option exists only
+to force use of overlay mode if another mode has been set as the default (see
+`Setting WAVE Resources' below);  usually, overlay mode is the default.  Use
+-dpi only if the X server does not have, and cannot be supplied, the correct
+information about the display resolution.
+
+In `demo' mode, WAVE displays the strips specified in LOGFILE, pausing for 5
+seconds after each display.  All of WAVE's controls operate in normal fashion
+while `demo' mode is active.  To exit `demo' mode without exiting from WAVE,
+call up the `Log...' window from the `File' menu and press the `Pause' button.
+You can return to `demo' mode by pressing the `Review log' button.  (See `WAVE
+Logs', below, for information on creating a LOGFILE.)
+
+See the WAVE FAQ if you have difficulty getting started.
+
+Using WAVE
+==========
+
+After typing a command to start WAVE, as described above, the main window
+of WAVE should appear on your display.  (Some window managers may require
+you to specify the placement or sizing of a new window before it appears.
+In this case, you may see an outline of the window, or the cursor shape may
+change, and you must use the mouse to open the window.  This behaviour is
+beyond the control of WAVE.)
+
+Move the mouse so that the pointer lies within the WAVE main window.  (Again,
+depending on your window manager, you may have to set the input focus
+explicitly before proceeding.  Typically, you may have to click the left
+mouse button with the pointer within the window in order to do so.)  Once
+the WAVE main window has the input focus, the buttons in the main control
+panel (at the top of the window) can be used to control WAVE.
+
+Some of WAVE's panels contain regions marked by underlines for entry of text.
+By positioning the pointer near any of the underlined entries and clicking the
+left mouse button, you can set a text cursor that appears above the underline.
+You may delete characters to the left of the text cursor using the DELETE key,
+or you may type into the entry.  If you press RETURN, your changes take effect
+immediately;  you may change two or more entries without pressing RETURN, and
+the effects of the changes will be deferred until you press RETURN or select
+one of the buttons on the panel.  To select a panel button, position the
+pointer on the button and click the left mouse button.  If the button label
+includes a menu indicator (a downward- or rightward-pointing triangle), you
+may pop up the menu by pressing the right mouse button;  drag the pointer to
+the desired choice on the menu and release the right mouse button, or move the
+pointer off of the menu before releasing the right mouse button if you do not
+wish to choose any of the menu items.
+
+WAVE Controls
+-------------
+
+The buttons of the main control panel are:
+
+ File		Press the right mouse button to bring up the File menu, which
+		includes:
+	Load...		Select this item to bring up the Load window;  change
+			the `Record' or `Annotator' fields in the Load window
+			in order to load a different record or annotation file.
+			The initial values of these fields are obtained from
+			the -r and -a options on the command line.  If the
+			`Annotator' field is empty, no annotations are loaded.
+	Save		Select this item to force your edits to be written to
+			disk files.  (This is done automatically after every
+			20 edits, any time the record or annotator is changed,
+			and upon exiting WAVE.)
+	Print		Select this item to print the contents of the ECG
+			window in chart recorder format (after saving any
+			edits).  This is accomplished by spawning a `pschart'
+			process, so you need not wait for the output before
+			continuing.  Output from multiple print requests
+			appears in the order in which the requests were made.
+ 	Analyze...	Select this item to bring up the Analyze panel and the
+			Analysis commands window; use the buttons in the panel
+			to analyze the record, or type a command directly into
+			the Analysis commands window.  The names of most of the
+			buttons and their assigned actions are read from a menu
+			file (by default, /usr/local/lib/wavemenu.def; 	this
+			may be overridden by setting the environment variable
+			WAVEMENU to the name of a different file).  The buttons
+			are usually configured to perform various analysis
+			functions on the current record; read the default menu
+			file for details.
+	Log...		Select this item to bring up the Log window.  Change
+			the `Log file name' field to load a log file;  enter
+			text to be recorded in the log file in the
+			`Description' field.  Record an entry by pressing the
+			`Save' button, or dismiss the window without logging
+			the entry by pressing `Cancel'.  Review the entries
+			by pressing `Review log';  each entry will be displayed
+			for 5 seconds unless you press `Pause' (disabled except
+			while reviewing the log).  Each entry contains the
+			record name, the times shown at the lower left and
+			right corners of the ECG window, and the contents of
+			the `Description' field.  Log files may be used as
+			command scripts for `pschart'.  You may write to as
+			many log files in a single session as you choose, and
+			you may accumulate entries from multiple sessions in a
+			single log file.
+
+ View...	Press the left mouse button to bring up the View window, which
+		includes:
+	Show:		Select one or more of these items in order to enable
+			or disable optional elements of the ECG display.
+	Time scale:	Press the right mouse button to view the list of
+			available time scales;  drag the pointer to the
+			desired scale and release the right mouse button.
+	Amplitude scale:
+			Press the right mouse button to view the list of
+			available amplitude scales;  drag the pointer to the
+			desired scale and release the right mouse button.
+	Draw:		Press the right mouse button to select either `all
+			signals' or `listed signals only'.  If you choose
+			`listed signals only', signals are displayed in the
+			order specified in the signal list on the `Analyze'
+			panel, and any signals not included in the list are
+			not displayed.
+	Grid:		Press the right mouse button to view the list of
+			available grid types;  drag the pointer to the
+			desired type and release the right mouse button.
+	Undo changes	Select this item to restore the View window indicators
+			to match the current state of the ECG window.
+	Redraw		Select this item to apply any changes you have made
+			and to dismiss the View window.
+
+ Edit		Press the right mouse button to bring up the Edit menu, which
+		includes:
+	Allow editing	Select this item if you wish to make changes in the
+			annotation file.
+	View only	Select this item if you do not wish to edit the
+			annotation file any longer.  By default, editing is
+			disabled when WAVE is started up.
+
+ Properties	Press the right mouse button to bring up the Properties menu,
+		which includes:
+	Signals...	Select this item to view information about the ECG
+			signals in the current record.
+	Annotations...	Select this item to view a summary of the contents of
+			the current annotation file.
+	About WAVE...	Select this item to view information about the version
+			number and installation date of this version of WAVE.
+
+ < Search	Search backwards, beginning with the annotation that
+		immediately precedes the earliest annotation currently
+		displayed, for an annotation that matches the entry in the
+		"Search for" field of the Find window (see below).  The display
+		is redrawn, roughly centered on the matching annotation.
+
+ <<		Skip backwards by an amount equal to the duration of the
+		signals currently displayed (i.e., a full screen).
+
+ <		Skip backwards by one-half screen.
+
+ Find...	Press the left mouse button to bring up the Find window, which
+		includes:
+	Start time:	The value of this item is the time shown in the lower
+			left corner of the ECG window.  Change it in order to
+			view another part of the record.  (Time can be entered
+			in h:m:s format, with hours or hours and minutes
+			omitted, or in sNNNNN format, in which NNNNN is a
+			number of sample intervals from the beginning of the
+			record.  Time is always rounded down to an even
+			multiple of one second, and is displayed in m:s or
+			h:m:s format irrespective of the input format once the
+			display is refreshed.)
+	End time:	Similarly, this item's value is the time shown in the
+			lower right corner of the ECG window.  Change it in
+			order to view another part of the record.  If you
+			change both the Start time and the End time fields
+			without pressing RETURN in between, only the last
+			change is effective.  To change the duration of the
+			ECG window, select the View window (see above) and
+			change the time scale.
+	Search for:	This entry is initially empty.  Enter a string to
+			specify a search target for the "< Search" and
+			"Search >" buttons.  The string should match an
+			annotation or marker mnemonic, signal quality code,
+			rhythm, comment, or other text string, or one of:
+			  *v	to match any ventricular ectopic beat
+			  *s	to match any supraventricular ectopic beat
+			  *n	to match any other beat type
+			  *	to match any annotation or marker
+			  .	to match a deletion made during this edit
+
+ >		Skip forwards by one-half screen.
+
+ >>		Skip forwards by a full screen.
+
+ Search >	Search forwards, beginning with the annotation that
+		immediately follows the last annotation currently displayed,
+		for an annotation that matches the entry in the "Search for"
+		field of the Find window (see above).  The display is redrawn,
+		roughly centered on the matching annotation.
+
+ Help		This button pops up a panel containing buttons that name
+		several topics for which extensive on-line help is available.
+		Choosing a topic allows you to browse through the associated
+		help file in a scrollable text window.
+
+ Quit		WAVE exits when you press this button, after saving your edits
+		if any.  If your input file would be overwritten as a result of
+		saving your edits, it is first renamed by appending a `~' to
+		the annotator name.  If you have entered annotations but have
+		not specified an annotator, the name by which you invoked this
+		program (normally, `wave') is used for the annotator name.
+
+Annotation and Marker Editing
+-----------------------------
+
+Annotations may be edited if you have enabled editing from the Edit menu. If
+you have specified an existing annotator on the command line or in the Load
+window (accessible from the File menu), you can modify the annotations assigned
+to that annotator.  You may also specify a new annotator name and create the
+annotation set from scratch.  If you do not specify an annotator name, WAVE
+creates an output annotation file for you if you insert any annotations;  the
+annotator name in this case is the name by which you invoked WAVE (normally
+`wave').
+
+If you have chosen to have annotations displayed by WAVE attached to signals
+(using the `Show annotations' menu button on WAVE's View panel), be sure to
+read the comments on `Multi-edit mode' at the end of this help topic, since
+editing operations in that mode are slightly different.
+
+Move the mouse so that the pointer enters the signal window (the portion of the
+main window in which the signals are drawn), and click the left mouse button.
+(While within the signal window, the shape of the pointer changes to a pair of
+crosshairs, which intersect at the "hot spot".)  The Annotation Template window
+appears; it shows the attributes given to any annotations that are inserted.
+The `Type' item shows the annotation mnemonic; if this field is `.', existing
+annotations will be deleted rather than changed.  You may change the type
+either by pulling down the type menu using the right mouse button, or by typing
+the mnemonic while the pointer is in the signal window.  Other fields may be
+set as desired.  You may remove the Annotation Template window from the screen
+by pressing the "Dismiss" button, but you may prefer to leave it on-screen as
+a reminder of its current contents.
+
+To INSERT an annotation, type its mnemonic while the pointer is in the signal
+display area (or select the desired type and other attributes in the Annotation
+Template window).  Move the pointer's hot spot to the spot where you wish to
+insert the annotation, and click the middle mouse button.  If you wish, you may
+"drag" the fiducial line (which appears when you press the middle button) to
+the exact location desired, then release the button to insert the annotation.
+
+To SELECT an existing annotation (in preparation for moving, changing, or
+deleting it), click the left or right mouse buttons to move the pointer one
+annotation at a time left or right.  The annotation under the pointer is
+"selected" by this operation and may be moved, changed, or deleted while it is
+marked with a rectangle.  WAVE recenters the display on the selected annotation
+if the pointer would otherwise move past the left or right edge of the signal
+window.
+
+To COPY an existing annotation, select it, then press <Copy> (or <F6> if your
+keyboard does not have a <Copy> key).  This action copies the selected
+annotation into the Annotation Template.  Now insert the copy at the desired
+location.
+
+To MOVE an existing annotation, select it using the left or right mouse button,
+drag its marker bars to the desired location, then release the button.
+Until the button is released, the rectangle stays in its original position;
+if you decide not to move the annotation, simply move the pointer back into
+the rectangle before releasing the button.  To move an annotation by an amount
+less than the width of the rectangle, simply drag the pointer above or below
+the rectangle to the desired position.
+
+To CHANGE an existing annotation, set the desired attributes in the Annotation
+Template window as described above.  Select the annotation to be changed using
+the left or right mouse buttons.  While the pointer is within the rectangle,
+click the middle mouse button.  The previous annotation at the same time is
+overwritten by the new one.  Thus this operation is just like inserting a new
+annotation, except that you select an existing annotation first.
+
+To DELETE an annotation, type "." while the pointer is in the signal window, or
+select the ". (deleted annotation)" item from the Type menu within the
+Annotation Template window.  Select the annotation to be deleted using the left
+or right mouse buttons as above, then click the middle button to delete the
+annotation.  The previous annotation is removed, and a "." appears in its place
+(thus this operation is exactly like changing an annotation).  The "." marks
+remain until the annotation file is closed; until that time, they can be
+selected in the same way as ordinary annotations, but they are not written to
+the output annotation file.
+
+If you perform the deletion operation on an annotation that is marked as
+deleted, the annotation is "undeleted" (i.e., restored to its original state).
+
+To perform the same operation repeatedly it is not necessary to retype the
+annotation mnemonic (or ".") each time.  Type the mnemonic only when you wish
+to change the type of editing operation.
+
+The operations above, with the exception of moving an annotation, may also be
+performed using the keyboard.  The `Num Lock' indicator must be off (press the
+`Num Lock' key to turn off the indicator if necessary), and the pointer must
+be in the signal window (as indicated by a crosshair pointer replacing the
+normal arrow pointer).  In this context, keys <4>, <5>, and <6> (left-arrow,
+unmarked, and right-arrow) on the numeric keypad behave in the same way as the
+left, middle, and right mouse buttons respectively (except that <shift> cannot
+be used with the keypad as with the mouse buttons; <control> and <meta> do
+work, however).  You can move the pointer left or right using the <=> and <*>
+keys on the keypad (useful for inserting annotations);  the pointer accelerates
+while these keys are depressed.
+
+To change or delete all annotations in a specified interval:
+ 1. mark the beginning of the interval with the `<' (begin analysis) marker
+ 2. mark the end of the interval with the `>' (end analysis marker)
+ 3. set the Type, Text, Subtype, Chan, and Num fields of the Annotation
+    Template as desired
+ 4. press the `Change all in range' button in the Annotation Template window
+Since this operation can have far-reaching consequences, WAVE asks for
+confirmation before performing it if either of the `<' or `>' markers is not
+on-screen.
+
+During editing, the current state of the annotation buffer is saved frequently
+to avoid the possibility of data loss.  The output annotation file is given
+the name of the input annotation file.  Since input annotation files are not
+necessarily found in the current directory, it may not be necessary to create
+a backup file for the input in order to avoid overwriting it.  If, however,
+the input file is found in the directory in which the output file is to be
+written, it is renamed by appending a tilde (`~') to the annotator name.  Only
+one level of backup is preserved, so you will overwrite the original
+annotation file if it is in the current directory and you open the same
+annotator more than once.
+
+Markers (displayed as `<', `:', and `>') may be edited just as for annotations,
+but they are not saved in output annotation files.  It is not necessary to
+enable editing from the Edit menu in order to be able to edit markers.  Note
+that there can be at most one `<' (beginning of analysis) and one `>' (end of
+analysis) marker in the annotation buffer at any time;  inserting one of these
+markers has the effect of deleting any other marker of the same type.  You may
+have as many `:' (index) markers as you wish.  It is also possible to insert
+`<' and `>' markers by entering the time directly into the `Start' and `End'
+fields in the Analyze window (obtained from the File menu).  Markers are not
+affected by use of the `Change all in range' button.
+
+For information on defining new annotation types, see the help topic called
+`Resources'.
+
+
+Multi-edit mode
+---------------
+
+Using the `Show annotations' menu button on WAVE's View panel, you may choose
+to have annotations displayed attached to signals.  In this case, the `chan'
+field of each annotation specifies the signal number of the signal to which it
+is attached.  If annotation editing is enabled when annotations are displayed
+in this way, WAVE is in `multi-edit mode'.
+
+WAVE draws the signals in order of signal number from the top to the bottom of
+the signal window, beginning with signal number 0 at the top of the signal
+window.  When annotations are attached to signals, WAVE draws them about 2 mm
+above the center of the range of the attached signal (except for special
+annotations that are displaced above or below the usual level).  Although this
+presentation usually helps to avoid the visual confusion that might result from
+drawing annotations directly on the associated signals, it may contribute to
+confusion if the spacing between signals is too small (as may happen if the
+signal window is reduced in height, or if many signals are displayed).  If this
+becomes a problem, try increasing the height of the signal window (by dragging
+on the resize handles on the window frame), or displaying only a subset of the
+signals (by specifying which signals are to be shown in the `Signal list' field
+of WAVE's Analyze panel, and selecting `Draw: listed signals only' in WAVE's
+View panel).
+
+In multi-edit mode, annotation editing operations are slightly different from
+those described above.  The most important difference is that you must always
+point to the desired signal when inserting or moving annotations.  In this
+mode, the `chan' field in the Annotation Template window does not determine the
+`chan' field of an inserted annotation; rather, the signal to which you point
+determines the `chan' field, and the `chan' field in the Annotation Template
+window is updated accordingly after each insertion.  To move an annotation to a
+different signal, simply select it and drag the pointer to the desired time and
+signal.  If you wish to change the `chan' field of an annotation without
+changing its time, select the annotation and use the up-arrow and down-arrow
+keys (keys <2> and <8> on the numeric keypad; `Num Lock' must be off) to move
+it to the desired signal.  Hold down the <control> key during these operations
+to copy the annotation, rather than to move it (simultaneous annotations are
+permitted if their `chan' fields differ).
+
+
+Changing the display scales ("zooming")
+---------------------------------------
+
+While editing, it may be helpful to change the time or amplitude scales.
+You may do so either using the controls on the View panel, or by using
+these keyboard commands while the focus is in the signal window:
+
+  <Ctrl>+<(>   Zoom in (show more detail by expanding the time axis)
+  <Ctrl>+<)>   Zoom out (show more context by compressing the time axis)
+  <Ctrl>+<+>   Increase the amplitude of the signal(s)
+  <Ctrl>+<->   Decrease the amplitude of the signal(s)
+  <Ctrl>+<*>   Invert the signal(s)
+  <Ctrl>+<=>   Restore the scales selected on the View panel
+
+If you have selected a signal (by <Shift>+<left click> near the signal of
+interest), amplitude changes will be applied to that signal only.  Otherwise,
+they will be applied to all signals.
+
+Analyzing Data with WAVE
+------------------------
+
+For many users, WAVE's data analysis capabilities will be of greatest
+interest.  WAVE itself does not perform analysis of the signals or
+annotations it displays.  What WAVE offers is an easy-to-use means of
+controlling external analysis programs and viewing their outputs.  The buttons
+in the Analyze panel activate these external programs.  These buttons are easy
+to create -- in fact, you can add your own buttons to those in the Analyze
+panel while WAVE is running.
+
+The controls at the top of the Analyze panel are always the same:
+  Start:	The time at which analysis should begin.  When WAVE starts up,
+		the contents of this field are `beginning of record'.  To
+		change it, either type a time (such as `2:25') into this field,
+		or insert a `start of analysis' (`<') marker (see `Editing').
+  End:		The time at which analysis should end.  When WAVE starts up,
+		the contents of this field are `end of record'.  To change it,
+		either type a time into this field, or insert an `end of
+		analysis' (`>') marker.
+  Signal:	The signal number of the selected signal.  To select a signal,
+		either enter its number in this field directly, or point to the
+		desired signal in the signal window, depress the <Shift> key,
+		and click left.  The selected signal is highlighted if a
+		selection has been made since the signal window was redrawn.
+  Signal list:	An ordered list of signal numbers specifying which signals are
+		to be analyzed, printed, or displayed.  When WAVE starts up,
+		the signal list contains all of the available signals for the
+		record.  A signal may appear more than once in the signal list.
+		To change the signal list, either:
+		 1. type directly into the list; or
+		 2. point to a signal, then depress the <Control> key and click
+		    left (to add it to the list), or depress the <Meta> key
+		    and click left (to delete its first occurrence, if any,
+		    from the list).
+		Note: by default, WAVE displays all available signals, not just
+		those on the signal list.  To display the listed signals only,
+		change the `Draw' selection in the `View' window.
+  Show scope window
+		Press this button to open WAVE's `oscilloscope' window.
+  Show command window
+		Press this button to reopen the Analysis commands window if
+		you have closed it.
+  Edit menu	Press this button to open an editor window containing WAVE's
+		menu file (see below).
+  Reread menu	Press this button to force WAVE to reread the menu file (be
+		sure to save your changes first) and to reconfigure the Analyze
+		panel.  The Analyze panel briefly disappears before returning
+		(possibly in a different location on the screen, depending on
+		your window manager).
+
+The remaining buttons in the Analyze panel (both their labels and the actions
+they perform) are specified by WAVE's menu file.  WAVE's menu file may be named
+by the enviroment variable WAVEMENU.  If WAVEMENU is not set, WAVE reads a
+file called `wavemenu' if it exists in the current directory, or the system
+default menu file (usually `wavemenu.def' in /usr/local/lib) otherwise.
+
+In menu files, comment lines begin with `#'.  The comments at the beginning of
+the default menu file describe how it works.  Except for those listed above,
+each of the buttons in the Analyze panel corresponds to an entry in the menu
+file.  The first part of the entry -- up to the first tab character --
+specifies the label that appears on the button; the remainder of the entry
+specifies the command that is inserted into the Analysis commands window if you
+click left on the button.  Certain strings that begin with `$' are interpreted
+by WAVE before being passed to the shell in the Analysis commands window:
+	$RECORD		the current record name
+	$ANNOTATOR	the current input annotator name
+	$START		the current `Start' time as shown in the Analyze panel
+			 (the time of the `<' marker, if any)
+	$END		the current `End' time as shown in the Analyze panel
+			 (the time of the `>' marker, if any)
+	$DURATION	the time interval between $END and $START
+	$LEFT		the time of the left edge of the signal display window
+	$RIGHT		the time of the right edge of the signal display window
+	$WIDTH		the time interval between $RIGHT and $LEFT
+	$SIGNAL		the number of the selected signal
+	$SIGNALS	the signal list
+	$LOG		the name of the current log file
+	$WFDB		the WFDB path (from the Load panel)
+	$WFDBCAL	the name of the WFDB calibration file (from the Load
+			  panel)
+
+Other strings that begin with `$' are passed to the shell unchanged.  The
+character `\', if immediately followed by a newline, causes the next line to be
+treated as a continuation of the current line.
+
+In the default WAVE menu, for example, the `List annotations' and `List
+samples' buttons are specified as:
+  List annotations	rdann -r $RECORD -a $ANNOTATOR -f $START -t $END
+  List samples		rdsamp -r $RECORD -f $START -t $END -s $SIGNALS
+(Refer to the `man' pages for `rdann' and `rdsamp', or to the ECG Database
+Applications Guide, for details on how these programs interpret their
+command-line arguments.)
+
+A common problem in many cases is simply selecting a segment to be analyzed,
+from a digitized signal file that may include extraneous material at the
+beginning or at the end.  This can be done easily by inspecting the signals
+with WAVE and placing `<' and `>' markers at the beginning and end of the
+region of interest.  If the analysis program is written to accept starting and
+ending times, these times can be passed as command-line arguments by WAVE,
+as in the examples above.  Similarly, it's simple to choose one or more of a
+larger number of signals to be analyzed after viewing them with WAVE (as in
+the `List samples' example).
+
+Editing WAVE's menu file
+------------------------
+
+When you click left on `Edit menu' in the Analyze panel, WAVE's menu file
+appears in an OpenWindows `textedit' window, unless you have specified a
+different editor by setting the EDITOR environment variable.  The command
+needed to start the editor appears in the Analysis commands window.  If you
+have changed directories within the Analysis commands window, and the name
+of WAVE's menu file does not begin with `/', the editor may not open the
+correct menu file.  If this happens, exit from the editor, return to the
+original directory in the Analysis commands window, and try again.
+
+If WAVEMENU is not set, `wavemenu' doesn't exist, and you click on `Edit menu',
+WAVE pops up a notice:
+	    You are now using the system default menu file,
+	           which you may not edit directly.
+          Press `Copy' to copy it into the current directory
+	    as `wavemenu' (and remember to set the WAVEMENU
+	           environment variable next time),
+			        - or -
+          Press `Quit' if you prefer not to edit a menu file.
+If you select `Copy', you will be able to edit the copy as many times as you
+wish in the current session of WAVE.  If you wish to use the edited menu in
+future sessions, WAVEMENU should be set to the path name of your customized
+menu file (you can give the menu file any name you choose).  For example, if
+you use the C-shell, and `wavemenu' is in your home directory, use the command
+    setenv WAVEMENU ~/wavemenu
+before running WAVE again.  You may wish to add this command to your `.login'
+script to set the variable automatically each time you log in.
+
+Be careful when editing the menu file to keep at least one <tab> character
+between each button label and its associated command.  If you cut-and-paste
+(or drag-and-drop) menu entries from another window, tabs may have been
+converted to spaces.
+
+When you have finished editing the menu file, save your work and exit from
+the editor before clicking on `Reread menu' in the Analyze panel.
+
+WAVE Logs
+---------
+
+WAVE logs are text files, in the format used by `pschart' and `psfd' script
+files.  Typically, logs contain notes about interesting sections of one or more
+records.  Each entry (line) in a WAVE log contains a record name, a time
+reference, and a comment.  Using the `Log ...' window (accessed from the `File'
+menu of WAVE's main control panel), you may create or review logs, and add,
+modify, or delete entries in them.  Within the WAVE menu, the name of the
+current log file can be represented as `$LOG';  this feature may be used to
+write WAVE extensions that extract or print segments of interest.
+
+When the log panel is first opened, most of its controls are disabled.  You
+must specify a name for the log before you can use any of these controls.
+Do so by typing the name into the `File:' field;  press RETURN to tell WAVE
+to accept the name.  If the log exists already, WAVE reads its contents and
+shows you its first entry.  If the log does not exist, WAVE creates an empty
+log with the name you have chosen.  The other controls are enabled as
+appropriate (for example, the `Delete' button is not enabled unless there is
+an entry to delete).
+
+The `Description:' field contains the description associated with the current
+log entry.
+
+The buttons of the log panel are:
+
+ Load		WAVE reads the log file into memory, after saving the current
+		contents as a backup file if any changes were made since it
+		was most recently loaded.  Use this button to read a log
+	        file generated by another process, such as a WAVE analysis
+		menu button.
+
+ Add		WAVE adds an entry containing the record name and the contents
+		of the description field to the log file.  If an annotation or
+		marker within the signal window has been selected (i.e., if it
+		is shown marked with a box), WAVE records the time of that
+		annotation in the log entry;  when the entry is redisplayed,
+		WAVE selects the same annotation again.  Otherwise, WAVE
+		records the times in the lower left and right corners of the
+		signal window.
+
+ Replace	WAVE replaces the description attached to the current log
+		entry with the current contents of the description field.  It
+		does not create a new entry (use the `Add' button for that
+		purpose).
+
+ Delete		WAVE deletes the current entry from the log, and displays the
+		next entry if it exists.
+
+ Edit		This button is currently non-functional.
+
+ |<		WAVE shows the first log entry.
+
+ <<		WAVE reviews each entry in the log file in reverse order,
+		pausing 5 seconds between entries.  While a review is in
+		progress, only the Pause button is enabled.
+
+ <		WAVE shows the previous log entry.
+
+ Pause		WAVE stops the log review that was begun by the `<<' or `>>'
+		button.  This button is disabled unless a review is in
+		progress.
+
+ >		WAVE shows the next log entry.
+
+ >>		WAVE reviews each entry in the log file, pausing 5 seconds
+		between entries.  While a review is in progress, only the
+		Pause button is enabled.
+
+ >|		WAVE shows the last log entry.
+Printing
+--------
+
+There are three ways to print annotated signals from WAVE:
+
+1. From the File menu, select `Print'.  This produces a `chart recorder' format
+   copy of the contents of the Signal window.
+2. From the File menu, select `Analyze...' and then `Print chart' from the
+   Analyze window.
+3. From the File menu, select `Analyze...' and then `Print full disclosure'
+   from the Analyze window.
+
+If you choose either of the last two methods, you should first select the
+portion of the record you wish to print, either by entering the times directly
+in the `Start' and `End' fields of the Analyze window, or by inserting `<' and
+`>' markers at the beginning and end of the segment to be printed.
+
+Printing is performed by spawning a `pschart' or `psfd' process (after saving
+any edits).  In general, the output has higher resolution than is possible on
+screen.
+
+Setting WAVE Resources
+======================
+
+You can control many aspects of WAVE's appearance and behaviour by setting its
+resources.  If you are not familiar with this concept, refer to an introductory
+book on using the X Window System, such as Quercia and O'Reilly's `X Window
+System User's Guide'.  Since WAVE is built using the XView toolkit, all of the
+resources listed in the man page for XView can be used with WAVE (type `man
+xview' for details).  In addition, the WAVE-specific resources listed below may
+also be set.  Those marked with a `*' are recorded in your `.Xdefaults' file
+when you use the `Save as new defaults' button in the `View' panel.
+
+If you use WAVE on workstations with different display capabilities, you can
+create custom resource settings for each one by moving these resource
+definitions from .Xdefaults to .Xdefaults-HOSTNAME (where HOSTNAME specifies
+the system to which the display is attached).  The resources marked below with
+a `+' are those that are most likely to require different settings on different
+displays, but any of the others can also be moved to .Xdefaults-HOSTNAME.
+
+Wave.AllowDottedLines * +
+    This resource specifies if WAVE is allowed to render dotted lines.  WAVE
+    normally draws annotation marker bars as dotted lines, and may use dotted
+    lines for other display elements on black-and-white displays for clarity.
+    Some X servers do not properly render dotted lines, however;  if you
+    observe irregular or missing annotation marker bars, change the value of
+    this resource from `True' to `False' (by editing `.Xdefaults').
+
+Wave.Anntab
+    This resource specifies the name of a file that contains a table of
+    annotation definitions.  The environment variable ANNTAB can also be used
+    to specify this filename;  the resource overrides the environment variable
+    if both are set.  The file contains one-line entries of the form
+        15 % Funny looking beat
+    in which the first field specifies the (numeric) annotation code in the
+    range between 1 and ACMAX inclusive (see /usr/include/ecg/ecgcodes.h for a
+    list of predefined codes and for the definition of ACMAX);  the second
+    field (`%' in the example) is a mnemonic (used in annotation display and
+    entry), and the remainder of the entry is a description of the intended use
+    of the annotation code (which appears next to the mnemonic in the `Type'
+    field and menu of `Annotation Template' windows).  Lines in the annotation
+    table that begin with `#' are treated as comments and ignored.  It is not
+    necessary to specify an annotation table when editing an existing
+    annotation file unless previously undefined annotation types are to be
+    added to it during the editing process, although it is generally harmless
+    to do so.
+
+Wave.Dpi * +
+    This resource specifies the display resolution in dots per inch in the
+    form `MMxNN', where MM is the horizontal resolution and NN is the vertical
+    resolution.  Normally, the resolution is known to the X server, and it is
+    unnecessary to specify this resource.  If your X server is misinformed,
+    WAVE's calibrated display scales will be incorrect;  the best solution is
+    to specify the resolution using a server option such as the `-dpi' option
+    supported by MIT's X11R4 servers, since this will solve problems common
+    to any other applications that require calibrated scales as well.  Sun's
+    xnews server, however, labors under the delusion that all displays have 83
+    dots per inch resolution (true only for some 19" monitors) and cannot be
+    persuaded otherwise, so it is necessary to inform WAVE using this resource
+    or the `-dpi' command-line option if you are using xnews on any other type
+    of monitor.  The command-line option overrides the resource if both are
+    specified.
+
+Wave.GraphicsMode * +
+    This resource specifies the graphics mode used by WAVE;  it can be
+    overridden using the -g, -m, -O, or -S options.  The legal values are
+    1 (monochrome mode), 2 (overlay greyscale mode), 4 (shared color mode), 6
+    (shared grey mode), and 8 (overlay color mode).
+
+Wave.SignalWindow.{Grey|Color}.{Background|Grid|Cursor|Annotation|Signal}
+    These resources specify the colors to be used on greyscale or color
+    displays.  The `Color.*' resources are used only if the display is
+    color-capable and neither greyscale nor monochrome mode has been
+    specified.  The defaults are:
+				Grey		Color
+		Background	white		white
+		Grid		grey75		grey75
+		Cursor		grey50		orange red
+		Annotation	grey25		yellow green
+		Signal		black		blue
+
+Wave.SignalWindow.Mono.Background
+    In monochrome mode, the background color is normally white, and all other
+    colors are normally black.  The reverse can be obtained by setting this
+    resource to `black'.  [There is at least one server for which this fails.]
+
+Wave.SignalWindow.{Height_mm|Width_mm} *
+    These resources specify the preferred dimensions (in millimeters) for the
+    signal window.  The defaults are 120 and 250 respectively.  The signal
+    window can be resized by dragging any of its resize handles using the left
+    mouse button.
+
+Wave.SignalWindow.Font
+    This resource specifies the font used to display annotations and time
+    marks in the signal window.  The default is `fixed'.
+
+Wave.TextEditor
+    This resource specifies the name of the text editor invoked by WAVE to
+    permit you to edit WAVE's log and analysis menu files.  The default is
+    `textedit' (the OpenLook visual editor).  You may override this resource
+    by using the environment variable EDITOR, which is also used by many other
+    UNIX applications that invoke editors.
+
+Wave.View.{Subtype|Chan|Num|Aux|Markers|SignalNames|Baselines|Level} *
+    These resources specify which of the `Show:' options at the top of the
+    `View' panel are enabled by default;  their values are `True' or `False'.
+
+Wave.View.{TimeScale|AmplitudeScale} *
+Wave.View.{SignalMode|AnnotationMode|TimeMode|GridMode} *
+    These resources specify the initial positions of the menu choices in the
+    corresponding `View' menus, where the top item on each menu is in position
+    0, the one below it is in position 1, etc.  For example, to set the
+    initial time scale to 50 mm/sec (the item at position 6 in the `Time Scale'
+    menu), set Wave.View.TimeScale to 6.
+
+Note that WAVE-specific resources cannot be set using the XView `-default'
+or `-xrm' options.
