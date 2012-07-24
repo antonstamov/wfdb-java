@@ -1,3 +1,0 @@
-WFDB=". ${HOME}/database /afs/.ecg.mit.edu/software/wfdb/amd64_linux26/wfdb_v10.5.8//database /cdrom http://www.physionet.org/physiobank/database"; export WFDB
-: Change www.physionet.org above to your favorite mirror if you wish
-WFDBCAL=wfdbcal; export WFDBCAL
