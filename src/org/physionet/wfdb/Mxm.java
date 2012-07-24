@@ -37,18 +37,22 @@ package org.physionet.wfdb;
  * @author Ikaro Silva
  * 
  */
-public class Coherence extends Wfdbexec {
+public class Mxm extends Wfdbexec {
 
-	private static final String TAG = "coherence";
-	public static final String URL="http://www.physionet.org/physiotools/old/dbag/cohere-1.htm";
-	
+	private static final String TAG = "mxm";
+	public static final String URL="http://www.physionet.org/physiotools/wag/mxm-1.htm";
+
 	public static enum Arguments {
 		//Define input arguments syntax is:
 		// argumentName(number of parameters,is optional,WDFD command string)
-		inputFileName(1,false, "-i"),
-		samplingFrequencyHz(1,true, "-f"),
-		windowSize(1,true, "-n"),
-		scaleFactor(1,true, "-x");
+		recordName(1,false, "-r"),
+		annotators(1,false, "-a"),
+		startTime(1,true, "-f"),
+		appendLineFormattoFile(1,true, "-l"),
+		compareMType(1,true, "-m"),
+		appendStarndardFormattoFile(1, true,"-s"),
+		stopTime(1,true, "-t"),
+		unormalizedRMS(0,true, "-u");
 		public int parameters;
 		public boolean optional;
 		public String label;
@@ -59,11 +63,10 @@ public class Coherence extends Wfdbexec {
 		}
 	}
 
-	
-	public Coherence() {
+	public Mxm() {
 		setExecName(TAG);
 	}
-		
+	
 	public String getArgumentValue(Arguments arg) {
 		return this.argumentValues.get(arg.label);
 	}

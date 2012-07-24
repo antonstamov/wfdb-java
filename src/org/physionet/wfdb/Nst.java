@@ -37,18 +37,20 @@ package org.physionet.wfdb;
  * @author Ikaro Silva
  * 
  */
-public class Coherence extends Wfdbexec {
+public class Nst extends Wfdbexec {
 
-	private static final String TAG = "coherence";
-	public static final String URL="http://www.physionet.org/physiotools/old/dbag/cohere-1.htm";
+	private static final String TAG = "nst";
+	public static final String URL="http://www.physionet.org/physiotools/wag/nst-1.htm";
 	
 	public static enum Arguments {
 		//Define input arguments syntax is:
 		// argumentName(number of parameters,is optional,WDFD command string)
-		inputFileName(1,false, "-i"),
-		samplingFrequencyHz(1,true, "-f"),
-		windowSize(1,true, "-n"),
-		scaleFactor(1,true, "-x");
+		cleanAndNoisyRecords(1,false, "-i"),
+		annotator(1,true, "-a"),
+		signalFormat(1,true, "-F"),
+		outputRecord(1,true, "-o"),
+		protocol(1,true, "-p"),
+		signalToNoiseRatio(1,true, "-s");
 		public int parameters;
 		public boolean optional;
 		public String label;
@@ -60,7 +62,7 @@ public class Coherence extends Wfdbexec {
 	}
 
 	
-	public Coherence() {
+	public Nst() {
 		setExecName(TAG);
 	}
 		
