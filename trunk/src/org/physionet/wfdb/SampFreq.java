@@ -37,18 +37,16 @@ package org.physionet.wfdb;
  * @author Ikaro Silva
  * 
  */
-public class Coherence extends Wfdbexec {
+public class SampFreq extends Wfdbexec {
 
-	private static final String TAG = "coherence";
-	public static final String URL="http://www.physionet.org/physiotools/old/dbag/cohere-1.htm";
+	private static final String TAG = "sampfreq";
+	public static final String URL="http://www.physionet.org/physiotools/wag/sampfr-1.htm";
 	
 	public static enum Arguments {
 		//Define input arguments syntax is:
 		// argumentName(number of parameters,is optional,WDFD command string)
-		inputFileName(1,false, "-i"),
-		samplingFrequencyHz(1,true, "-f"),
-		windowSize(1,true, "-n"),
-		scaleFactor(1,true, "-x");
+		recordName(1,false, ""),
+		showHighestSamplingFrequency(0,false, "-H");
 		public int parameters;
 		public boolean optional;
 		public String label;
@@ -60,7 +58,7 @@ public class Coherence extends Wfdbexec {
 	}
 
 	
-	public Coherence() {
+	public SampFreq() {
 		setExecName(TAG);
 	}
 		

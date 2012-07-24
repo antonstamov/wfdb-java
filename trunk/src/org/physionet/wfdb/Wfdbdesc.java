@@ -40,7 +40,7 @@ package org.physionet.wfdb;
 	public class Wfdbdesc extends Wfdbexec {
 
 		private static final String TAG = "wfdbdesc";
-
+		public static final String URL="http://www.physionet.org/physiotools/wag/wfdbe-1.htm";
 		public static enum Arguments {
 			//Define input arguments syntax is:
 			// argumentName(number of parameters,is optional,WDFD command string)
