@@ -1,1 +1,0 @@
-.././mpi/i386/mpih-sub1.S

@@ -1,3 +1,0 @@
-setenv WFDB ". ${HOME}/database /home/ikaro/workspace/wfdb-java/nativelibs/linuxi386/tmp/wfdb-10.5.13/build/database /cdrom http://www.physionet.org/physiobank/database"
-# Change www.physionet.org above to your favorite mirror if you wish
-setenv WFDBCAL wfdbcal
