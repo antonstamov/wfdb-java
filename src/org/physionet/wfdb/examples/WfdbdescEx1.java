@@ -7,6 +7,6 @@ public class WfdbdescEx1 {
 		// Simple test of for the class Reads first 10 seconds of ECG
 		Wfdbdesc wfdbdesc= new Wfdbdesc();
 		wfdbdesc.setArgumentValue(Wfdbdesc.Arguments.recordName, "mitdb/100");
-		System.out.println(wfdbdesc.exec());
+		System.out.println(wfdbdesc.execToString());
 	}
 }
