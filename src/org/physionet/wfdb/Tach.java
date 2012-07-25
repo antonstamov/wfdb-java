@@ -67,7 +67,7 @@ public class Tach extends Wfdbexec {
 	}
 
 	
-	public Sumann() {
+	public Tach() {
 		setExecName(TAG);
 	}
 		
