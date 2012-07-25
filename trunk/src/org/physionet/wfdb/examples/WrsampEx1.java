@@ -12,7 +12,7 @@ public class WrsampEx1 {
 		Wrsamp wrsampexec = new Wrsamp();
 		wrsampexec.setArgumentValue(Wrsamp.Arguments.file,inFile);
 		wrsampexec.setArgumentValue(Wrsamp.Arguments.outputFile,outFile);
-		wrsampexec.exec();
+		wrsampexec.execToString();
 		System.out.println("Done executing,  file save at:");
 		System.out.println(out_dir + System.getProperty("file.separator") 
 				+ outFile + ".dat");
