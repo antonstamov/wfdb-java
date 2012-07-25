@@ -94,20 +94,21 @@ public class Wfdbexec {
 		return argumentValues;
 	}
 
-	public String exec(String command,List<String> inputs){
+	/*  TO DO: Remove this from later versions 
+	public ArrayList<String> exec(String command,List<String> inputs){
 
 		ProcessBuilder launcher=new ProcessBuilder();
 		launcher.redirectErrorStream(true);
 		inputs.add(0,Wfdbexec.WFDB_NATIVE_BIN + command);
 		launcher.command(inputs);
-		String results="";
+		ArrayList<String> results= new ArrayList<String>();
 		try {
 			Process p =launcher.start();
 			BufferedReader output = new BufferedReader(
 					new InputStreamReader(p.getInputStream()));
 			String line;
 			while ((line = output.readLine()) != null)
-				results +=line +"\n";
+				results.add(line);
 			p.waitFor();
 			
 		} catch (IOException e) {
@@ -118,7 +119,8 @@ public class Wfdbexec {
 		return results;
 
 	}
-
+	 */
+	
 	private void gen_exec_arguments() {
 		// Generates a list to be passed to the process builder that
 		// will eventually execute the code
@@ -149,11 +151,11 @@ public class Wfdbexec {
 		return commandLine;
 	}
 	
-	public String exec() {
+	public ArrayList<String> execToStringList() {
 		gen_exec_arguments();
 		ProcessBuilder launcher = new ProcessBuilder();
 		launcher.redirectErrorStream(true);
-		String results = "";
+		ArrayList<String> results= new ArrayList<String>();
 	
 		env = launcher.environment();
 		env.put(LIBRARY_PATH,arch_library_path);
@@ -164,7 +166,66 @@ public class Wfdbexec {
 					p.getInputStream()));
 			String line;
 			while ((line = output.readLine()) != null)
-				results += line + "\n";
+				results.add(line);
+			p.waitFor();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		return results;
+	}
+	
+	public ArrayList[] execTo2DString() {
+		gen_exec_arguments();
+		ProcessBuilder launcher = new ProcessBuilder();
+		launcher.redirectErrorStream(true);
+		
+		ArrayList[] results = new ArrayList[2];
+		results[0] = new ArrayList<String>();
+		results[1] = new ArrayList<String>();
+		
+		env = launcher.environment();
+		env.put(LIBRARY_PATH,arch_library_path);
+		launcher.command(getCommandInput());
+		int n=0;
+		try {
+			Process p = launcher.start();
+			BufferedReader output = new BufferedReader(new InputStreamReader(
+					p.getInputStream()));
+			String line;
+			String[] tmpStr;
+			while ((line = output.readLine()) != null){
+				tmpStr=line.split("\\s+");
+				results[0].add(tmpStr[1]);
+				results[1].add(tmpStr[2]);
+				n++;
+			}
+			p.waitFor();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		return results;
+	}
+	
+	public String execToString() {
+		gen_exec_arguments();
+		ProcessBuilder launcher = new ProcessBuilder();
+		launcher.redirectErrorStream(true);
+		String results="";
+	
+		env = launcher.environment();
+		env.put(LIBRARY_PATH,arch_library_path);
+		launcher.command(getCommandInput());
+		try {
+			Process p = launcher.start();
+			BufferedReader output = new BufferedReader(new InputStreamReader(
+					p.getInputStream()));
+			String line;
+			while ((line = output.readLine()) != null)
+				results+=line+"\n";
 			p.waitFor();
 		} catch (IOException e) {
 			e.printStackTrace();
