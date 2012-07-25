@@ -103,3 +103,7 @@ cd ..
 #
 cc -o $1/bin/edr $SRC_LOCATIONedr.c -lm -lwfdb
 
+#
+# build dfa
+#
+cc -o $1/bin/dfa $SRC_LOCATIONdfa.c -lm 
