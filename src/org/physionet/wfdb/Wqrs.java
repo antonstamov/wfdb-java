@@ -44,6 +44,7 @@ public class Wqrs extends Wfdbexec {
 	public static enum Arguments {
 		//Define input arguments syntax is:
 		// argumentName(number of parameters,is optional,WDFD command string)
+		recordName(1,false, "-r"),
 		dumpSamples(1, true, "-d"),
 		startTime(1, true, "-f"),
 		stopTime(1, true, "-t"),
