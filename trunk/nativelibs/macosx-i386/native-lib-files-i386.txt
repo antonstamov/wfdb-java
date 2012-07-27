@@ -1,7 +1,0 @@
-libwfdb.dylib-i386
-libwfdbjava.dylib-i386
-libcurl.dylib-i386
-libgcrypt.dylib-i386
-libgnutls.dylib-i386
-libgpg-error.dylib-i386
-libidn.dylib-i386
