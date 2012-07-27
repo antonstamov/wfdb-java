@@ -1,0 +1,7 @@
+libcurl-4.dll-amd64
+libgcrypt-11.dll-amd64
+libgnutls-26.dll-amd64
+libgpg-error-0.dll-amd64
+libidn-11.dll-amd64
+libwfdb.dll-amd64
+wfdbjava.dll-amd64
