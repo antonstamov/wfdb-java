@@ -57,7 +57,6 @@
  */
 
 package org.physionet.wfdb.examples;
-import java.awt.Shape;
 import java.util.ArrayList;
 import javax.swing.JPanel;
 
