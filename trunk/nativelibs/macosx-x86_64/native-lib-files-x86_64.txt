@@ -1,7 +1,0 @@
-libwfdb.dylib-x86_64
-libwfdbjava.dylib-x86_64
-libcurl.dylib-x86_64
-libgcrypt.dylib-x86_64
-libgnutls.dylib-x86_64
-libgpg-error.dylib-x86_64
-libidn.dylib-x86_64

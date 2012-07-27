@@ -1,7 +1,0 @@
-libwfdb.dylib-ppc
-libwfdbjava.dylib-ppc
-libcurl.dylib-ppc
-libgcrypt.dylib-ppc
-libgnutls.dylib-ppc
-libgpg-error.dylib-ppc
-libidn.dylib-ppc
