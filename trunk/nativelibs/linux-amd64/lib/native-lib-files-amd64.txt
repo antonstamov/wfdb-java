@@ -1,0 +1,7 @@
+libcurl.so-amd64
+libgcrypt.so-amd64
+libgnutls.so-amd64
+libgpg-error.so-amd64
+libidn.so-amd64
+libwfdbjava.so-amd64
+libwfdb.so-amd64
