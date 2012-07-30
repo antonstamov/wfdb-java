@@ -33,6 +33,8 @@
  */
 package org.physionet.wfdb.signalprocessing;
 
+import org.physionet.wfdb.Wfdbexec;
+
 /**
  * @author Ikaro Silva
  * 
