@@ -29,9 +29,9 @@ public class wfdbTest {
 
 	@Test
 	public void testrdannExec() {
-		rdann rdannexec = new rdann();
-		rdannexec.setArgumentValue(rdann.Arguments.stopTime, "10s");
-		rdannexec.setArgumentValue(rdann.Arguments.recordName, "mitdb/100");
+		Rdann rdannexec = new Rdann();
+		rdannexec.setArgumentValue(Rdann.Arguments.stopTime, "10s");
+		rdannexec.setArgumentValue(Rdann.Arguments.recordName, "mitdb/100");
 		assertEquals(2, rdannexec.get_num_arguments());
 		rdannexec.gen_exec_arguments();
 		assertEquals("/afs/ecg.mit.edu/software/wfdb/amd64_linux26/current/bin/rdann -r mitdb/100 -t 10s ", rdannexec.get_command_line());

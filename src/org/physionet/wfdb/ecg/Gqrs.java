@@ -33,6 +33,8 @@
  */
 package org.physionet.wfdb.ecg;
 
+import org.physionet.wfdb.Wfdbexec;
+
 /**
  * @author Ikaro Silva
  * 

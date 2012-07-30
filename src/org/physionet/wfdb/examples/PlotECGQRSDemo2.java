@@ -74,7 +74,7 @@ import org.jfree.ui.ApplicationFrame;
 import org.jfree.ui.RefineryUtilities;
 import org.physionet.wfdb.Rdann;
 import org.physionet.wfdb.Rdsamp;
-import org.physionet.wfdb.Wqrs;
+import org.physionet.wfdb.ecg.Wqrs;
 
     public class PlotECGQRSDemo2 extends ApplicationFrame {
 
