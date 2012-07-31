@@ -51,14 +51,14 @@ do
 done
 
 if [ x$PLOT = x ]; then
-  if [ -x /home/ikaro/workspace/wfdb-java/nativelibs/linuxi386//bin/plt ]; then
-    PLOT=/home/ikaro/workspace/wfdb-java/nativelibs/linuxi386//bin/plt
+  if [ -x /home/ikaro/workspace/wfdb-java/nativelibs/tmp//bin/plt ]; then
+    PLOT=/home/ikaro/workspace/wfdb-java/nativelibs/tmp//bin/plt
   elif [ -x /usr/local/bin/plt ]; then
     PLOT=/usr/local/bin/plt
   elif [ -x /usr/bin/plt ]; then
     PLOT=/usr/bin/plt
-  elif [ -x /home/ikaro/workspace/wfdb-java/nativelibs/linuxi386//bin/plot2d ]; then
-    PLOT=/home/ikaro/workspace/wfdb-java/nativelibs/linuxi386//bin/plot2d
+  elif [ -x /home/ikaro/workspace/wfdb-java/nativelibs/tmp//bin/plot2d ]; then
+    PLOT=/home/ikaro/workspace/wfdb-java/nativelibs/tmp//bin/plot2d
   elif [ -x /usr/local/bin/plot2d ]; then
     PLOT=/usr/local/bin/plot2d
   elif [ -x /usr/bin/plot2d ]; then

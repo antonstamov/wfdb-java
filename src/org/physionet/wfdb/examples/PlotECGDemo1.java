@@ -116,7 +116,6 @@ import org.physionet.wfdb.Rdsamp;
     		//Print time in second and values in high precision
     		rdsampexec.setArgumentValue(Rdsamp.PrintTimeFormatLabel.P);
     		rdsampexec.setArgumentValue(Rdsamp.Arguments.recordName, "mitdb/100");
-    		//List<String> results= new ArrayList<String>(); 
     		ArrayList[] results= rdsampexec.execTo2DString();
     		
     		//Insert data into plotting series 
