@@ -7,7 +7,7 @@
 
 if [ ! -n "$1" ] || [ ! -n "$2" ]
 then
-    echo "Usage: $0 <install_dir>"
+    echo "Usage: $0 <install_dir> <target>"
 fi
 
 # FIXME: the version number changes!
@@ -18,6 +18,7 @@ cd $1
 mkdir tmp
 cd tmp
 
+if [ ${2} = "libgpg" ]; then
 #
 # build libgpg-error
 #
@@ -30,9 +31,9 @@ cd libgpg-error-1.10
 make
 make install
 cd ..
+fi
 
-
-
+if [ ${2} = "libidn" ]; then
 #
 # build libidn
 #
@@ -44,8 +45,9 @@ cd libidn-1.12
 make
 make install
 cd ..
+fi
 
-
+if [ ${2} = "libgcrypt" ]; then
 #
 # build libgcrypt
 #
@@ -57,8 +59,9 @@ cd libgcrypt-1.4.4
 make
 make install
 cd ..
+fi
 
-
+if [ ${2} = "gnutls" ]; then
 #
 # build gnutls
 #
@@ -70,8 +73,9 @@ cd gnutls-2.6.4
 make
 make install
 cd ..
+fi
 
-
+if [ ${2} = "curl" ]; then
 #
 # build curl
 #
@@ -85,6 +89,10 @@ make
 make install
 cd ..
 
+fi
+
+
+if [ ${2} = "wfdb" ]; then
 
 #
 # build wfdb
@@ -97,14 +105,18 @@ PATH=$1/bin:$PATH make
 PATH=$1/bin:$PATH make install
 cd ..
 
+fi
 
-
+if [ ${2} = "edr" ]; then
 #
 # build edr
 #
 cc -o $1/bin/edr ${SRC_LOCATION}edr.c -lm -lwfdb
+fi
 
+if [ ${2} = "dfa" ]; then
 #
 # build dfa
 #
 cc -o $1/bin/dfa ${SRC_LOCATION}dfa.c -lm 
+fi

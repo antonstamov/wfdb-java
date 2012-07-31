@@ -126,7 +126,6 @@ import org.physionet.wfdb.ecg.Wqrs;
     		//Print time in second and values in high precision
     		rdsampexec.setArgumentValue(Rdsamp.PrintTimeFormatLabel.P);
     		rdsampexec.setArgumentValue(Rdsamp.Arguments.recordName,recordName);
-    		//List<String> results= new ArrayList<String>(); 
     		ArrayList[] results= rdsampexec.execTo2DString();
     		
     		//Insert data into plotting series 
