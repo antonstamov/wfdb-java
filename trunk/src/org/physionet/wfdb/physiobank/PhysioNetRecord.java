@@ -34,16 +34,23 @@
 
 package org.physionet.wfdb.physiobank;
 
+import java.util.ArrayList;
+
 public class PhysioNetRecord {
 
 	private final String name;
 	private final String dbName;
-	private final String info;
+	private ArrayList<String> signalList;
 		
-	PhysioNetRecord(String db,String recname,String recinfo){
+	PhysioNetRecord(String db,String recname){
 		name=recname;
 		dbName=db;
-		info=recinfo;
+		signalList = new ArrayList<String>();
+	}
+	PhysioNetRecord(String db,String recname,ArrayList<String> sgList ){
+		name=recname;
+		dbName=db;
+		signalList = sgList;
 	}
 	
 	public String getRecordName() {
@@ -53,15 +60,28 @@ public class PhysioNetRecord {
 	public String getDbName() {
 		return dbName;
 	}
+	
+	public ArrayList<String> getSingalList() {
+		return signalList;
+	}
 
-	public String getRecordInfo() {
-		return info;
-	}
-	
 	public void printRecord(){
-		System.out.println(name);
+		System.out.println("Record: "+ name);
 		System.out.println("\tDatabase name: "+ dbName);
-		System.out.println("\tInfo: "+ dbName);
+		System.out.println("\tSignals: ");
+		for(String sig: signalList){
+			System.out.println("\t\t" + sig);
+		}
 	}
 	
+	
+	public static void main(String[] args) {
+		
+		// Prints information regarding all databases
+		// Currently available at PhysioNet
+		System.out.println("Started");
+		PhysioNetRecord re = new PhysioNetRecord("aami-ec13","aami3a");
+		re.printRecord();
+	}
+
 }
