@@ -14,7 +14,7 @@ function [varargout]=mat2wfdb(varargin)
 % bit_res -(Optional)  1xM (or Mx1):scalar determining the bit depth of the conversion for 
 %                      each signal. 
 %                      1x1 : If all the signals should have the same bit depth  
-%          Options are: 8 (signed 8) 16 (signed) and 32 (signed). 16 is the default.
+%          Options are: 8,  16, and 32 ( all are signed types). 16 is the default.
 % adu     -(Optional)   String describing the physical units (default is 'V'). 
 %          If only one string is entered all signals will have the same physical units.
 %          Multiple physical units can be entered by using '/' to separate them. If 
@@ -24,20 +24,24 @@ function [varargout]=mat2wfdb(varargin)
 % verbose -(Optional)  Logical that will display at the MALTAB command prompt
 %                      the files generated (default is 1, which displays
 %                      the generated files)
-% gain    -(Optional) Scalar, if provided no gain/scaling will be applied before the
+% gain    -(Optional) Scalar, if provided, no automatic scaling will be applied before the
 %          quantitzation of the signal and the gain passed in will be set
 %          as is on the header file.
-% 
+% sg_name -(Optional) String descring signal name. Multiple signals names
+%           are separated with by a forward slash ('/').
 % Ouput Parameters are:
 % 
-% xbit    -(Optional)  NxM the quantitized signals that were written.
+% xbit    -(Optional)  NxM the quantitized signals that written to file (possible
+%          rescaled if no gain was provided at input). Useful for comparing
+%          and estimating quatitization error with the input double signal X 
+%          (see examples below).
 %
 %
 %  NOTE: The signals can have different amplitudes, they will all be scaled to
 %  a reference gain, with the scaling factor saved in the *.hea file.
 %
 %
-%%%%%%%%%%  Example %%%%%%%%%%%%
+%%%%%%%%%%  Example 1 %%%%%%%%%%%%
 % 
 % display('***This example will write a  Ex1.dat and Ex1.hea file to your current directory!')
 % s=input('Hit "ctrl + c" to quit or "Enter" to continue!');
@@ -77,13 +81,32 @@ function [varargout]=mat2wfdb(varargin)
 % % plot(sig)
 % % subplot(212)
 % % plot(x(:,1),x(:,2));hold on;plot(x(:,1),x(:,3),'k');plot(x(:,1),x(:,4),'r')
-%%%%%%%% End of Example %%%%%%%%%%%%%%%%%%%%%%%%
+%
+%%%%%%%% End of Example 1%%%%%%%%%
+%
+%
+%%%%%%%%%%  Example 2 %%%%%%%%%%%%
+%
+% %Import a signal from PhysioNet with known units into MATLAB
+% %and check that the generated header file has same info as original
+% %signal
+% sig_name='aftdb/test-set-a/a05.hea';
+% x=rdsamp(sig_name,'sigs',1,'phys',true,'begin','00:00:10','stop','00:02:30','hires',true);
+% info=wfdbdesc(sig_name,1);
+% [xbit]=mat2wfdb(x,'test',info.samplingFrequency,16,info.groups.signals(1).units,...
+%  sig_name,1,[],sg_name);
+% xrecon=rdsamp('test','sigs',1,'phys',true,'begin','00:00:10','stop','00:02:30','hires',true);
+%
+%
+%%%%%%%% End of Example 1%%%%%%%%%
 %
 %
 %
 %Written by Ikaro Silva 2010
-%Modified by 
-
+%Modified by Louis Mayaud 2011
+%
+%
+% Version 1.0
 
 machine_format='l';
 skip=0;
@@ -176,9 +199,10 @@ for m=1:M
      if(~sgn(m))
          head_str(m+1)={[fname '.dat ' num2str(bit_res(m)) '0 ' num2str(bit_gain) '/' adu{m}]};
      else
-        %old - head_str(m+1)={[fname '.dat ' num2str(bit_res(m)) ' ' num2str(1/gain(m)) '/' adu{m} ' ' num2str(bit_res(m)) ' 0 0 0 0 ' sg_name{m}]};
-        head_str(m+1)={[fname '.dat ' num2str(bit_res(m)) ' ' num2str(bit_gain) '(' num2str(zero_ADC) ')/' adu{m} ' ' num2str(bit_res(m)) ...
-            ' 0 0 ' num2str(ck_sum) ' 0 0 ' sg_name{m}]};     end
+        %head_str(m+1)={[fname '.dat ' num2str(bit_res(m)) ' ' num2str(bit_gain) '(' num2str(zero_ADC) ')/' adu{m} ' ' num2str(bit_res(m)) ...
+        %    ' 0 0 ' num2str(ck_sum) ' 0 0 ' sg_name{m}]};     end
+        head_str(m+1)={[fname '.dat ' num2str(bit_res(m)) ' ' num2str(bit_gain) '(' num2str(zero_ADC) ')/' adu{m} ' ' ...
+            '0 0 0 ' num2str(ck_sum) ' 0 0 ' sg_name{m}]};     end
 end
 
 %Write *.dat file
@@ -230,7 +254,7 @@ fclose(fid);
 
 
 %Helper function 
-function [y,rg,bit_gain,offset,zero_ADC,check_sum]=quant(x,bit_res,sgn,gain)
+function [y,rg,adc_gain,offset,zero_ADC,check_sum]=quant(x,bit_res,sgn,gain)
 %shift so that the signal midrange is at 0
 min_x=min(x(~isnan(x)));
 nan_ind=isnan(x);
@@ -238,19 +262,29 @@ if(isempty(gain))
     rg=max(x(~isnan(x)))-min_x;
     offset=min_x + (rg/2);
     x=x-offset;
+    
+    %ADC gain (ADC units per physical unit). This value is a floating-point number 
+    %that specifies the difference in sample values that would be observed if a step 
+    %of one physical unit occurred in the original analog signal. For ECGs, the gain 
+    %is usually roughly equal to the R-wave amplitude in a lead that is roughly parallel 
+    %to the mean cardiac electrical axis. If the gain is zero or missing, this indicates 
+    %that the signal amplitude is uncalibrated; in such cases, a value of 200 (DEFGAIN, 
+    %defined in <wfdb/wfdb.h>) ADC units per physical unit may be assumed. 
     bit_gain=(2^(bit_res-1)-2)/(rg/2); %Dynamic range of encoding / Dynamic Range of Dat --but leave 1 bit for NaN
     
     %Convert to integers, with extreme values set rounded to the limit
     y=x.*bit_gain;
+    adc_gain=bit_gain;%(2^(bit_res-1)-2)/(rg/2);
     
     %Get the baseline to include in the header file
     zero_ADC = round(-offset*bit_gain);
+    
 else
     %if gain is alreay passed don't do anything to the signal
     %the gain will be used in the header file only
     y=x;
     rg=NaN;
-    bit_gain=gain;
+    adc_gain=gain;
     offset=0;
     zero_ADC=0;
 end
@@ -260,8 +294,6 @@ eval(['y=int' num2str(bit_res) '(y);'])
 
 %Set NaNs to lowest levels
 y(nan_ind)=-2^(bit_res-1);
-
-
 
 %Store the checksum
 check_sum=mod(sum(y),2^16);
