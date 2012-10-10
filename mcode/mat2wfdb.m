@@ -1,39 +1,54 @@
 function [varargout]=mat2wfdb(varargin)
 %
-%       [xbit]=mat2wfdb(X,fname,Fs,bit_res,adu,info,verbose,gain,sg_name)
-% 
+%       [xbit]=mat2wfdb(X,fname,Fs,bit_res,adu,info,verbose,gain,sg_name,offset,isint)
+%
 % Convert data readable in matlab into WFDB Physionet format.
-% 
+%
 % Input Paramater are:
-% 
-% X       -(required)  NxM matrix of M signals with N samples each.  
+%
+% X       -(required)  NxM matrix of M signals with N samples each. The
+%                      signals can be of type double.The signals are assumed to be
+%                      in physical units already and will be converted to
+%                      ADU.
 % fname   -(required)  String where the the header (*.hea) and data (*.dat)
 %          files will be saved (one single name for both, with no sufix).
-% Fs      -(Optional)  1x1 sampling frequency in Hz (all signals must have 
-%          been sampled at the same frquency). Default is 1 Hz. 
-% bit_res -(Optional)  1xM (or Mx1):scalar determining the bit depth of the conversion for 
-%                      each signal. 
-%                      1x1 : If all the signals should have the same bit depth  
+% Fs      -(Optional)  1x1 sampling frequency in Hz (all signals must have
+%          been sampled at the same frquency). Default is 1 Hz.
+% bit_res -(Optional)  1xM (or Mx1):scalar determining the bit depth of the conversion for
+%                      each signal.
+%                      1x1 : If all the signals should have the same bit depth
 %          Options are: 8,  16, and 32 ( all are signed types). 16 is the default.
-% adu     -(Optional)   String describing the physical units (default is 'V'). 
+% adu     -(Optional)   String describing the physical units (default is 'V').
 %          If only one string is entered all signals will have the same physical units.
-%          Multiple physical units can be entered by using '/' to separate them. If 
-%          muliplte physical units, the total units entered (separated by '/') has to 
+%          Multiple physical units can be entered by using '/' to separate them. If
+%          muliplte physical units, the total units entered (separated by '/') has to
 %          equal M (number of channels).
-% info    -(Optional)  String that will be added to the comment section of the header file.          
+% info    -(Optional)  String that will be added to the comment section of the header file.
 % verbose -(Optional)  Logical that will display at the MALTAB command prompt
 %                      the files generated (default is 1, which displays
 %                      the generated files)
 % gain    -(Optional) Scalar, if provided, no automatic scaling will be applied before the
-%          quantitzation of the signal and the gain passed in will be set
-%          as is on the header file.
+%          quantitzation of the signal. If a gain is passed,  in will be the same one set
+%          on the header file. The signal will be scaled by this gain prior to the quantization
+%          process. Use this options if you want to have a standard gain and quantization
+%          process for all signals in a dataset (the function will not attempt to quantitized
+%          individual waveforms based on their individual range and offset).
+%offset   -(Optional) Offset (ADC zero) It is an integer that represents the amplitude (sample
+%           value) that would be observed if the analog signal present at the ADC inputs had a
+%           level that fell exactly in the middle of the input range of the ADC.
 % sg_name -(Optional) String descring signal name. Multiple signals names
 %           are separated with by a forward slash ('/').
+%
+% isingt  -(Optional) Logical value (default=0). Use this option if you know
+%           the signal is already quantitized, and you want to remove round-off
+%           error by setting the original values to integers prior to fixed
+%           point conversion.
+%
 % Ouput Parameters are:
-% 
+%
 % xbit    -(Optional)  NxM the quantitized signals that written to file (possible
 %          rescaled if no gain was provided at input). Useful for comparing
-%          and estimating quatitization error with the input double signal X 
+%          and estimating quatitization error with the input double signal X
 %          (see examples below).
 %
 %
@@ -42,10 +57,10 @@ function [varargout]=mat2wfdb(varargin)
 %
 %
 %%%%%%%%%%  Example 1 %%%%%%%%%%%%
-% 
+%
 % display('***This example will write a  Ex1.dat and Ex1.hea file to your current directory!')
 % s=input('Hit "ctrl + c" to quit or "Enter" to continue!');
-% 
+%
 % %Generate 3 different signals and convert them to signed 16 bit in WFDB format
 % clear all;clc;close all
 % N=1024;
@@ -53,28 +68,28 @@ function [varargout]=mat2wfdb(varargin)
 % tm=[0:1/Fs:(N-1)/Fs]';
 % adu='V/mV/V';
 % info='Example 1';
-% 
-% 
+%
+%
 % %First signal a ramp with 2^16 unique levels and is set to (+-) 2^15 (Volts)
 % %Thus the header file should have one quant step equal to (2^15-(-2^15))/(2^16) V.
-% sig1=double(int16(linspace(-2^15,2^15,N)')); 
-% 
+% sig1=double(int16(linspace(-2^15,2^15,N)'));
+%
 % %Second signal is a sine wave with 2^8 unique levels and set to (+-) 1 (mV)
 % %Thus the header file should one quant step equal a (1--1)/(2^16)  adu step
-% sig2=double(int8(sin(2*pi*tm*1000).*(2^7)))./(2^7); 
-% 
+% sig2=double(int8(sin(2*pi*tm*1000).*(2^7)))./(2^7);
+%
 % %Third signal is a random binary signal set to to (+-) 1 (V) with DC (to be discarded)
 % %Thus the header file should have one quant step equal a 1/(2^16) adu step.
 % sig3=(rand(N,1) > 0.97)*2 -1 + 2^16;
-% 
+%
 % %Concatenate all signals and convert to WFDB format with default 16 bits (empty brackets)
 % sig=[sig1 sig2 sig3];
 % mat2wfdb(sig,'Ex1',Fs,[],adu,info)
-% 
+%
 % % %NOTE: If you have WFDB installed you can check the conversion by
 % % %uncomenting and this section and running (notice that all signals are scaled
 % % %to unit amplitude during conversion, with the header files keeping the gain info):
-% 
+%
 % % !rdsamp -r Ex1 > foo
 % % x=dlmread('foo');
 % % subplot(211)
@@ -114,12 +129,15 @@ skip=0;
 %Set default parameters
 
 Def=2;
-params={'Fs','bit_res','adu','info','verbose','gain','sg_name'};
+params={'Fs','bit_res','adu','info','verbose','gain','sg_name','offset','isint'};
 Fs=1;
 adu='V';
 info=[];
-verbose=1;
+isint=0;
+%Use cell array for offset and gain in case of empty conditions
+offset=[];
 gain=[];
+verbose=1;
 sg_name=[];
 x=varargin{1};
 fname=varargin{2};
@@ -132,12 +150,14 @@ for i=3:nargin
     if(~isempty(varargin{i}))
         if(isnumeric(varargin{i}))
             eval([params{i-2} '= [' num2str(varargin{i}) '];'])
-         else
+        else
             eval([params{i-2} '= ''' varargin{i} ''';'])
         end
     end
 end
 
+gain={gain};
+offset={offset};
 
 
 if(isempty(sg_name))
@@ -184,25 +204,22 @@ head_str(1)={[fname ' ' num2str(M) ' ' num2str(Fs) ' ' num2str(N)]};
 
 for m=1:M
     eval(['y=' int_str{m} num2str(bit_res(m)) '(zeros(N,M));'])  %allocate space
-
+    
     nameArray = regexp(fname,'/','split');
     if ~isempty(nameArray)
         fname = nameArray{end};
     end
     
-    if(~isempty(gain))
-         [tmp_bit1,rg,bit_gain,offset,zero_ADC,ck_sum]=quant(x(:,m),bit_res(m),sgn(m),gain(m));
+    [tmp_bit1,bit_gain,offset,zero_ADC,ck_sum]=quant(x(:,m), ...
+        bit_res(m),sgn(m),gain{m},offset{m},isint);
+    y(:,m)=tmp_bit1;
+    if(~sgn(m))
+        head_str(m+1)={[fname '.dat ' num2str(bit_res(m)) '0 ' num2str(bit_gain) '/' adu{m}]};
     else
-        [tmp_bit1,rg,bit_gain,offset,zero_ADC,ck_sum]=quant(x(:,m),bit_res(m),sgn(m),[]);
-    end
-     y(:,m)=tmp_bit1;
-     if(~sgn(m))
-         head_str(m+1)={[fname '.dat ' num2str(bit_res(m)) '0 ' num2str(bit_gain) '/' adu{m}]};
-     else
         %head_str(m+1)={[fname '.dat ' num2str(bit_res(m)) ' ' num2str(bit_gain) '(' num2str(zero_ADC) ')/' adu{m} ' ' num2str(bit_res(m)) ...
         %    ' 0 0 ' num2str(ck_sum) ' 0 0 ' sg_name{m}]};     end
         head_str(m+1)={[fname '.dat ' num2str(bit_res(m)) ' ' num2str(bit_gain) '(' num2str(zero_ADC) ')/' adu{m} ' ' ...
-            '0 0 0 ' num2str(ck_sum) ' 0 0 ' sg_name{m}]};     end
+            '0 0 0 ' num2str(ck_sum) ' 0 ' sg_name{m}]};     end
 end
 
 %Write *.dat file
@@ -219,7 +236,7 @@ if(~count)
 end
 
 if(verbose)
-fprintf(['Generated *.dat file: ' fname '\n'])
+    fprintf(['Generated *.dat file: ' fname '\n'])
 end
 fclose(fid);
 
@@ -233,14 +250,14 @@ for m=1:M+1
 end
 
 if(~isempty(info))
-     count=fprintf(fid,'#%s',info);
+    count=fprintf(fid,'#%s',info);
 end
 
 if(nargout==1)
     varargout(1)={y};
 end
 if(verbose)
-fprintf(['Generated *.hea file: ' fname '\n'])
+    fprintf(['Generated *.hea file: ' fname '\n'])
 end
 fclose(fid);
 
@@ -253,40 +270,44 @@ fclose(fid);
 
 
 
-%Helper function 
-function [y,rg,adc_gain,offset,zero_ADC,check_sum]=quant(x,bit_res,sgn,gain)
+%Helper function
+function [y,adc_gain,offset,zero_ADC,check_sum]=quant(x,bit_res,sgn,gain,offset,isint)
 %shift so that the signal midrange is at 0
+
 min_x=min(x(~isnan(x)));
 nan_ind=isnan(x);
-if(isempty(gain))
-    rg=max(x(~isnan(x)))-min_x;
+rg=max(x(~isnan(x)))-min_x;
+if(isempty(offset))
     offset=min_x + (rg/2);
-    x=x-offset;
-    
-    %ADC gain (ADC units per physical unit). This value is a floating-point number 
-    %that specifies the difference in sample values that would be observed if a step 
-    %of one physical unit occurred in the original analog signal. For ECGs, the gain 
-    %is usually roughly equal to the R-wave amplitude in a lead that is roughly parallel 
-    %to the mean cardiac electrical axis. If the gain is zero or missing, this indicates 
-    %that the signal amplitude is uncalibrated; in such cases, a value of 200 (DEFGAIN, 
-    %defined in <wfdb/wfdb.h>) ADC units per physical unit may be assumed. 
-    bit_gain=(2^(bit_res-1)-2)/(rg/2); %Dynamic range of encoding / Dynamic Range of Dat --but leave 1 bit for NaN
-    
-    %Convert to integers, with extreme values set rounded to the limit
-    y=x.*bit_gain;
-    adc_gain=bit_gain;%(2^(bit_res-1)-2)/(rg/2);
-    
-    %Get the baseline to include in the header file
-    zero_ADC = round(-offset*bit_gain);
-    
+end
+x=x-offset;
+
+if(isempty(gain))
+    %ADC gain (ADC units per physical unit). This value is a floating-point number
+    %that specifies the difference in sample values that would be observed if a step
+    %of one physical unit occurred in the original analog signal. For ECGs, the gain
+    %is usually roughly equal to the R-wave amplitude in a lead that is roughly parallel
+    %to the mean cardiac electrical axis. If the gain is zero or missing, this indicates
+    %that the signal amplitude is uncalibrated; in such cases, a value of 200 (DEFGAIN,
+    %defined in <wfdb/wfdb.h>) ADC units per physical unit may be assumed.
+    adc_gain=(2^(bit_res-1)-2)/(rg/2); %Dynamic range of encoding / Dynamic Range of Data --but leave 1 quant level for NaN
 else
     %if gain is alreay passed don't do anything to the signal
     %the gain will be used in the header file only
-    y=x;
-    rg=NaN;
+    %Convert the signal to integers before encoding in order minimize round off
+    %error
     adc_gain=gain;
-    offset=0;
-    zero_ADC=0;
+end
+
+y=x.*adc_gain;
+
+if(isint)
+    %Use this option if you know the signal is already quantitized, and you
+    %want to remove round-off error by setting the original values to
+    %integers prior to fixed point conversion
+    df_db=min(diff(sort(unique(y))));
+    y=y/df_db;
+    adc_gain=adc_gain/df_db;
 end
 
 %convert to appropiate bit type
@@ -297,6 +318,9 @@ y(nan_ind)=-2^(bit_res-1);
 
 %Store the checksum
 check_sum=mod(sum(y),2^16);
+
+%Get the baseline to include in the header file
+zero_ADC = round(-offset*adc_gain);
 
 
 
