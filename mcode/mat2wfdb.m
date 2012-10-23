@@ -1,6 +1,6 @@
 function [varargout]=mat2wfdb(varargin)
 %
-%       [xbit]=mat2wfdb(X,fname,Fs,bit_res,adu,info,verbose,gain,sg_name,offset,isint)
+%       [xbit]=mat2wfdb(X,fname,Fs,bit_res,adu,info,gain,sg_name,offset,isint)
 %
 % Convert data readable in matlab into WFDB Physionet format.
 %
@@ -18,28 +18,23 @@ function [varargout]=mat2wfdb(varargin)
 %                      each signal.
 %                      1x1 : If all the signals should have the same bit depth
 %          Options are: 8,  16, and 32 ( all are signed types). 16 is the default.
-% adu     -(Optional)   String describing the physical units (default is 'V').
+% adu     -(Optional)  Cell array of strings describing the physical units (default is 'V').
 %          If only one string is entered all signals will have the same physical units.
-%          Multiple physical units can be entered by using '/' to separate them. If
-%          muliplte physical units, the total units entered (separated by '/') has to
-%          equal M (number of channels).
+%          If muliplte physical units, the total units entered has to equal M (number of
+%          channels).
 % info    -(Optional)  String that will be added to the comment section of the header file.
-% verbose -(Optional)  Logical that will display at the MALTAB command prompt
-%                      the files generated (default is 1, which displays
-%                      the generated files)
 % gain    -(Optional) Scalar, if provided, no automatic scaling will be applied before the
 %          quantitzation of the signal. If a gain is passed,  in will be the same one set
 %          on the header file. The signal will be scaled by this gain prior to the quantization
 %          process. Use this options if you want to have a standard gain and quantization
 %          process for all signals in a dataset (the function will not attempt to quantitized
 %          individual waveforms based on their individual range and offset).
-%offset   -(Optional) Offset (ADC zero) It is an integer that represents the amplitude (sample
+%offset   -(Optional) Offset (ADC zero) Mx1 array of integers that represents the amplitude (sample
 %           value) that would be observed if the analog signal present at the ADC inputs had a
 %           level that fell exactly in the middle of the input range of the ADC.
-% sg_name -(Optional) String descring signal name. Multiple signals names
-%           are separated with by a forward slash ('/').
+% sg_name -(Optional) Cell array of strings describing signal names.
 %
-% isingt  -(Optional) Logical value (default=0). Use this option if you know
+% isint  -(Optional) Logical value (default=0). Use this option if you know
 %           the signal is already quantitized, and you want to remove round-off
 %           error by setting the original values to integers prior to fixed
 %           point conversion.
@@ -54,6 +49,8 @@ function [varargout]=mat2wfdb(varargin)
 %
 %  NOTE: The signals can have different amplitudes, they will all be scaled to
 %  a reference gain, with the scaling factor saved in the *.hea file.
+%
+% Version 1.1
 %
 %
 %%%%%%%%%%  Example 1 %%%%%%%%%%%%
@@ -109,7 +106,7 @@ function [varargout]=mat2wfdb(varargin)
 % x=rdsamp(sig_name,'sigs',1,'phys',true,'begin','00:00:10','stop','00:02:30','hires',true);
 % info=wfdbdesc(sig_name,1);
 % [xbit]=mat2wfdb(x,'test',info.samplingFrequency,16,info.groups.signals(1).units,...
-%  sig_name,1,[],sg_name);
+%  sig_name,[],sg_name);
 % xrecon=rdsamp('test','sigs',1,'phys',true,'begin','00:00:10','stop','00:02:30','hires',true);
 %
 %
@@ -121,23 +118,23 @@ function [varargout]=mat2wfdb(varargin)
 %Modified by Louis Mayaud 2011
 %
 %
-% Version 1.0
 
+Version=1.1;
 machine_format='l';
 skip=0;
 
 %Set default parameters
 
 Def=2;
-params={'Fs','bit_res','adu','info','verbose','gain','sg_name','offset','isint'};
+params={'Fs','bit_res','adu','info','gain','sg_name','offset','isint'};
+param_offset=nargin-length(params)+1;
 Fs=1;
-adu='V';
+adu=[];
 info=[];
 isint=0;
 %Use cell array for offset and gain in case of empty conditions
 offset=[];
 gain=[];
-verbose=1;
 sg_name=[];
 x=varargin{1};
 fname=varargin{2};
@@ -146,54 +143,57 @@ fname=varargin{2};
 bit_res = ones(M,1)*16 ;
 bit_res_suport=[8 80 16 32];
 
-for i=3:nargin
+for i=param_offset:nargin
     if(~isempty(varargin{i}))
         if(isnumeric(varargin{i}))
-            eval([params{i-2} '= [' num2str(varargin{i}) '];'])
+            eval([params{i-param_offset+1} '= [' num2str(varargin{i}) '];'])
+        elseif(iscell(varargin{i}))
+            eval([params{i-param_offset+1} '= varargin{i};'])
         else
-            eval([params{i-2} '= ''' varargin{i} ''';'])
+            eval([params{i-param_offset+1} '= ''' varargin{i} ''';'])
         end
     end
 end
 
-gain={gain};
-offset={offset};
-
+if(isempty(gain))
+   gain=cell(M,1); %Generate empty cells as default
+elseif(length(gain)<M)
+    gain=repmat(gain,[M 1]);
+    gain=num2cell(gain);
+else
+    gain={gain};
+end
 
 if(isempty(sg_name))
-    sg_name='';
+    sg_name=repmat({''},[M 1]);
+end
+if(isempty(adu))
+    adu=repmat({'V'},[M 1]);
 end
 
 if (length(bit_res)~=M)
     if length(bit_res) == 1
         bit_res = bit_res * ones(1,M);
     else
-        error(['Expecting 1 or ' num2str(M) 'for bit_res length, but got: ' num2str(length(bit_res))]);
+        error(['Expecting 1 or ' num2str(M) ' for bit_res length, but got: ' num2str(length(bit_res))]);
     end
 end
 if ~isempty(setdiff(bit_res,bit_res_suport))
     error(['Bit res should be any of: ' num2str(bit_res_suport)]);
 end
+if(length(bit_res)<M)
+   bit_res=repmatn(bit_ris,[M 1]); 
+end
+if(isempty(offset))
+   offset=cell(M,1); %Generate empty cells as default
+end
 
-%dealing with format '80' case
+%Dealing with format '80' case
 int_str = cell(1,M) ;
 int_str(bit_res~=80) = {'int'};
 int_str(bit_res==80) = {'uint'};
 sgn = ~(bit_res==80) ; % 1- signed bit, 0 is unsigned
 bit_res(bit_res==80) = 8 ;
-
-%Parse adu if its has more than one unit
-%adu=regexp(adu,'/','split');
-adu=get_names(adu,'/');
-if(length(adu) ==1)
-    adu=repmat(adu,[1 M]);
-end
-
-%sg_name=regexp(sg_name,'/','split');
-sg_name=get_names(sg_name,'/');
-if(length(sg_name) ==1)
-    sg_name=repmat(sg_name,[1 M]);
-end
 
 %Header string
 head_str=cell(M+1,1);
@@ -201,7 +201,6 @@ head_str(1)={[fname ' ' num2str(M) ' ' num2str(Fs) ' ' num2str(N)]};
 
 %Loop through all signals, digitizing them and generating lines in header
 %file
-
 for m=1:M
     eval(['y=' int_str{m} num2str(bit_res(m)) '(zeros(N,M));'])  %allocate space
     
@@ -210,16 +209,16 @@ for m=1:M
         fname = nameArray{end};
     end
     
-    [tmp_bit1,bit_gain,offset,zero_ADC,ck_sum]=quant(x(:,m), ...
+    [tmp_bit1,bit_gain,offset_tmp,zero_ADC,ck_sum]=quant(x(:,m), ...
         bit_res(m),sgn(m),gain{m},offset{m},isint);
+    
     y(:,m)=tmp_bit1;
     if(~sgn(m))
         head_str(m+1)={[fname '.dat ' num2str(bit_res(m)) '0 ' num2str(bit_gain) '/' adu{m}]};
     else
-        %head_str(m+1)={[fname '.dat ' num2str(bit_res(m)) ' ' num2str(bit_gain) '(' num2str(zero_ADC) ')/' adu{m} ' ' num2str(bit_res(m)) ...
-        %    ' 0 0 ' num2str(ck_sum) ' 0 0 ' sg_name{m}]};     end
         head_str(m+1)={[fname '.dat ' num2str(bit_res(m)) ' ' num2str(bit_gain) '(' num2str(zero_ADC) ')/' adu{m} ' ' ...
-            '0 0 0 ' num2str(ck_sum) ' 0 ' sg_name{m}]};     end
+            '0 0 0 ' num2str(ck_sum) ' 0 ' sg_name{m}]};    
+    end
 end
 
 %Write *.dat file
@@ -235,9 +234,7 @@ if(~count)
     error(['Could not data write to file: ' fname])
 end
 
-if(verbose)
-    fprintf(['Generated *.dat file: ' fname '\n'])
-end
+fprintf(['Generated *.dat file: ' fname '\n'])
 fclose(fid);
 
 %Write *.hea file
@@ -256,9 +253,7 @@ end
 if(nargout==1)
     varargout(1)={y};
 end
-if(verbose)
-    fprintf(['Generated *.hea file: ' fname '\n'])
-end
+fprintf(['Generated *.hea file: ' fname '\n'])
 fclose(fid);
 
 %%%End of Main %%%%
@@ -290,7 +285,7 @@ if(isempty(gain))
     %to the mean cardiac electrical axis. If the gain is zero or missing, this indicates
     %that the signal amplitude is uncalibrated; in such cases, a value of 200 (DEFGAIN,
     %defined in <wfdb/wfdb.h>) ADC units per physical unit may be assumed.
-    adc_gain=(2^(bit_res-1)-2)/(rg/2); %Dynamic range of encoding / Dynamic Range of Data --but leave 1 quant level for NaN
+    adc_gain=(2^(bit_res-1)-1)/(rg/2); %Dynamic range of encoding / Dynamic Range of Data --but leave 1 quant level for NaN
 else
     %if gain is alreay passed don't do anything to the signal
     %the gain will be used in the header file only

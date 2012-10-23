@@ -6,11 +6,11 @@ isint=1;
 
 %[xbit]=mat2wfdb(X,fname,Fs,bit_res,adu,info,verbose,gain,sg_name,offset)
 
-[xbit]=mat2wfdb(x(:,2),'test',info.samplingFrequency,16,'mV',...
-sig_name,1,[],[],[],isint);
-
 %[xbit]=mat2wfdb(x(:,2),'test',info.samplingFrequency,16,'mV',...
-%sig_name,1,info.groups.signals(1).gain,[],0,isint);
+%sig_name,1,[],[],[],isint);
+
+[xbit]=mat2wfdb(x(:,2),'test',info.samplingFrequency,16,'mV',...
+sig_name,info.groups.signals(1).gain,[],0,isint);
 
 xrecon=rdsamp('test','phys',true,'hires',true);
 info2=wfdbdesc('test',1);
