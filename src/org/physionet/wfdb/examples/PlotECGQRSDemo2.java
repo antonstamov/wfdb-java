@@ -123,6 +123,7 @@ import org.physionet.wfdb.ecg.Wqrs;
     		//Get ECG data from WFDB in number of samples
     		Rdsamp rdsampexec = new Rdsamp();
     		rdsampexec.setArgumentValue(Rdsamp.Arguments.stopTime, "s"+N);
+    		
     		//Print time in second and values in high precision
     		rdsampexec.setArgumentValue(Rdsamp.PrintTimeFormatLabel.P);
     		rdsampexec.setArgumentValue(Rdsamp.Arguments.recordName,recordName);
@@ -132,7 +133,6 @@ import org.physionet.wfdb.ecg.Wqrs;
     		Double ecgSamp;
     		for(int n=0;n<results[1].size();n++){
     			ecgSamp=Double.valueOf((String) results[1].get(n));
-    			//ecgSignal.add(Double.valueOf((String) results[0].get(n)),ecgSamp);
     			ecgSignal.add(n,ecgSamp);
     			mxEcg= (mxEcg > ecgSamp) ? mxEcg : ecgSamp; 
     		}
@@ -145,10 +145,9 @@ import org.physionet.wfdb.ecg.Wqrs;
         	wqrsExec.setArgumentValue(Wqrs.Arguments.stopTime,"s"+N);
         	wqrsExec.execToString();
         	
-        	//The annotation file will be store at the current directory
-        	//Under ./mitdb/100.wqrs
+        	//The annotation file will be stored at the current directory (./mitdb/100.wqrs)
         	
-        	//Use rdann to read the annotation file and store values in memory
+        	//Use RDANN to read the annotation file and store values in memory
         	Rdann rdannExec = new Rdann();
         	rdannExec.setArgumentValue(Rdann.Arguments.annotator,"wqrs");
         	rdannExec.setArgumentValue(Rdann.Arguments.recordName,recordName);
