@@ -31,6 +31,14 @@
  * -------
  * Check: http://code.google.com/p/wfdb-java/list
  */ 
+
+/** 
+ * @author Ikaro Silva
+ *  @version 1.0
+ */
+
+
+
 package org.physionet.wfdb;
 
 import java.io.BufferedReader;
@@ -94,33 +102,6 @@ public class Wfdbexec {
 		return argumentValues;
 	}
 
-	/*  TO DO: Remove this from later versions 
-	public ArrayList<String> exec(String command,List<String> inputs){
-
-		ProcessBuilder launcher=new ProcessBuilder();
-		launcher.redirectErrorStream(true);
-		inputs.add(0,Wfdbexec.WFDB_NATIVE_BIN + command);
-		launcher.command(inputs);
-		ArrayList<String> results= new ArrayList<String>();
-		try {
-			Process p =launcher.start();
-			BufferedReader output = new BufferedReader(
-					new InputStreamReader(p.getInputStream()));
-			String line;
-			while ((line = output.readLine()) != null)
-				results.add(line);
-			p.waitFor();
-			
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		} 
-		return results;
-
-	}
-	 */
-	
 	private void gen_exec_arguments() {
 		// Generates a list to be passed to the process builder that
 		// will eventually execute the code
@@ -176,11 +157,12 @@ public class Wfdbexec {
 		return results;
 	}
 	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public ArrayList[] execTo2DString() {
 		gen_exec_arguments();
 		ProcessBuilder launcher = new ProcessBuilder();
 		launcher.redirectErrorStream(true);
-		
+	
 		ArrayList[] results = new ArrayList[2];
 		results[0] = new ArrayList<String>();
 		results[1] = new ArrayList<String>();
@@ -188,7 +170,6 @@ public class Wfdbexec {
 		env = launcher.environment();
 		env.put(LIBRARY_PATH,arch_library_path);
 		launcher.command(getCommandInput());
-		int n=0;
 		try {
 			Process p = launcher.start();
 			BufferedReader output = new BufferedReader(new InputStreamReader(
@@ -199,7 +180,6 @@ public class Wfdbexec {
 				tmpStr=line.split("\\s+");
 				results[0].add(tmpStr[1]);
 				results[1].add(tmpStr[2]);
-				n++;
 			}
 			p.waitFor();
 		} catch (IOException e) {
@@ -245,7 +225,6 @@ public class Wfdbexec {
 		try {
 			jar_bin_dir=URLDecoder.decode(path, "UTF-8");
 		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
 			jar_bin_dir="";
 			e.printStackTrace();
 		}
