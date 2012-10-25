@@ -45,50 +45,25 @@ import java.util.List;
 
 public class PhysioNetDB {
 
-	private final String name;
+	private String name;
 	private String info;
-	private final URL url;
+	private URL url;
 	private static final String DB_URL="http://physionet.org/physiobank/database/pbi/";
 	private static final String DB_LIST="http://physionet.org/physiobank/database/DBS";
 	private ArrayList<PhysioNetRecord> dbRecordList;
 
-	PhysioNetDB(String Name,String Info){
-		name=Name;
-		info=Info;
-		url=setDBURL();
-		dbRecordList = new ArrayList<PhysioNetRecord>();
-	}
-
-	PhysioNetDB(String Name){
+	public PhysioNetDB(String Name){
 		name=Name;
 		url=setDBURL();
 		info=setInfo();
 		dbRecordList = new ArrayList<PhysioNetRecord>();
 	}
-
-	private String setInfo() {
-		// TODO Auto-generated method stub
-		String inputLine;
-		BufferedReader in = null;
-		String desc="";
-		try {
-			URL pnb = new URL(DB_LIST);
-			in = new BufferedReader(
-					new InputStreamReader(pnb.openStream()));
-			String[] tmpStr;
-			while ((inputLine = in.readLine()) != null){
-				tmpStr=inputLine.split("\\t");
-				if(tmpStr[0].compareTo(name)==0){
-					desc=(inputLine.replaceFirst(tmpStr[0],"")).replaceAll("\\t","");
-					break;
-				}
-			}			
-			in.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}		
-		return desc;
+	
+	private PhysioNetDB(String Name,String Info){
+		name=Name;
+		info=Info;
+		url=setDBURL();
+		dbRecordList = new ArrayList<PhysioNetRecord>();
 	}
 
 	public String getname() {
@@ -106,16 +81,7 @@ public class PhysioNetDB {
 	public URL getURL() {
 		return url;
 	}
-	private URL setDBURL() {
-		try {
-			return new URL(DB_URL + name.replaceAll("/","_"));
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
-		}
-	}
-
+	
 	public static List<PhysioNetDB> getPhysioNetDBList(){
 		String inputLine;
 		BufferedReader in = null;
@@ -147,6 +113,76 @@ public class PhysioNetDB {
 		System.out.println("\tURL: "+ url);
 	}
 
+	public void printDBRecordList(){
+
+		this.getDBRecordList();
+		System.out.println("Record list for: ");
+		this.printDBInfo();
+		for(PhysioNetRecord rec : dbRecordList){
+			rec.printRecord();
+		}
+	}
+
+	public static void printDBList(List<PhysioNetDB> pnDB ) {
+		// Prints information regarding all databases in pnDB 
+		List<PhysioNetDB> pnDBList = PhysioNetDB.getPhysioNetDBList();
+		for(PhysioNetDB db : pnDBList){
+			db.printDBInfo();
+		}
+	}
+	
+	public static void printDBList() {
+		// Prints information regarding all databases
+		// Currently available at PhysioNet
+		List<PhysioNetDB> pnDBList = PhysioNetDB.getPhysioNetDBList();
+		for(PhysioNetDB db : pnDBList){
+			db.printDBInfo();
+		}
+	}
+
+	public static void main(String[] args) {
+
+		// Prints information regarding all databases
+		// Currently available at PhysioNet
+		PhysioNetDB pnDB = new PhysioNetDB("challenge_2010_set-a");
+		pnDB.printDBRecordList();
+	}
+
+	private URL setDBURL() {
+		try {
+			return new URL(DB_URL + name.replaceAll("/","_"));
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	private String setInfo() {
+		// TODO Auto-generated method stub
+		String inputLine;
+		BufferedReader in = null;
+		String desc="";
+		try {
+			URL pnb = new URL(DB_LIST);
+			in = new BufferedReader(
+					new InputStreamReader(pnb.openStream()));
+			String[] tmpStr;
+			while ((inputLine = in.readLine()) != null){
+				tmpStr=inputLine.split("\\t");
+				if(tmpStr[0].compareTo(name)==0){
+					desc=(inputLine.replaceFirst(tmpStr[0],"")).replaceAll("\\t","");
+					break;
+				}
+			}			
+			in.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
+		return desc;
+	}
+
 	private void setDBRecordList(){
 		String inputLine;
 		BufferedReader in = null;
@@ -176,34 +212,6 @@ public class PhysioNetDB {
 			e.printStackTrace();
 		}	
 	}
-
-	public void printDBRecordList(){
-
-		this.getDBRecordList();
-		System.out.println("Record list for: ");
-		this.printDBInfo();
-		for(PhysioNetRecord rec : dbRecordList){
-			rec.printRecord();
-		}
-	}
-
-	public static void printDBList() {
-		// Prints information regarding all databases
-		// Currently available at PhysioNet
-		List<PhysioNetDB> pnDBList = PhysioNetDB.getPhysioNetDBList();
-		for(PhysioNetDB db : pnDBList){
-			db.printDBInfo();
-		}
-	}
-
-	public static void main(String[] args) {
-
-		// Prints information regarding all databases
-		// Currently available at PhysioNet
-		PhysioNetDB pnDB = new PhysioNetDB("challenge_2010_set-a");
-		pnDB.printDBRecordList();
-	}
-
 
 
 }
