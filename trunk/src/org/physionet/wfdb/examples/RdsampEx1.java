@@ -35,16 +35,13 @@
 //Very basic example of how to print 10 samples of a WFDB record
 //into the standard output
 package org.physionet.wfdb.examples;
-import java.util.ArrayList;
-
 import org.physionet.wfdb.Rdsamp;
 
 
 public class RdsampEx1 {
 
 	public static void main(String[] args) {
-		// Simple test of for the class
-		
+		// Example showing how to read data form a WFDB Record
 		Rdsamp rdsampexec = new Rdsamp();
 		rdsampexec.setArgumentValue(Rdsamp.Arguments.stopTime, "s10");
 		rdsampexec.setArgumentValue(Rdsamp.PrintTimeFormatLabel.p);

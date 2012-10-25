@@ -4,7 +4,7 @@ import org.physionet.wfdb.Wrsamp;
 public class WrsampEx1 {
 
 	public static void main(String[] args) {
-		// Simple test of for the class Reads first 10 seconds of ECG
+		//Example showing how to write data to a WFDB record
 		String dir="/home/ikaro/workspace/wfdb-java/src/org/physionet/wfdb/examples/";
 		String inFile= dir + "test.txt";
 		String out_dir=System.getProperty("user.dir");
