@@ -220,6 +220,7 @@ public class Wfdbexec {
 		osArch = System.getProperty("os.arch");
 		fileSeparator=System.getProperty("file.separator");
 		osName=System.getProperty("os.name");
+		osName=osName.replace(" ","");
 		String jar_bin_dir;
 		String path = Wfdbexec.class.getProtectionDomain().getCodeSource().getLocation().getPath();
 		try {
@@ -245,8 +246,7 @@ public class Wfdbexec {
 		
 		arch_library_path= arch_library_path + ":" + WFDB_JAVA_HOME + WFDB_NATIVE_BIN_FOLDER + fileSeparator + 
 		 osName.toLowerCase() + "-" + osArch.toLowerCase() 
-		 + fileSeparator + "lib64" + fileSeparator;
-		//arch_library_path="/afs/ecg.mit.edu/software/wfdb/@sys/current/lib64";
+		 + fileSeparator + "lib64" + fileSeparator;	
 		 LIBRARY_PATH="LD_LIBRARY_PATH";
 	}
 	
