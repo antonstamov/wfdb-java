@@ -101,7 +101,6 @@ public class PhysioNetDB {
 			}			
 			in.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return physionetDBList;
@@ -152,14 +151,12 @@ public class PhysioNetDB {
 		try {
 			return new URL(DB_URL + name.replaceAll("/","_"));
 		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;
 		}
 	}
 
 	private String setInfo() {
-		// TODO Auto-generated method stub
 		String inputLine;
 		BufferedReader in = null;
 		String desc="";
@@ -177,7 +174,6 @@ public class PhysioNetDB {
 			}			
 			in.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}		
 		return desc;
@@ -208,7 +204,6 @@ public class PhysioNetDB {
 			}			
 			in.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}	
 	}
