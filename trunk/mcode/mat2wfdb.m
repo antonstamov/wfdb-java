@@ -209,15 +209,15 @@ for m=1:M
         fname = nameArray{end};
     end
     
-    [tmp_bit1,bit_gain,offset_tmp,zero_ADC,ck_sum]=quant(x(:,m), ...
+    [tmp_bit1,bit_gain,baseline_tmp,ck_sum]=quant(x(:,m), ...
         bit_res(m),sgn(m),gain{m},offset{m},isint);
     
     y(:,m)=tmp_bit1;
     if(~sgn(m))
         head_str(m+1)={[fname '.dat ' num2str(bit_res(m)) '0 ' num2str(bit_gain) '/' adu{m}]};
     else
-        head_str(m+1)={[fname '.dat ' num2str(bit_res(m)) ' ' num2str(bit_gain) '(' num2str(zero_ADC) ')/' adu{m} ' ' ...
-            '0 0 0 ' num2str(ck_sum) ' 0 ' sg_name{m}]};    
+        head_str(m+1)={[fname '.dat ' num2str(bit_res(m)) ' ' num2str(bit_gain) '(' ...
+            num2str(baseline_tmp) ')/' adu{m} ' ' '0 0 0 ' num2str(ck_sum) ' 0 ' sg_name{m}]};    
     end
 end
 
@@ -266,7 +266,7 @@ fclose(fid);
 
 
 %Helper function
-function [y,adc_gain,offset,zero_ADC,check_sum]=quant(x,bit_res,sgn,gain,offset,isint)
+function [y,adc_gain,baseline,check_sum]=quant(x,bit_res,sgn,gain,offset,isint)
 %shift so that the signal midrange is at 0
 
 min_x=min(x(~isnan(x)));
@@ -311,11 +311,20 @@ eval(['y=int' num2str(bit_res) '(y);'])
 %Set NaNs to lowest levels
 y(nan_ind)=-2^(bit_res-1);
 
-%Store the checksum
-check_sum=mod(sum(y),2^16);
+%Calculate the 16-bit signed checksum of all samples in the signal
+check_sum=sum(y);
 
-%Get the baseline to include in the header file
-zero_ADC = round(-offset*adc_gain);
+%Discard overflow bits and get two's complement of the sum
+ybin=dec2bin(check_sum);
+yind=min(length(ybin),16);
+check_sum=bin2dec(ybin(end-yind+1:end));
+%check_sum=bitcmp(check_sum,15)+1;
+
+%Calculate baseline (ADC units):
+%The baseline is an integer that specifies the sample 
+%value corresponding to 0 physical units.
+offset=offset.*adc_gain;
+baseline=-offset;
 
 
 
