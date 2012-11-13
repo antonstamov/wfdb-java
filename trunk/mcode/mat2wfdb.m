@@ -1,6 +1,6 @@
 function [varargout]=mat2wfdb(varargin)
 %
-%       [xbit]=mat2wfdb(X,fname,Fs,bit_res,adu,info,gain,sg_name,offset,isint)
+%       [xbit]=mat2wfdb(X,fname,Fs,bit_res,adu,info,gain,sg_name,baseline,isint)
 %
 % Convert data readable in matlab into WFDB Physionet format.
 %
@@ -28,8 +28,8 @@ function [varargout]=mat2wfdb(varargin)
 %          on the header file. The signal will be scaled by this gain prior to the quantization
 %          process. Use this options if you want to have a standard gain and quantization
 %          process for all signals in a dataset (the function will not attempt to quantitized
-%          individual waveforms based on their individual range and offset).
-%offset   -(Optional) Offset (ADC zero) Mx1 array of integers that represents the amplitude (sample
+%          individual waveforms based on their individual range and baseline).
+%baseline   -(Optional) Offset (ADC zero) Mx1 array of integers that represents the amplitude (sample
 %           value) that would be observed if the analog signal present at the ADC inputs had a
 %           level that fell exactly in the middle of the input range of the ADC.
 % sg_name -(Optional) Cell array of strings describing signal names.
@@ -113,6 +113,30 @@ function [varargout]=mat2wfdb(varargin)
 %%%%%%%% End of Example 1%%%%%%%%%
 %
 %
+%%%%%%%%%%  Example 3- Comparing with WFDB Records %%%%%%%%%%%%
+%clc;close all;clear all
+%x = rdsamp('mitdb/100','phys',true,'hires',true);
+%desc=wfdbdesc('mitdb/100',1);
+%sg_info=desc.groups.signals(2);
+%x(:,1:2)=[];
+%filename='wfdb_test';
+%isint=1;
+%info=[];
+%bit_res=16;
+%Fs=128;
+%adu=[];
+%sg_name={'ECG'};
+%offset=[];
+%gain=[];
+%[xbit]=mat2wfdb(x,filename,Fs,bit_res,adu,info,gain,sg_name,offset,isint);
+%xrecon=rdsamp(filename,'phys',true,'hires',true);
+%xrecon(:,1)=[]; %Get rid of time index
+%[x(:) xrecon(:)]
+%sqrt(mean((x(:)-xrecon(:)).^2))
+%
+%
+%
+%%%End of Example 3
 %
 %Written by Ikaro Silva 2010
 %Modified by Louis Mayaud 2011
@@ -124,14 +148,14 @@ machine_format='l';
 skip=0;
 
 %Set default parameters
-params={'Fs','bit_res','adu','info','gain','sg_name','offset','isint'};
+params={'Fs','bit_res','adu','info','gain','sg_name','baseline','isint'};
 param_offset=nargin-length(params)+1;
 Fs=1;
 adu=[];
 info=[];
 isint=0;
-%Use cell array for offset and gain in case of empty conditions
-offset=[];
+%Use cell array for baseline and gain in case of empty conditions
+baseline=[];
 gain=[];
 sg_name=[];
 x=varargin{1};
@@ -155,7 +179,7 @@ end
 
 if(isempty(gain))
     gain=cell(M,1); %Generate empty cells as default
-elseif(length(gain)<M)
+elseif(length(gain)==1)
     gain=repmat(gain,[M 1]);
     gain=num2cell(gain);
 else
@@ -170,8 +194,11 @@ end
 if ~isempty(setdiff(bit_res,bit_res_suport))
     error(['Bit res should be any of: ' num2str(bit_res_suport)]);
 end
-if(isempty(offset))
-    offset=cell(M,1); %Generate empty cells as default
+if(isempty(baseline))
+    baseline=cell(M,1); %Generate empty cells as default
+elseif(length(baseline)==1)
+    baseline=repmat(baseline,[M 1]);
+    baseline=num2cell(baseline);
 end
 
 %Header string
@@ -188,7 +215,7 @@ for m=1:M
     end
     
     [tmp_bit1,bit_gain,baseline_tmp,ck_sum]=quant(x(:,m), ...
-        bit_res,gain{m},offset{m},isint);
+        bit_res,gain{m},baseline{m},isint);
     
     y(:,m)=tmp_bit1;
     head_str(m+1)={[fname '.dat ' num2str(bit_res) ' ' num2str(bit_gain) '(' ...
@@ -240,16 +267,16 @@ fclose(fid);
 
 
 %Helper function
-function [y,adc_gain,baseline,check_sum]=quant(x,bit_res,gain,offset,isint)
+function [y,adc_gain,baseline,check_sum]=quant(x,bit_res,gain,baseline,isint)
 %shift so that the signal midrange is at 0
 
 min_x=min(x(~isnan(x)));
 nan_ind=isnan(x);
 rg=max(x(~isnan(x)))-min_x;
-if(isempty(offset))
-    offset=min_x + (rg/2);
+if(isempty(baseline))
+    baseline=min_x + (rg/2);
 end
-x=x-offset;
+x=x-baseline;
 
 if(isempty(gain))
     %ADC gain (ADC units per physical unit). This value is a floating-point number
@@ -305,8 +332,8 @@ end
 %Calculate baseline (ADC units):
 %The baseline is an integer that specifies the sample
 %value corresponding to 0 physical units.
-offset=offset.*adc_gain;
-baseline=-round(offset);
+baseline=baseline.*adc_gain;
+baseline=-round(baseline);
 
 
 
