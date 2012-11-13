@@ -124,8 +124,6 @@ machine_format='l';
 skip=0;
 
 %Set default parameters
-
-Def=2;
 params={'Fs','bit_res','adu','info','gain','sg_name','offset','isint'};
 param_offset=nargin-length(params)+1;
 Fs=1;
@@ -140,8 +138,8 @@ x=varargin{1};
 fname=varargin{2};
 %Convert signal from double to appropiate type
 [N,M]=size(x);
-bit_res = ones(M,1)*16 ;
-bit_res_suport=[8 80 16 32];
+bit_res = 16 ;
+bit_res_suport=[8 16 32];
 
 for i=param_offset:nargin
     if(~isempty(varargin{i}))
@@ -156,44 +154,25 @@ for i=param_offset:nargin
 end
 
 if(isempty(gain))
-   gain=cell(M,1); %Generate empty cells as default
+    gain=cell(M,1); %Generate empty cells as default
 elseif(length(gain)<M)
     gain=repmat(gain,[M 1]);
     gain=num2cell(gain);
 else
     gain={gain};
 end
-
 if(isempty(sg_name))
     sg_name=repmat({''},[M 1]);
 end
 if(isempty(adu))
     adu=repmat({'V'},[M 1]);
 end
-
-if (length(bit_res)~=M)
-    if length(bit_res) == 1
-        bit_res = bit_res * ones(1,M);
-    else
-        error(['Expecting 1 or ' num2str(M) ' for bit_res length, but got: ' num2str(length(bit_res))]);
-    end
-end
 if ~isempty(setdiff(bit_res,bit_res_suport))
     error(['Bit res should be any of: ' num2str(bit_res_suport)]);
 end
-if(length(bit_res)<M)
-   bit_res=repmatn(bit_ris,[M 1]); 
-end
 if(isempty(offset))
-   offset=cell(M,1); %Generate empty cells as default
+    offset=cell(M,1); %Generate empty cells as default
 end
-
-%Dealing with format '80' case
-int_str = cell(1,M) ;
-int_str(bit_res~=80) = {'int'};
-int_str(bit_res==80) = {'uint'};
-sgn = ~(bit_res==80) ; % 1- signed bit, 0 is unsigned
-bit_res(bit_res==80) = 8 ;
 
 %Header string
 head_str=cell(M+1,1);
@@ -201,24 +180,19 @@ head_str(1)={[fname ' ' num2str(M) ' ' num2str(Fs) ' ' num2str(N)]};
 
 %Loop through all signals, digitizing them and generating lines in header
 %file
+eval(['y=int' num2str(bit_res) '(zeros(N,M));'])  %allocate space
 for m=1:M
-    eval(['y=' int_str{m} num2str(bit_res(m)) '(zeros(N,M));'])  %allocate space
-    
     nameArray = regexp(fname,'/','split');
     if ~isempty(nameArray)
         fname = nameArray{end};
     end
     
     [tmp_bit1,bit_gain,baseline_tmp,ck_sum]=quant(x(:,m), ...
-        bit_res(m),sgn(m),gain{m},offset{m},isint);
+        bit_res,gain{m},offset{m},isint);
     
     y(:,m)=tmp_bit1;
-    if(~sgn(m))
-        head_str(m+1)={[fname '.dat ' num2str(bit_res(m)) '0 ' num2str(bit_gain) '/' adu{m}]};
-    else
-        head_str(m+1)={[fname '.dat ' num2str(bit_res(m)) ' ' num2str(bit_gain) '(' ...
-            num2str(baseline_tmp) ')/' adu{m} ' ' '0 0 0 ' num2str(ck_sum) ' 0 ' sg_name{m}]};    
-    end
+    head_str(m+1)={[fname '.dat ' num2str(bit_res) ' ' num2str(bit_gain) '(' ...
+            num2str(baseline_tmp) ')/' adu{m} ' ' '0 0 0 ' num2str(ck_sum) ' 0 ' sg_name{m}]};
 end
 
 %Write *.dat file
@@ -227,7 +201,7 @@ if(~fid)
     error(['Could not create data file for writing: ' fname])
 end
 
-count=fwrite(fid,y',[int_str{M} num2str(bit_res(m))],skip,machine_format);
+count=fwrite(fid,y',['int' num2str(bit_res)],skip,machine_format);
 
 if(~count)
     fclose(fid);
@@ -266,7 +240,7 @@ fclose(fid);
 
 
 %Helper function
-function [y,adc_gain,baseline,check_sum]=quant(x,bit_res,sgn,gain,offset,isint)
+function [y,adc_gain,baseline,check_sum]=quant(x,bit_res,gain,offset,isint)
 %shift so that the signal midrange is at 0
 
 min_x=min(x(~isnan(x)));
@@ -313,18 +287,26 @@ y(nan_ind)=-2^(bit_res-1);
 
 %Calculate the 16-bit signed checksum of all samples in the signal
 check_sum=sum(y);
-
-%Discard overflow bits and get two's complement of the sum
-ybin=dec2bin(check_sum);
-yind=min(length(ybin),16);
-check_sum=bin2dec(ybin(end-yind+1:end));
-%check_sum=bitcmp(check_sum,15)+1;
+M=check_sum/(2^15);
+if(M<0)
+    check_sum=mod(check_sum,-2^15);
+    if(~check_sum && abs(M)<1)
+        check_sum=-2^15;
+    elseif (mod(ceil(M),2))
+        check_sum=2^15 + check_sum;
+    end
+else
+    check_sum=mod(check_sum,2^15);
+    if(mod(floor(M),2))
+        check_sum=-2^15+check_sum;
+    end
+end
 
 %Calculate baseline (ADC units):
-%The baseline is an integer that specifies the sample 
+%The baseline is an integer that specifies the sample
 %value corresponding to 0 physical units.
 offset=offset.*adc_gain;
-baseline=-offset;
+baseline=-round(offset);
 
 
 
