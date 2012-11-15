@@ -219,7 +219,7 @@ for m=1:M
     
     y(:,m)=tmp_bit1;
     head_str(m+1)={[fname '.dat ' num2str(bit_res) ' ' num2str(bit_gain) '(' ...
-            num2str(baseline_tmp) ')/' adu{m} ' ' '0 0 0 ' num2str(ck_sum) ' 0 ' sg_name{m}]};
+        num2str(baseline_tmp) ')/' adu{m} ' ' '0 0 0 ' num2str(ck_sum) ' 0 ' sg_name{m}]};
 end
 
 %Write *.dat file
@@ -286,31 +286,42 @@ if(isempty(gain))
     %to the mean cardiac electrical axis. If the gain is zero or missing, this indicates
     %that the signal amplitude is uncalibrated; in such cases, a value of 200 (DEFGAIN,
     %defined in <wfdb/wfdb.h>) ADC units per physical unit may be assumed.
-    adc_gain=(2^(bit_res-1)-1)/(rg/2); %Dynamic range of encoding / Dynamic Range of Data --but leave 1 quant level for NaN
+    
+    %Dynamic range of encoding / Dynamic Range of Data --but leave 1 quant level for NaN
+    adc_gain=(2^(bit_res-1)-1)/(rg/2); 
+    y=x.*adc_gain;
+    
+    if(isint)
+        %Use this option if you know the signal is quantitized, and you
+        %want to remove round-off error by setting the original values to
+        %integers prior to fixed point conversion
+        df_db=min(diff(sort(unique(y))));
+        y=y/df_db;
+        adc_gain=adc_gain/df_db;
+    end
+       
 else
     %if gain is alreay passed don't do anything to the signal
     %the gain will be used in the header file only
     %Convert the signal to integers before encoding in order minimize round off
     %error
     adc_gain=gain;
+    y=x;
 end
 
-y=x.*adc_gain;
-
-if(isint)
-    %Use this option if you know the signal is already quantitized, and you
-    %want to remove round-off error by setting the original values to
-    %integers prior to fixed point conversion
-    df_db=min(diff(sort(unique(y))));
-    y=y/df_db;
-    adc_gain=adc_gain/df_db;
-end
 
 %convert to appropiate bit type
 eval(['y=int' num2str(bit_res) '(y);'])
 
-%Set NaNs to lowest levels
-y(nan_ind)=-2^(bit_res-1);
+%Shift WFDB NaN int value to a lower value so that they will not be read as NaN's by WFDB
+WFDBNAN=-32768;
+iswfdbnan=find(y==WFDBNAN); %-12^15 are NaNs in WFDB
+if(~isempty(iswfdbnan))
+    y(iswfdbnan)=WFDBNAN-1;
+end
+    
+%Set NaNs to WFDBNAN
+y(nan_ind)=WFDBNAN;
 
 %Calculate the 16-bit signed checksum of all samples in the signal
 check_sum=sum(y);
