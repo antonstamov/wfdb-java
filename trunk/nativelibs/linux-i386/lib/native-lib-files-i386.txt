@@ -1,7 +1,0 @@
-libcurl.so-i386
-libgcrypt.so-i386
-libgnutls.so-i386
-libgpg-error.so-i386
-libidn.so-i386
-libwfdbjava.so-i386
-libwfdb.so-i386
