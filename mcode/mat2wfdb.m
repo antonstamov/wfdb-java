@@ -183,7 +183,7 @@ elseif(length(gain)==1)
     gain=repmat(gain,[M 1]);
     gain=num2cell(gain);
 else
-    gain={gain};
+    gain=gain;
 end
 if(isempty(sg_name))
     sg_name=repmat({''},[M 1]);
