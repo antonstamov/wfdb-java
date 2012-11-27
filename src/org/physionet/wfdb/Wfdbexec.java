@@ -230,9 +230,17 @@ public class Wfdbexec {
 			e.printStackTrace();
 		}
 
+		System.out.println("jar_bin-dir= " + jar_bin_dir);
 		//Remove the /bin/ from the Eclipse project to get the WFDB-Java 
 		//root directory
-		int endIndex=jar_bin_dir.lastIndexOf(fileSeparator+"bin"+fileSeparator);
+		int endIndex=0;
+		if(jar_bin_dir.contains(".jar")){
+			//Running from a JAR file
+			endIndex=jar_bin_dir.length()-1;
+		}else{
+			endIndex=jar_bin_dir.lastIndexOf(fileSeparator+"bin"+fileSeparator);
+		}
+		
 		WFDB_JAVA_HOME= jar_bin_dir.substring(0, endIndex)+fileSeparator;
 		
 		//Set path to executables based on system/arch
