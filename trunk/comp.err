@@ -1,0 +1,349 @@
+warning: [options] bootstrap class path not set in conjunction with -source 1.4
+src/org/physionet/wfdb/Rdann.java:40: warning: as of release 5, 'enum' is a keyword, and may not be used as an identifier
+	public static enum Arguments {
+	              ^
+  (use -source 5 or higher to use 'enum' as a keyword)
+src/org/physionet/wfdb/Rdann.java:40: error: ';' expected
+	public static enum Arguments {
+	                            ^
+src/org/physionet/wfdb/Rdann.java:43: error: ';' expected
+		recordName(1, false, "-r"),
+		                          ^
+src/org/physionet/wfdb/Rdann.java:44: error: ';' expected
+		startTime(1, true, "-f"),
+		                        ^
+src/org/physionet/wfdb/Rdann.java:45: error: ';' expected
+		stopTime(1, true, "-t"),
+		                       ^
+src/org/physionet/wfdb/Rdann.java:46: error: ';' expected
+		annotator(1, false, "-a"),
+		                         ^
+src/org/physionet/wfdb/Rdann.java:47: error: ';' expected
+		channel(1, true, "-c"),
+		                      ^
+src/org/physionet/wfdb/Rdann.java:48: error: ';' expected
+		printNum(1, true, "-n"),
+		                       ^
+src/org/physionet/wfdb/Rdann.java:49: error: ';' expected
+		printType(1, true, "-p"),
+		                        ^
+src/org/physionet/wfdb/Rdann.java:50: error: ';' expected
+		printSubType(1, true, "-s"),
+		                           ^
+src/org/physionet/wfdb/Rdann.java:53: error: illegal start of expression
+		public int parameters;
+		^
+src/org/physionet/wfdb/Rdann.java:54: error: illegal start of expression
+		public boolean optional;
+		^
+src/org/physionet/wfdb/Rdann.java:55: error: illegal start of expression
+		public String label;
+		^
+src/org/physionet/wfdb/Rdann.java:56: error: '.class' expected
+		Arguments(int parameters, boolean optional, String label) {
+		              ^
+src/org/physionet/wfdb/Rdann.java:56: error: ';' expected
+		Arguments(int parameters, boolean optional, String label) {
+		                        ^
+src/org/physionet/wfdb/Rdann.java:56: error: ';' expected
+		Arguments(int parameters, boolean optional, String label) {
+		                                                  ^
+src/org/physionet/wfdb/Rdann.java:56: error: not a statement
+		Arguments(int parameters, boolean optional, String label) {
+		                                                   ^
+src/org/physionet/wfdb/Rdann.java:56: error: ';' expected
+		Arguments(int parameters, boolean optional, String label) {
+		                                                        ^
+src/org/physionet/wfdb/ecg/Wqrs.java:46: warning: as of release 5, 'enum' is a keyword, and may not be used as an identifier
+	public static enum Arguments {
+	              ^
+  (use -source 5 or higher to use 'enum' as a keyword)
+src/org/physionet/wfdb/ecg/Wqrs.java:46: error: ';' expected
+	public static enum Arguments {
+	                            ^
+src/org/physionet/wfdb/ecg/Wqrs.java:49: error: ';' expected
+		recordName(1,false, "-r"),
+		                         ^
+src/org/physionet/wfdb/ecg/Wqrs.java:50: error: ';' expected
+		dumpSamples(1, true, "-d"),
+		                          ^
+src/org/physionet/wfdb/ecg/Wqrs.java:51: error: ';' expected
+		startTime(1, true, "-f"),
+		                        ^
+src/org/physionet/wfdb/ecg/Wqrs.java:52: error: ';' expected
+		stopTime(1, true, "-t"),
+		                       ^
+src/org/physionet/wfdb/ecg/Wqrs.java:53: error: ';' expected
+		highResolution(0, true, "-H"),
+		                             ^
+src/org/physionet/wfdb/ecg/Wqrs.java:54: error: ';' expected
+		findJPoints(1, true, "-j"),
+		                          ^
+src/org/physionet/wfdb/ecg/Wqrs.java:55: error: ';' expected
+		thresholdInmV(1,true,"-m"),
+		                          ^
+src/org/physionet/wfdb/ecg/Wqrs.java:56: error: ';' expected
+		powerLineFrequencyHz(1,true,"-p"),
+		                                 ^
+src/org/physionet/wfdb/ecg/Wqrs.java:57: error: ';' expected
+		resample(0,true,"-R"),
+		                     ^
+src/org/physionet/wfdb/ecg/Wqrs.java:58: error: ';' expected
+		signal(1,true, "-s"),
+		                    ^
+src/org/physionet/wfdb/ecg/Wqrs.java:60: error: illegal start of expression
+		public int parameters;
+		^
+src/org/physionet/wfdb/ecg/Wqrs.java:61: error: illegal start of expression
+		public boolean optional;
+		^
+src/org/physionet/wfdb/ecg/Wqrs.java:62: error: illegal start of expression
+		public String label;
+		^
+src/org/physionet/wfdb/ecg/Wqrs.java:63: error: '.class' expected
+		Arguments(int parameters, boolean optional, String label) {
+		              ^
+src/org/physionet/wfdb/ecg/Wqrs.java:63: error: ';' expected
+		Arguments(int parameters, boolean optional, String label) {
+		                        ^
+src/org/physionet/wfdb/ecg/Wqrs.java:63: error: ';' expected
+		Arguments(int parameters, boolean optional, String label) {
+		                                                  ^
+src/org/physionet/wfdb/ecg/Wqrs.java:63: error: not a statement
+		Arguments(int parameters, boolean optional, String label) {
+		                                                   ^
+src/org/physionet/wfdb/ecg/Wqrs.java:63: error: ';' expected
+		Arguments(int parameters, boolean optional, String label) {
+		                                                        ^
+src/org/physionet/wfdb/Wfdbconfig.java:45: warning: as of release 5, 'enum' is a keyword, and may not be used as an identifier
+	public static enum Arguments {
+	              ^
+  (use -source 5 or higher to use 'enum' as a keyword)
+src/org/physionet/wfdb/Wfdbconfig.java:45: error: ';' expected
+	public static enum Arguments {
+	                            ^
+src/org/physionet/wfdb/Wfdbconfig.java:48: error: ';' expected
+		cflags(0, true, "--cflags"),
+		                           ^
+src/org/physionet/wfdb/Wfdbconfig.java:49: error: ';' expected
+		libs(0, true, "--libs"),
+		                       ^
+src/org/physionet/wfdb/Wfdbconfig.java:51: error: illegal start of expression
+		public int parameters;
+		^
+src/org/physionet/wfdb/Wfdbconfig.java:52: error: illegal start of expression
+		public boolean optional;
+		^
+src/org/physionet/wfdb/Wfdbconfig.java:53: error: illegal start of expression
+		public String label;
+		^
+src/org/physionet/wfdb/Wfdbconfig.java:54: error: '.class' expected
+		Arguments(int parameters, boolean optional, String label) {
+		              ^
+src/org/physionet/wfdb/Wfdbconfig.java:54: error: ';' expected
+		Arguments(int parameters, boolean optional, String label) {
+		                        ^
+src/org/physionet/wfdb/Wfdbconfig.java:54: error: ';' expected
+		Arguments(int parameters, boolean optional, String label) {
+		                                                  ^
+src/org/physionet/wfdb/Wfdbconfig.java:54: error: not a statement
+		Arguments(int parameters, boolean optional, String label) {
+		                                                   ^
+src/org/physionet/wfdb/Wfdbconfig.java:54: error: ';' expected
+		Arguments(int parameters, boolean optional, String label) {
+		                                                        ^
+src/org/physionet/wfdb/physiobank/PhysioNetRecord.java:43: error: generics are not supported in -source 1.4
+	private ArrayList<String> signalList;
+	                 ^
+  (use -source 5 or higher to enable generics)
+src/org/physionet/wfdb/physiobank/PhysioNetRecord.java:72: error: for-each loops are not supported in -source 1.4
+		for(String sig: signalList){
+		              ^
+  (use -source 5 or higher to enable for-each loops)
+src/org/physionet/wfdb/physiobank/PhysioNetDB.java:53: error: generics are not supported in -source 1.4
+	private ArrayList<PhysioNetRecord> dbRecordList;
+	                 ^
+  (use -source 5 or higher to enable generics)
+src/org/physionet/wfdb/physiobank/PhysioNetDB.java:120: error: for-each loops are not supported in -source 1.4
+		for(PhysioNetRecord rec : dbRecordList){
+		                        ^
+  (use -source 5 or higher to enable for-each loops)
+src/org/physionet/wfdb/Wfdbdesc.java:44: warning: as of release 5, 'enum' is a keyword, and may not be used as an identifier
+		public static enum Arguments {
+		              ^
+  (use -source 5 or higher to use 'enum' as a keyword)
+src/org/physionet/wfdb/Wfdbdesc.java:44: error: ';' expected
+		public static enum Arguments {
+		                            ^
+src/org/physionet/wfdb/Wfdbdesc.java:47: error: ';' expected
+			recordName(1, false, ""),
+			                        ^
+src/org/physionet/wfdb/Wfdbdesc.java:49: error: illegal start of expression
+			public int parameters;
+			^
+src/org/physionet/wfdb/Wfdbdesc.java:50: error: illegal start of expression
+			public boolean optional;
+			^
+src/org/physionet/wfdb/Wfdbdesc.java:51: error: illegal start of expression
+			public String label;
+			^
+src/org/physionet/wfdb/Wfdbdesc.java:52: error: '.class' expected
+			Arguments(int parameters, boolean optional, String label) {
+			              ^
+src/org/physionet/wfdb/Wfdbdesc.java:52: error: ';' expected
+			Arguments(int parameters, boolean optional, String label) {
+			                        ^
+src/org/physionet/wfdb/Wfdbdesc.java:52: error: ';' expected
+			Arguments(int parameters, boolean optional, String label) {
+			                                                  ^
+src/org/physionet/wfdb/Wfdbdesc.java:52: error: not a statement
+			Arguments(int parameters, boolean optional, String label) {
+			                                                   ^
+src/org/physionet/wfdb/Wfdbdesc.java:52: error: ';' expected
+			Arguments(int parameters, boolean optional, String label) {
+			                                                        ^
+src/org/physionet/wfdb/Rdsamp.java:45: warning: as of release 5, 'enum' is a keyword, and may not be used as an identifier
+	public enum Arguments {
+	       ^
+  (use -source 5 or higher to use 'enum' as a keyword)
+src/org/physionet/wfdb/Rdsamp.java:45: error: ';' expected
+	public enum Arguments {
+	                     ^
+src/org/physionet/wfdb/Rdsamp.java:48: error: ';' expected
+		recordName(1, false, "-r"),
+		                          ^
+src/org/physionet/wfdb/Rdsamp.java:49: error: ';' expected
+		startTime(1, true, "-f"),
+		                        ^
+src/org/physionet/wfdb/Rdsamp.java:50: error: ';' expected
+		stopTime(1, true, "-t"),
+		                       ^
+src/org/physionet/wfdb/Rdsamp.java:51: error: ';' expected
+		highResolution(0, true, "-H"),
+		                             ^
+src/org/physionet/wfdb/Rdsamp.java:52: error: ';' expected
+		interval(1, true, "-l"),
+		                       ^
+src/org/physionet/wfdb/Rdsamp.java:53: error: ';' expected
+		printTextFormat(0, true, null),
+		                              ^
+src/org/physionet/wfdb/Rdsamp.java:54: error: ';' expected
+		printTimeFormat(0, true, null),
+		                              ^
+src/org/physionet/wfdb/Rdsamp.java:55: error: ';' expected
+		signalList(1, true, "-s"),
+		                         ^
+src/org/physionet/wfdb/Rdsamp.java:56: error: ';' expected
+		signal(1, true, "-S"),
+		                     ^
+src/org/physionet/wfdb/Rdsamp.java:58: error: illegal start of expression
+		public int parameters;
+		^
+src/org/physionet/wfdb/Rdsamp.java:59: error: illegal start of expression
+		public boolean optional;
+		^
+src/org/physionet/wfdb/Rdsamp.java:60: error: illegal start of expression
+		public String label;
+		^
+src/org/physionet/wfdb/Rdsamp.java:61: error: '.class' expected
+		Arguments(int parameters, boolean optional, String label) {
+		              ^
+src/org/physionet/wfdb/Rdsamp.java:61: error: ';' expected
+		Arguments(int parameters, boolean optional, String label) {
+		                        ^
+src/org/physionet/wfdb/Rdsamp.java:61: error: ';' expected
+		Arguments(int parameters, boolean optional, String label) {
+		                                                  ^
+src/org/physionet/wfdb/Rdsamp.java:61: error: not a statement
+		Arguments(int parameters, boolean optional, String label) {
+		                                                   ^
+src/org/physionet/wfdb/Rdsamp.java:61: error: ';' expected
+		Arguments(int parameters, boolean optional, String label) {
+		                                                        ^
+src/org/physionet/wfdb/Rdsamp.java:68: warning: as of release 5, 'enum' is a keyword, and may not be used as an identifier
+	public enum PrintTimeFormatLabel {
+	       ^
+  (use -source 5 or higher to use 'enum' as a keyword)
+src/org/physionet/wfdb/Rdsamp.java:68: error: ';' expected
+	public enum PrintTimeFormatLabel {
+	                                ^
+src/org/physionet/wfdb/Rdsamp.java:69: error: ';' expected
+		p("-p"), 
+		       ^
+src/org/physionet/wfdb/Rdsamp.java:70: error: ';' expected
+		P("-P"), 
+		       ^
+src/org/physionet/wfdb/Rdsamp.java:71: error: ';' expected
+		pd("-pd"), 
+		         ^
+src/org/physionet/wfdb/Rdsamp.java:72: error: ';' expected
+		Pd("-Pd"), 
+		         ^
+src/org/physionet/wfdb/Rdsamp.java:73: error: ';' expected
+		pe("-pe"), 
+		         ^
+src/org/physionet/wfdb/Rdsamp.java:74: error: ';' expected
+		Pe("-Pe"), 
+		         ^
+src/org/physionet/wfdb/Rdsamp.java:75: error: ';' expected
+		ph("-ph"), 
+		         ^
+src/org/physionet/wfdb/Rdsamp.java:76: error: ';' expected
+		Ph("-Ph"), 
+		         ^
+src/org/physionet/wfdb/Rdsamp.java:77: error: ';' expected
+		pm("-pm"), 
+		         ^
+src/org/physionet/wfdb/Rdsamp.java:78: error: ';' expected
+		Pm("-Pm"), 
+		         ^
+src/org/physionet/wfdb/Rdsamp.java:79: error: ';' expected
+		ps("-ps"), 
+		         ^
+src/org/physionet/wfdb/Rdsamp.java:81: error: illegal start of expression
+		public String label;
+		^
+src/org/physionet/wfdb/Rdsamp.java:82: error: ')' expected
+		PrintTimeFormatLabel(String label) {
+		                           ^
+src/org/physionet/wfdb/Rdsamp.java:82: error: illegal start of expression
+		PrintTimeFormatLabel(String label) {
+		                                 ^
+src/org/physionet/wfdb/Rdsamp.java:82: error: ';' expected
+		PrintTimeFormatLabel(String label) {
+		                                  ^
+src/org/physionet/wfdb/Rdsamp.java:87: error: enums are not supported in -source 1.4
+	public enum PrintTextFormatLabel {
+	       ^
+  (use -source 5 or higher to enable enums)
+src/org/physionet/wfdb/Rdsamp.java:96: error: class, interface, or enum expected
+	public Rdsamp() {
+	       ^
+src/org/physionet/wfdb/Rdsamp.java:98: error: class, interface, or enum expected
+	}
+	^
+src/org/physionet/wfdb/Rdsamp.java:100: error: class, interface, or enum expected
+	public String getArgumentValue(Arguments arg) {
+	       ^
+src/org/physionet/wfdb/Rdsamp.java:102: error: class, interface, or enum expected
+	}
+	^
+src/org/physionet/wfdb/signalprocessing/SigNum.java:47: warning: as of release 5, 'enum' is a keyword, and may not be used as an identifier
+	public static enum Arguments {
+	              ^
+  (use -source 5 or higher to use 'enum' as a keyword)
+src/org/physionet/wfdb/signalprocessing/SigName.java:47: warning: as of release 5, 'enum' is a keyword, and may not be used as an identifier
+	public static enum Arguments {
+	              ^
+  (use -source 5 or higher to use 'enum' as a keyword)
+src/org/physionet/wfdb/signalprocessing/Dfa.java:47: warning: as of release 5, 'enum' is a keyword, and may not be used as an identifier
+	public static enum Arguments {
+	              ^
+  (use -source 5 or higher to use 'enum' as a keyword)
+src/org/physionet/wfdb/signalprocessing/SampFreq.java:47: warning: as of release 5, 'enum' is a keyword, and may not be used as an identifier
+	public static enum Arguments {
+	              ^
+  (use -source 5 or higher to use 'enum' as a keyword)
+100 errors
+11 warnings
+make: *** [compile] Error 1

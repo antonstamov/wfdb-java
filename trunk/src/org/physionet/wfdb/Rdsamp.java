@@ -42,7 +42,7 @@ public class Rdsamp extends Wfdbexec {
 	private static final String TAG = "rdsamp";
 	public static final String URL="http://www.physionet.org/physiotools/wag/rdsamp-1.htm";
 
-	public static enum Arguments {
+	public enum Arguments {
 		//Define input arguments syntax is:
 		// argumentName(number of parameters,is optional,WDFD command string)
 		recordName(1, false, "-r"),
@@ -65,7 +65,7 @@ public class Rdsamp extends Wfdbexec {
 		}
 	}
 
-	public static enum PrintTimeFormatLabel {
+	public enum PrintTimeFormatLabel {
 		p("-p"), 
 		P("-P"), 
 		pd("-pd"), 
@@ -84,7 +84,7 @@ public class Rdsamp extends Wfdbexec {
 		}
 	}
 
-	public static enum PrintTextFormatLabel {
+	public enum PrintTextFormatLabel {
 		c("-c"), 
 		X("-X");
 		public String label;
