@@ -15,23 +15,10 @@
 
   <target name="jar" depends="compile">
     <mkdir dir="${jar.dir}"/>
-    <jar destfile="${jar.dir}/wfdb.jar" basedir="${classes.dir}">
+    <jar destfile="${jar.dir}/wfdbapp.jar" basedir="${classes.dir}">
       <manifest>
         <attribute name="Main-Class" value="org.physionet.wfdb.rdsamp"/>
       </manifest>
     </jar>
   </target>
-	
-	  <target name ="makejar" description="Create a jar ">
-	    <jar jarfile="wfdbapp.jar" includes="*.class" basedir="bin"/>
-	  </target>
-	
-  <target name="run">
-    <java jar="${jar.dir}/wfdb.jar" fork="true">
-      <arg value="-r 'mitdb/100' -t s10"/>
-    </java>
-  </target>
-
-
-
 </project>

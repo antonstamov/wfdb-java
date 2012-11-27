@@ -9,7 +9,7 @@ Current supported classes:
  
 For headless build, run:
 
-java -jar /lib64/eclipse/plugins/org.eclipse.equinox.launcher_1.3.0.v20120522-1813.jar -application org.eclipse.ant.core.antRunner -buildfile /home/joe/workspace/wfdb-java\(TRUNK\)/build.xml
+java -jar /lib64/eclipse/plugins/org.eclipse.equinox.launcher_1.3.0.v20120522-1813.jar -application org.eclipse.ant.core.antRunner -buildfile /home/joe/workspace/wfdb-java-app/build.xml
 
 Alternatively, setup Eclipse to automatically generate JAR file.
 For instructions on how to create an Ant buildfile see:
