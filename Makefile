@@ -17,11 +17,12 @@ JFLAGS := -sourcepath $(SOURCE_DIR)		\
 all_javas := $(OUTPUT_DIR)/all.javas
 
 #compile the source
-#.PHONY: compile
-#compile: $(all_javas)
-#	$(JAVAC) $(JFLAGS) @$<
+.PHONY: compile
+compile: $(all_javas)
+	$(JAVAC) $(JFLAGS) @$<
 	
 #Gather rouisce file list
 .INTERMEDIATE: $(all_javas)
 $(all_javas):
 	$(FIND) $(SOURCE_DIR) -name '*.java' > $@
+	cat $(OUTPUT_DIR)/all.javas
