@@ -1,29 +1,32 @@
 #Makefile for wfdb-java-applications
 
-SOURCE_DIR := src
-OUTPUT_DIR := build
-
-#Tools used by packaging
-FIND := /usr/bin/find
+#Output Settings (defined in build.xml)
+JAR_DIR := ./build/jar/
+JAR_NAME :=  $(JAR_DIR)wfdbapp.jar
 
 #Java Tools
 JAVA := /usr/bin/java
-BUILDFILE_DIR := /home/joe/workspace/wfdb-java\(TRUNK\)/build.xml
+BUILDFILE_DIR := /home/ikaro/workspace/wfdb-java-app/build.xml
+ECLIPSEPATH := /lib64/eclipse/plugins/
+ANTPATH := org.eclipse.ant.core.antRunner
+EQUINOXPATH := $(ECLIPSEPATH)org.eclipse.equinox.launcher_1.3.0.v20120522-1813.jar
 JARFLAGS := -jar		\
-		  /lib64/eclipse/plugins/org.eclipse.equinox.launcher_1.3.0.v20120522-1813.jar				\
-		  -application org.eclipse.ant.core.antRunner	\
+		  $(EQUINOXPATH)		\
+		  -application $(ANTPATH)	\
 		  -buildfile $(BUILDFILE_DIR)
 
-#all_javas - Temp file for holding source file list
-all_javas := $(OUTPUT_DIR)/all.javas
+
+#Tests 
+JTEST := java -cp $(JAR_NAME)
+TEST_PHYSIONETDB := $(JTEST) org.physionet.wfdb.physiobank.PhysioNetDB
+TEST_RDSAMP := $(JTEST) org.physionet.wfdb.examples.RdsampEx1
 
 #compile the source
 .PHONY: jar
 jar: 
-	$(JAVA) $(JARFLAGS) @$<
+	$(JAVA) $(JARFLAGS) 	
 	
-#Gather rouisce file list
-#.INTERMEDIATE: $(all_javas)
-#$(all_javas):
-#$(FIND) $(SOURCE_DIR) -name '*.java' > $@
-#	cat $(OUTPUT_DIR)/all.javas
+test: jar
+	$(TEST_RDSAMP) 
+	
+		
