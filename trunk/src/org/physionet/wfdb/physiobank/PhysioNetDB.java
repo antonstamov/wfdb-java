@@ -143,8 +143,7 @@ public class PhysioNetDB {
 
 		// Prints information regarding all databases
 		// Currently available at PhysioNet
-		PhysioNetDB pnDB = new PhysioNetDB("challenge_2010_set-a");
-		pnDB.printDBRecordList();
+		PhysioNetDB.printDBList();
 	}
 
 	private URL setDBURL() {
