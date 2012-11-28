@@ -20,5 +20,12 @@
         <attribute name="Main-Class" value="org.physionet.wfdb.rdsamp"/>
       </manifest>
     </jar>
+
+  	<!-- to copy data & images folders' contents to dist folder on build. -->
+  	 <property name="nativelibs.dir" value="./build/nativelibs" />
+  	 <copy todir="${nativelibs.dir}">
+  	   <fileset dir="./nativelibs" />
+  	 </copy>
+  	 <echo level="info" message="Native Libs folder content was copied."/>
   </target>
 </project>
