@@ -233,12 +233,10 @@ public class Wfdbexec {
 		
 		
 		WFDB_JAVA_HOME= jar_bin_dir;
-		System.out.println(WFDB_JAVA_HOME);
 		//Set path to executables based on system/arch
 		WFDB_NATIVE_BIN= WFDB_JAVA_HOME + WFDB_NATIVE_BIN_FOLDER + fileSeparator + 
 						 osName.toLowerCase() + "-" + osArch.toLowerCase() 
-						 + fileSeparator + "bin" + fileSeparator;
-		System.out.println(WFDB_NATIVE_BIN); 
+						 + fileSeparator + "bin" + fileSeparator; 
 		arch_library_path= WFDB_JAVA_HOME + WFDB_NATIVE_BIN_FOLDER + fileSeparator + 
 		 osName.toLowerCase() + "-" + osArch.toLowerCase() 
 		 + fileSeparator + "lib" + fileSeparator;

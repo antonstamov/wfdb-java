@@ -36,6 +36,7 @@ jar:
 	$(JAVA) $(JARFLAGS) 	
 	
 test: jar
+	echo -e "\nTesting Toolbox...\n"
 	$(TEST_RDSAMP) 
 	
 		
