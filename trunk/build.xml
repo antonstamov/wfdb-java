@@ -3,7 +3,8 @@
   <property name="build.dir"   value="build"/>
   <property name="classes.dir" value="${build.dir}/classes"/>
   <property name="jar.dir"     value="${build.dir}/jar"/>
-
+  <property name="nativelibs.dir" value="${build.dir}/nativelibs" />
+	
   <target name="clean">
     <delete dir="${build.dir}"/>
   </target>
@@ -15,17 +16,21 @@
 
   <target name="jar" depends="compile">
     <mkdir dir="${jar.dir}"/>
+  	<mkdir dir="${nativelibs.dir}"/>
     <jar destfile="${jar.dir}/wfdbapp.jar" basedir="${classes.dir}">
       <manifest>
         <attribute name="Main-Class" value="org.physionet.wfdb.rdsamp"/>
       </manifest>
     </jar>
-
-  	<!-- to copy data & images folders' contents to dist folder on build. -->
-  	 <property name="nativelibs.dir" value="./build/nativelibs" />
-  	 <copy todir="${nativelibs.dir}">
+    <exec executable="rsync">
+        <arg line="-r ${basedir}${file.separator}nativelibs${file.separator} 
+        	${basedir}${file.separator}${nativelibs.dir}${file.separator}"/>
+    </exec>    			
+  	<!--to copy data & images folders' contents to dist folder on build.  
+  	 <copy todir="${nativelibs.dir}" overwrite="true">
   	   <fileset dir="./nativelibs" />
   	 </copy>
-  	 <echo level="info" message="Native Libs folder content was copied."/>
+  	 <echo level="info" message="Native Libs folder content was copied."/> -->
   </target>
+
 </project>
