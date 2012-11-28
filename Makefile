@@ -1,5 +1,14 @@
 #Makefile for wfdb-java-applications
 
+#NOTE: this make file uses Eclipse and Ant to build the jar file headlessly.
+#The Ant build.xml file can be modified from within the Eclipse prooject 
+#by right clicking on the file and selecting "Run As ..." -> "Ant Build..."
+#Using this option allows you to modify the build file in an Eclipse compatible
+#way so that any external libraries (ie, jcommon.jar) will be included in the 
+#headless build process.
+
+
+
 #Output Settings (defined in build.xml)
 JAR_DIR := ./build/jar/
 JAR_NAME :=  $(JAR_DIR)wfdbapp.jar

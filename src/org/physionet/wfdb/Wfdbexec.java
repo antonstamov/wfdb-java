@@ -221,7 +221,7 @@ public class Wfdbexec {
 		fileSeparator=System.getProperty("file.separator");
 		osName=System.getProperty("os.name");
 		osName=osName.replace(" ","");
-		WFDB_NATIVE_BIN_FOLDER="build" + fileSeparator + "nativelibs";
+		WFDB_NATIVE_BIN_FOLDER="nativelibs";
 		String jar_bin_dir;
 		String path = Wfdbexec.class.getProtectionDomain().getCodeSource().getLocation().getPath();
 		try {
@@ -230,24 +230,15 @@ public class Wfdbexec {
 			jar_bin_dir="";
 			e.printStackTrace();
 		}
-	
-		int endIndex=0;
-		if(jar_bin_dir.contains(".jar")){
-			//Running from a JAR file
-			endIndex=jar_bin_dir.length()-1;
-		}else{
-			//In IDE mode 
-			//Remove the /bin/ from the Eclipse project to get the WFDB-Java 
-			//root directory
-			endIndex=jar_bin_dir.lastIndexOf(fileSeparator+"bin"+fileSeparator);
-		}
 		
-		WFDB_JAVA_HOME= jar_bin_dir.substring(0, endIndex)+fileSeparator;
+		
+		WFDB_JAVA_HOME= jar_bin_dir;
+		System.out.println(WFDB_JAVA_HOME);
 		//Set path to executables based on system/arch
 		WFDB_NATIVE_BIN= WFDB_JAVA_HOME + WFDB_NATIVE_BIN_FOLDER + fileSeparator + 
 						 osName.toLowerCase() + "-" + osArch.toLowerCase() 
 						 + fileSeparator + "bin" + fileSeparator;
-		 
+		System.out.println(WFDB_NATIVE_BIN); 
 		arch_library_path= WFDB_JAVA_HOME + WFDB_NATIVE_BIN_FOLDER + fileSeparator + 
 		 osName.toLowerCase() + "-" + osArch.toLowerCase() 
 		 + fileSeparator + "lib" + fileSeparator;
