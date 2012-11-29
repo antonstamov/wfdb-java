@@ -68,7 +68,7 @@ public class Wfdbexec {
 	protected static Map<String,String> env;
 	protected static String LIBRARY_PATH;
 	protected static String arch_library_path;
-		
+
 	//Abstracts be implemented by inherited classes
 	public String help() {
 		return null;
@@ -119,11 +119,11 @@ public class Wfdbexec {
 			}
 		}
 	}
-	
+
 	protected int get_num_arguments() {
 		return argumentLabels.size();
 	}
-	
+
 	public String get_command_line() {
 		String commandLine = "";
 		for(String argument: commandInput) {
@@ -131,13 +131,13 @@ public class Wfdbexec {
 		}
 		return commandLine;
 	}
-	
+
 	public ArrayList<String> execToStringList() {
 		gen_exec_arguments();
 		ProcessBuilder launcher = new ProcessBuilder();
 		launcher.redirectErrorStream(true);
 		ArrayList<String> results= new ArrayList<String>();
-	
+
 		env = launcher.environment();
 		env.put(LIBRARY_PATH,arch_library_path);
 		launcher.command(getCommandInput());
@@ -156,17 +156,17 @@ public class Wfdbexec {
 		}
 		return results;
 	}
-	
+
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public ArrayList[] execTo2DString() {
 		gen_exec_arguments();
 		ProcessBuilder launcher = new ProcessBuilder();
 		launcher.redirectErrorStream(true);
-	
+
 		ArrayList[] results = new ArrayList[2];
 		results[0] = new ArrayList<String>();
 		results[1] = new ArrayList<String>();
-		
+
 		env = launcher.environment();
 		env.put(LIBRARY_PATH,arch_library_path);
 		launcher.command(getCommandInput());
@@ -189,13 +189,13 @@ public class Wfdbexec {
 		}
 		return results;
 	}
-	
+
 	public String execToString() {
 		gen_exec_arguments();
 		ProcessBuilder launcher = new ProcessBuilder();
 		launcher.redirectErrorStream(true);
 		String results="";
-	
+
 		env = launcher.environment();
 		env.put(LIBRARY_PATH,arch_library_path);
 		launcher.command(getCommandInput());
@@ -230,24 +230,33 @@ public class Wfdbexec {
 			jar_bin_dir="";
 			e.printStackTrace();
 		}
-		
-		
-		WFDB_JAVA_HOME= jar_bin_dir;
+
+
+		if(jar_bin_dir.endsWith(".jar")){
+			//In JAR package, remove jar directory to get root location
+			String[] jar_name=jar_bin_dir.split(fileSeparator);
+			String tmpStr=fileSeparator + jar_name[jar_name.length-2] 
+					+fileSeparator+ jar_name[jar_name.length-1];
+			WFDB_JAVA_HOME=jar_bin_dir.replace(tmpStr,"")+fileSeparator;
+			
+		} else{
+			WFDB_JAVA_HOME= jar_bin_dir;
+		}
 		//Set path to executables based on system/arch
 		WFDB_NATIVE_BIN= WFDB_JAVA_HOME + WFDB_NATIVE_BIN_FOLDER + fileSeparator + 
-						 osName.toLowerCase() + "-" + osArch.toLowerCase() 
-						 + fileSeparator + "bin" + fileSeparator; 
+				osName.toLowerCase() + "-" + osArch.toLowerCase() 
+				+ fileSeparator + "bin" + fileSeparator;
 		arch_library_path= WFDB_JAVA_HOME + WFDB_NATIVE_BIN_FOLDER + fileSeparator + 
-		 osName.toLowerCase() + "-" + osArch.toLowerCase() 
-		 + fileSeparator + "lib" + fileSeparator;
-		
+				osName.toLowerCase() + "-" + osArch.toLowerCase() 
+				+ fileSeparator + "lib" + fileSeparator;
 		arch_library_path= arch_library_path + ":" + WFDB_JAVA_HOME + WFDB_NATIVE_BIN_FOLDER + fileSeparator + 
-		 osName.toLowerCase() + "-" + osArch.toLowerCase() 
-		 + fileSeparator + "lib64" + fileSeparator;	
-		 LIBRARY_PATH="LD_LIBRARY_PATH";
+				osName.toLowerCase() + "-" + osArch.toLowerCase() 
+				+ fileSeparator + "lib64" + fileSeparator;	
+		LIBRARY_PATH="LD_LIBRARY_PATH";
+
 	}
-	
-	
+
+
 
 
 } //Of class
