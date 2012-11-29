@@ -2,9 +2,23 @@
 This is a collection of Java wrappers to the WFDB Application Software. 
 The wrappers call compiled WFDB native code, supported only on Windows, Mac, and Linux (32 and 64 bits).
 
+NOTE:
+
+When compiling Java class make sure to change appropiate setting in the compiler to 
+target the appropiate JRE version of MATLAB. To find the MATLAB JRE version, type 
+the following command in MATLAB:
+
+lower(char(java.lang.System.getProperty('java.version')))
+
+Failure to take this into account will result in failure to find class when attemping
+to use it:
+
+??? Error using ==> javaObject No class org.wfdb.etc can be located on Java class path
+
+
+
 
 Current supported classes:
-
 
  
 For headless build, run:
