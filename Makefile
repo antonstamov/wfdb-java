@@ -34,9 +34,10 @@ TEST_RDSAMP := $(JTEST) org.physionet.wfdb.examples.RdsampEx1
 .PHONY: jar
 jar: 
 	$(JAVA) $(JARFLAGS) 	
-	
+
+.INTERMEDIATE: test	
 test: jar
-	echo -e "\nTesting Toolbox...\n"
 	$(TEST_RDSAMP) 
+	
 	
 		
