@@ -1,6 +1,6 @@
 package org.physionet.wfdb.examples;
 
-import java.util.List;
+import java.util.HashMap;
 
 import org.physionet.wfdb.physiobank.PhysioNetDB;
 
@@ -10,10 +10,10 @@ public class PhysioNetDBEx2 {
 		// Example showing how to all the records from one database at PhysioNet (output of PhysioNetDBEx1)
 
 		//Query the server and load the results into pnDB
-		List<PhysioNetDB> pnDBList=PhysioNetDB.getPhysioNetDBList();
+		HashMap<String,PhysioNetDB> pnDBMap=PhysioNetDB.getPhysioNetDBMap();
 		
 		//Print all records associated with the first database
-		pnDBList.get(0).printDBRecordList();
+		pnDBMap.get("mitdb").printDBRecordList();
 		
 
 	}
