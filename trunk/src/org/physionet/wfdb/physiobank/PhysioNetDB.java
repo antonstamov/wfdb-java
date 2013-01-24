@@ -107,6 +107,30 @@ public class PhysioNetDB {
 		}
 		return physionetDBList;
 	}
+	
+	public static HashMap<String,PhysioNetDB> getPhysioNetDBMap(){
+		String inputLine;
+		BufferedReader in = null;
+		HashMap<String,PhysioNetDB> physionetDBMap= new HashMap<String,PhysioNetDB>();
+		try {
+			URL oracle = new URL(DB_LIST);
+			in = new BufferedReader(
+					new InputStreamReader(oracle.openStream()));
+			String[] tmpStr;
+			String tmpname;
+			String tmpInfo;
+			while ((inputLine = in.readLine()) != null){
+				tmpStr=inputLine.split("\\t");
+				tmpname=tmpStr[0];
+				tmpInfo=(inputLine.replaceFirst(tmpname,"")).replaceAll("\\t","");
+				physionetDBMap.put(tmpname,new PhysioNetDB(tmpname,tmpInfo));
+			}			
+			in.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return physionetDBMap;
+	}
 
 	public void printDBInfo(){
 		System.out.println(name);
