@@ -45,6 +45,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.net.URL;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -223,6 +224,8 @@ public class Wfdbexec {
 		WFDB_NATIVE_BIN_FOLDER="nativelibs";
 		String jar_bin_dir;
 		String path = Wfdbexec.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+		URL pp = Wfdbexec.class.getProtectionDomain().getCodeSource().getLocation();
+	
 		try {
 			jar_bin_dir=URLDecoder.decode(path, "UTF-8");
 		} catch (UnsupportedEncodingException e) {
@@ -231,6 +234,7 @@ public class Wfdbexec {
 			e.printStackTrace();
 		}
 
+		
 
 		if(jar_bin_dir.endsWith(".jar")){
 			//In JAR package, remove jar directory to get root location
@@ -240,8 +244,11 @@ public class Wfdbexec {
 			WFDB_JAVA_HOME=jar_bin_dir.replace(tmpStr,"")+fileSeparator;
 			
 		} else{
-			WFDB_JAVA_HOME= jar_bin_dir;
+			String[] jar_name=jar_bin_dir.split(fileSeparator);
+			String tmpStr=fileSeparator + "build";
+			WFDB_JAVA_HOME=jar_bin_dir.replace(tmpStr,"")+fileSeparator;
 		}
+		System.out.println(WFDB_JAVA_HOME);
 		//Set path to executables based on system/arch
 		WFDB_NATIVE_BIN= WFDB_JAVA_HOME + WFDB_NATIVE_BIN_FOLDER + fileSeparator + 
 				osName.toLowerCase() + "-" + osArch.toLowerCase() 
