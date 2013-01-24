@@ -53,7 +53,6 @@ import java.util.Map;
 
 public class Wfdbexec {
 
-	private static final String TAG="Wfdbexec";
 	private String commandName;
 	protected static String WFDB_JAVA_HOME;
 	protected static String WFDB_NATIVE_BIN;
@@ -227,6 +226,7 @@ public class Wfdbexec {
 		try {
 			jar_bin_dir=URLDecoder.decode(path, "UTF-8");
 		} catch (UnsupportedEncodingException e) {
+			System.err.println("path = \n" + path);
 			jar_bin_dir="";
 			e.printStackTrace();
 		}
