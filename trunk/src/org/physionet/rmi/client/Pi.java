@@ -33,7 +33,7 @@ package org.physionet.rmi.client;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-import org.physionet.rmi.compute.PhysioNetTask;
+import org.physionet.rmi.interfaces.PhysioNetTask;
 
 
 public class Pi implements PhysioNetTask<BigDecimal>, Serializable {
