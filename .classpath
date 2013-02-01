@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" output="build" path="src"/>
+	<classpathentry kind="src" output="build" path="src">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="wfdb-java-app/nativelibs"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry exported="true" kind="lib" path="/afs/ecg.mit.edu/user/ikaro/home/common_linux/workspace/wfdblibs/jfreechart-1.0.14/lib/jfreechart-1.0.14.jar" sourcepath="/afs/ecg.mit.edu/user/ikaro/home/common_linux/workspace/wfdblibs/jfreechart-1.0.14.zip"/>
 	<classpathentry exported="true" kind="lib" path="/afs/ecg.mit.edu/user/ikaro/home/common_linux/workspace/wfdblibs/jcommon-1.0.18/jcommon-1.0.18.jar" sourcepath="/afs/ecg.mit.edu/user/ikaro/home/common_linux/workspace/wfdblibs/jcommon-1.0.18.zip"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/3"/>
-	<classpathentry kind="output" path="build/nativelibs"/>
+	<classpathentry kind="output" path="build/"/>
 </classpath>
