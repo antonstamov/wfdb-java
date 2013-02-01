@@ -33,7 +33,7 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.math.BigDecimal;
 
-import org.physionet.rmi.compute.PhysioNetCompute;
+import org.physionet.rmi.interfaces.PhysioNetCompute;
  
 public class ComputePi {
     public static void main(String args[]) {
@@ -41,7 +41,7 @@ public class ComputePi {
             System.setSecurityManager(new SecurityManager());
         }
         try {
-            String name = "Compute";
+            String name = "PhysioNetCompute";
             Registry registry = LocateRegistry.getRegistry(args[0]);
             PhysioNetCompute comp = (PhysioNetCompute) registry.lookup(name);
             Pi task = new Pi(Integer.parseInt(args[1]));

@@ -29,12 +29,12 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.physionet.rmi.engine;
+package org.physionet.rmi.server;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 
-import org.physionet.rmi.compute.*;
+import org.physionet.rmi.interfaces.*;
 
 
 public class ComputeEngine implements PhysioNetCompute {
@@ -57,7 +57,7 @@ public class ComputeEngine implements PhysioNetCompute {
 		     
 			
 			
-			 String name ="PhysioNetCompute";
+			String name ="PhysioNetCompute";
 			PhysioNetCompute engine = new ComputeEngine();
 			PhysioNetCompute stub = (PhysioNetCompute) 
 					UnicastRemoteObject.exportObject(engine,0);

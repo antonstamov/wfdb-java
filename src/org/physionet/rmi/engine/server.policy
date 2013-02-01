@@ -1,3 +1,0 @@
-grant codeBase "file:/home/ikaro/workspace/wfdb-java-app/" {
-    permission java.security.AllPermission;
-};

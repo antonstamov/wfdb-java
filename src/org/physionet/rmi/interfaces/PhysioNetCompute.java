@@ -29,8 +29,12 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.physionet.rmi.compute;
+package org.physionet.rmi.interfaces;
 
-public interface PhysioNetTask<T> {
-	T execute();
+import java.rmi.Remote;
+import java.rmi.RemoteException;
+
+public interface PhysioNetCompute  extends Remote {
+	<T> T executeTask(PhysioNetTask<T> t) throws RemoteException;
+
 }
