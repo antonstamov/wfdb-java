@@ -10,7 +10,7 @@ the following command in MATLAB:
 
 lower(char(java.lang.System.getProperty('java.version')))
 
-Failure to take this into account will result in failure to find class when attemping
+Failure to take this into account will result in failure to find class when attempting
 to use it:
 
 ??? Error using ==> javaObject No class org.wfdb.etc can be located on Java class path

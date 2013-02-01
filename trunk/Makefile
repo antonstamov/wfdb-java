@@ -14,7 +14,7 @@ JAR_DIR := ./build/jar/
 JAR_NAME :=  $(JAR_DIR)wfdbapp.jar
 
 #Java Tools
-JAVA := /usr/bin/java
+JAVA := /afs/ecg.mit.edu/software/java/amd64_linux26/java_v1.6.0_26/jre/bin/java
 BUILDFILE_DIR := /home/ikaro/workspace/wfdb-java-app/build.xml
 ECLIPSEPATH := /lib64/eclipse/plugins/
 ANTPATH := org.eclipse.ant.core.antRunner
@@ -26,7 +26,7 @@ JARFLAGS := -jar		\
 
 
 #Tests 
-JTEST := java -cp $(JAR_NAME)
+JTEST := $(JAVA) -cp $(JAR_NAME)
 TEST_PHYSIONETDB := $(JTEST) org.physionet.wfdb.physiobank.PhysioNetDB
 TEST_RDSAMP := $(JTEST) org.physionet.wfdb.examples.RdsampEx1
 
