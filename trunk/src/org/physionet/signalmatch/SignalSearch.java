@@ -34,7 +34,7 @@
 
 //Very basic example of how to print 10 samples of a WFDB record
 //into the standard output
-package org.physionet.wfdb.examples;
+package org.physionet.signalmatch;
 import java.util.ArrayList;
 
 import org.physionet.wfdb.Wfdbdesc;
@@ -53,17 +53,11 @@ public class SignalSearch {
 
 		//Loop through all the records and select the ones containing the desired
 		//signal type
-
-		Wfdbdesc wfdbdesc= new Wfdbdesc();
 		ArrayList<String> infoList=new ArrayList<String>();
-		for(PhysioNetRecord thisRec: recList){	
-			//System.out.println(thisRec.getSignalList().toString());
-			tmpList=thisRec.getSignalList().toString().contains(signalType);
+		for(PhysioNetRecord thisRec: recList){
+			tmpList=thisRec.getSignalStringList().toString().contains(signalType);
 			if(tmpList){
-				wfdbdesc.setArgumentValue(Wfdbdesc.Arguments.recordName,
-						thisRec.getRecordName());
-				infoList = wfdbdesc.execToStringList();
-				for(String k: infoList)
+				for(String k: thisRec.getWfdbdes())
 					System.out.println(k);
 				break;
 			}

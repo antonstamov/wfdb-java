@@ -248,7 +248,6 @@ public class Wfdbexec {
 			String tmpStr=fileSeparator + "build";
 			WFDB_JAVA_HOME=jar_bin_dir.replace(tmpStr,"")+fileSeparator;
 		}
-		System.out.println(WFDB_JAVA_HOME);
 		//Set path to executables based on system/arch
 		WFDB_NATIVE_BIN= WFDB_JAVA_HOME + WFDB_NATIVE_BIN_FOLDER + fileSeparator + 
 				osName.toLowerCase() + "-" + osArch.toLowerCase() 

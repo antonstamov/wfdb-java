@@ -58,7 +58,7 @@
 
 package org.physionet.wfdb.examples;
 import java.util.ArrayList;
-import org.physionet.graphics.PlotWaveform;
+import org.physionet.graphics.Plot;
 import org.physionet.wfdb.Rdsamp;
 
 public class PlotECGDemo1 {
@@ -74,7 +74,7 @@ public class PlotECGDemo1 {
 		rdsampexec.setArgumentValue(Rdsamp.PrintTimeFormatLabel.P);
 		rdsampexec.setArgumentValue(Rdsamp.Arguments.recordName, "mitdb/100");
 		ArrayList<String>[] data= rdsampexec.execTo2DString();
-		PlotWaveform demo = new PlotWaveform(
+		Plot demo = new Plot(
 				"ECG","Time (ms)","Amplitude (mV)",data);
 		demo.showPlot();
 	}
