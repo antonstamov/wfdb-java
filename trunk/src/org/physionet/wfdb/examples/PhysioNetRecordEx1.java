@@ -7,7 +7,7 @@ import org.physionet.wfdb.physiobank.PhysioNetRecord;
 
 public class PhysioNetRecordEx1 {
 	//Example showing how to use PhysioNetRecord class to obtain information regarding
-	//a record on a PhysioNet server
+	//a record from the PhysioNet server
 	
 	public static void main(String[] args) {
 	

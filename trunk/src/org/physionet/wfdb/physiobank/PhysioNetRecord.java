@@ -61,7 +61,7 @@ public class PhysioNetRecord {
 		return dbName;
 	}
 	
-	public ArrayList<String> getSingalList() {
+	public ArrayList<String> getSignalList() {
 		return signalList;
 	}
 
