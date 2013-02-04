@@ -7,7 +7,8 @@ import org.physionet.wfdb.physiobank.PhysioNetDB;
 public class PhysioNetDBEx2 {
 
 	public static void main(String[] args) {
-		// Example showing how to all the records from one database at PhysioNet (output of PhysioNetDBEx1)
+		// Example showing how to print all the records from one database 
+		// at PhysioNet (output of PhysioNetDBEx1)
 
 		//Query the server and load the results into pnDB
 		HashMap<String,PhysioNetDB> pnDBMap=PhysioNetDB.getPhysioNetDBMap();
