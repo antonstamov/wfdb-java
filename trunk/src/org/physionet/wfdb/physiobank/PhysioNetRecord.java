@@ -45,7 +45,7 @@ public class PhysioNetRecord {
 	private final String name;
 	private final String dbName;
 	private ArrayList<String> signalStringList;
-	private ArrayList<PhysioNetRecord> signalList;
+	private ArrayList<PhysioNetSignal> signalList;
 	private Wfdbdesc wfdbdesc=new Wfdbdesc();
 
 	PhysioNetRecord(String db,String recname){
@@ -53,6 +53,7 @@ public class PhysioNetRecord {
 		dbName=db;
 		signalStringList = new ArrayList<String>();
 		wfdbdesc.setArgumentValue(Wfdbdesc.Arguments.recordName,name);
+		signalList=new ArrayList<PhysioNetSignal>();
 	}
 	PhysioNetRecord(String db,String recname,ArrayList<String> sgList ){
 		name=recname;
@@ -60,6 +61,7 @@ public class PhysioNetRecord {
 		signalStringList = sgList;
 		wfdbdesc=new Wfdbdesc();
 		wfdbdesc.setArgumentValue(Wfdbdesc.Arguments.recordName,name);
+		signalList=new ArrayList<PhysioNetSignal>();
 	}
 
 	public String getRecordName() {
@@ -88,7 +90,12 @@ public class PhysioNetRecord {
 		}
 	}
 
-	public void loadSignalList() {
+	public void setSignalList(){
+		setSignalList(null);
+	}
+
+
+	public void setSignalList(String descFilter) {
 		//Parse information from wfdbdesc to populate the record list
 		ArrayList<String> tmpList= wfdbdesc.execToStringList();
 		String startTime=null;
@@ -96,18 +103,19 @@ public class PhysioNetRecord {
 		String lengthSample=null;
 		String samplingFrequency=null;
 		PhysioNetSignal tmpSignal=null;
+
+		//REGEXP Parsers
 		String groupRegex="^Group (\\d+), Signal (\\d+):";
 		//Regex to parse something like: "Length:    30:05.556 (650000 sample intervals)"
 		String lengthRegex="^Length:    (\\d+:\\d+.\\d+) \\((\\d+) sample intervals\\)";
-		
+
 		Pattern groupPattern = Pattern.compile(groupRegex);
 		Pattern lengthPattern = Pattern.compile(lengthRegex);
-		
+
 		Matcher groupMatch=null;
 		Matcher lengthMatch=null;
-		
-		int index=-1;
-		for(String i : tmpList){	
+
+		for(String i : tmpList){
 			if(i.startsWith("Starting time: ")){
 				startTime=i.replace("Starting time: ","");
 			}
@@ -122,23 +130,30 @@ public class PhysioNetRecord {
 			}else if (i.startsWith("Sampling frequency: ")) {
 				samplingFrequency=i.replace("Sampling frequency: ","");
 			}else if (i.startsWith("Group ")) {
-				index++;
-				tmpSignal=new PhysioNetSignal(index,name,dbName);
+				if(tmpSignal != null){
+					if(descFilter == null){
+						signalList.add(tmpSignal);
+					}else if(descFilter.equals(tmpSignal.getDescription())){					
+						signalList.add(tmpSignal);
+					}
+				}
+				tmpSignal=new PhysioNetSignal(signalList.size()+1,name,dbName);
 				tmpSignal.setStartTime(startTime);
 				tmpSignal.setLengthTime(lengthTime);
 				tmpSignal.setLengthSample(lengthSample);
 				tmpSignal.setSamplingFrequency(samplingFrequency);
+				
 				groupMatch=groupPattern.matcher(i);
 				groupMatch.find();
 				if(! groupMatch.group(1).isEmpty())
 					tmpSignal.setGroup(groupMatch.group(1));
 				if(! groupMatch.group(2).isEmpty())
 					tmpSignal.setSignalIndex(groupMatch.group(2));
+
 			}else if (i.startsWith(" File: ")) {
 				tmpSignal.setFile(i.replace(" File: ",""));
 			}else if (i.startsWith(" Description: ")) {
 				tmpSignal.setDescription(i.replace(" Description: ",""));
-				System.out.println("desc= " + tmpSignal.getDescription());
 			}else if (i.startsWith(" Gain: ")) {
 				tmpSignal.setGain(i.replace(" Gain: ",""));
 			}else if (i.startsWith(" Initial value: ")) {
@@ -158,9 +173,20 @@ public class PhysioNetRecord {
 			}			
 		} //end of for loop
 
-		tmpSignal.printSignalInfo();
+		//Add last signal to list
+		if(tmpSignal != null){
+			if(descFilter == null){
+				signalList.add(tmpSignal);
+			}else if(descFilter.equals(tmpSignal.getDescription())){					
+				signalList.add(tmpSignal);
+			}
+		}
+
 	}
 
+	public ArrayList<PhysioNetSignal> getSignalList() {
+		return signalList;
+	}
 
 	public static void main(String[] args) {
 

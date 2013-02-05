@@ -46,32 +46,18 @@ public class SignalSearch {
 	public static void main(String[] args) {
 
 		String db="mitdb";
-		String signalType="ECG2	V1";
+		String signalType="V5";
 		PhysioNetDB pnDBMap=new PhysioNetDB(db);	
 		ArrayList<PhysioNetRecord> recList = pnDBMap.getDBRecordList();
-		boolean tmpList;
-
-		//Loop through all the records and select the ones containing the desired
-		//signal type
-		ArrayList<String> infoList=new ArrayList<String>();
+		ArrayList<PhysioNetSignal> list;
+		int count=0;
 		for(PhysioNetRecord thisRec: recList){
-			tmpList=thisRec.getSignalStringList().toString().contains(signalType);
-			if(tmpList){
-			}
-			thisRec.loadSignalList();
-			break;
+			thisRec.setSignalList(signalType);
+			list = thisRec.getSignalList();
+			if(list.size()>0)
+				count++;
 		}
-
-		//PhysioNetRecord thisRec=proccessList.get(0);
-		//System.out.println(wfdbdesc.execToString());
-
-		/*
-		Rdsamp rdsampexec = new Rdsamp();
-		//rdsampexec.setArgumentValue(Rdsamp.Arguments.stopTime, "s120");
-		rdsampexec.setArgumentValue(Rdsamp.PrintTimeFormatLabel.p);
-		rdsampexec.setArgumentValue(Rdsamp.Arguments.recordName, db);
-		System.out.println(rdsampexec.execToString());
-		 */
+		System.out.println("C= " + count);
 	}
 
 }
