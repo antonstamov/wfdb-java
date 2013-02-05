@@ -57,11 +57,9 @@ public class SignalSearch {
 		for(PhysioNetRecord thisRec: recList){
 			tmpList=thisRec.getSignalStringList().toString().contains(signalType);
 			if(tmpList){
-				for(String k: thisRec.getWfdbdes())
-					System.out.println(k);
-				break;
 			}
-
+			thisRec.loadSignalList();
+			break;
 		}
 
 		//PhysioNetRecord thisRec=proccessList.get(0);

@@ -1,21 +1,17 @@
 package org.physionet.wfdb.physiobank;
 
-import java.util.ArrayList;
-
-import org.physionet.graphics.Plot;
-import org.physionet.wfdb.Rdsamp;
-import org.physionet.wfdb.Wfdbdesc;
 
 public class PhysioNetSignal {
 
 	private final String recName;
 	private final String dbName;
 	private Integer recordIndex=null;
+	private String signalIndex=null;
 	private String startTime=null;
 	private String lengthTime=null;
 	private String lengthSample=null;
 	private String samplingFrequency=null;
-	private String  Group=null;
+	private String Group=null;
 	private String file=null;
 	private String description=null;
 	private String initialValue=null;
@@ -31,13 +27,34 @@ public class PhysioNetSignal {
 		setRecordIndex(mrecordIndex);
 		recName=mrecName;
 		dbName=mdbName;
-		//initializeSignal();
 	}
-
-	public static void main(String[] args) {
-		PhysioNetSignal sig = new PhysioNetSignal(0,"101","mitdb");
+	
+	public PhysioNetSignal(String mrecName, String mdbName){
+		recName=mrecName;
+		dbName=mdbName;
+	}
+	
+	public void printSignalInfo(){
+		System.out.println("DB/Record Name: " + dbName + "/" + recName);
+		System.out.println("Record/Signal Index: " + recordIndex + "/" + signalIndex);
+		System.out.println("Group: " + Group);
+		System.out.println("\tStart Time:\t\t" + startTime);
+		System.out.println("\tLength Time:\t\t" + lengthTime);
+		System.out.println("\tNumber of Samples:\t" + lengthSample);
+		System.out.println("\tSampling Frequency:\t" + samplingFrequency);
+		System.out.println("\tFile:\t\t\t" + file);
+		System.out.println("\tDescription:\t\t" + description);
+		System.out.println("\tInitial Value:\t\t" + initialValue);
+		System.out.println("\tGain:\t\t\t" + gain);
+		System.out.println("\tFormat:\t\t\t" + format);
+		System.out.println("\tI\\O:\t\t\t" + io);
+		System.out.println("\tADC Resolution:\t\t" + adcResolution);
+		System.out.println("\tADC Zero:\t\t" + adcZero);
+		System.out.println("\tBaseline:\t\t" + baseline);
+		System.out.println("\tChecksum:\t\t" + checksum);
 		
 	}
+	
 
 	public String getRecName() {
 		return recName;
@@ -173,6 +190,14 @@ public class PhysioNetSignal {
 
 	public void setChecksum(String checksum) {
 		this.checksum = checksum;
+	}
+
+	public String getSignalIndex() {
+		return signalIndex;
+	}
+
+	public void setSignalIndex(String string) {
+		this.signalIndex = string;
 	}
 	
 }

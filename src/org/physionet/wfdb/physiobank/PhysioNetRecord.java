@@ -35,6 +35,8 @@
 package org.physionet.wfdb.physiobank;
 
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.physionet.wfdb.Wfdbdesc;
 
@@ -51,7 +53,6 @@ public class PhysioNetRecord {
 		dbName=db;
 		signalStringList = new ArrayList<String>();
 		wfdbdesc.setArgumentValue(Wfdbdesc.Arguments.recordName,name);
-		initializeSignalList();
 	}
 	PhysioNetRecord(String db,String recname,ArrayList<String> sgList ){
 		name=recname;
@@ -59,7 +60,6 @@ public class PhysioNetRecord {
 		signalStringList = sgList;
 		wfdbdesc=new Wfdbdesc();
 		wfdbdesc.setArgumentValue(Wfdbdesc.Arguments.recordName,name);
-		initializeSignalList();
 	}
 
 	public String getRecordName() {
@@ -87,26 +87,38 @@ public class PhysioNetRecord {
 			System.out.println("\t\t" + sig);
 		}
 	}
-	private void initializeSignalList() {
+
+	public void loadSignalList() {
 		//Parse information from wfdbdesc to populate the record list
 		ArrayList<String> tmpList= wfdbdesc.execToStringList();
-		String startingTime=null;
 		String startTime=null;
 		String lengthTime=null;
 		String lengthSample=null;
 		String samplingFrequency=null;
 		PhysioNetSignal tmpSignal=null;
+		String groupRegex="^Group (\\d+), Signal (\\d+):";
+		//Regex to parse something like: "Length:    30:05.556 (650000 sample intervals)"
+		String lengthRegex="^Length:    (\\d+:\\d+.\\d+) \\((\\d+) sample intervals\\)";
+		
+		Pattern groupPattern = Pattern.compile(groupRegex);
+		Pattern lengthPattern = Pattern.compile(lengthRegex);
+		
+		Matcher groupMatch=null;
+		Matcher lengthMatch=null;
+		
 		int index=-1;
-
 		for(String i : tmpList){	
 			if(i.startsWith("Starting time: ")){
-				startingTime=i.replace("Starting time: ","");
+				startTime=i.replace("Starting time: ","");
 			}
 			else if (i.startsWith("Length: ")) {
-				//String should have a format similar to :
-				//Length:    30:05.556 (650000 sample intervals)
-				i=i.replace("Length: ","");
-				
+				//String should have a format similar to :Length:    30:05.556 (650000 sample intervals)
+				lengthMatch=lengthPattern.matcher(i);
+				lengthMatch.find();
+				if(! lengthMatch.group(1).isEmpty())
+					lengthTime=lengthMatch.group(1);
+				if(! lengthMatch.group(2).isEmpty())
+					lengthSample=lengthMatch.group(2);
 			}else if (i.startsWith("Sampling frequency: ")) {
 				samplingFrequency=i.replace("Sampling frequency: ","");
 			}else if (i.startsWith("Group ")) {
@@ -116,32 +128,37 @@ public class PhysioNetRecord {
 				tmpSignal.setLengthTime(lengthTime);
 				tmpSignal.setLengthSample(lengthSample);
 				tmpSignal.setSamplingFrequency(samplingFrequency);
-				//TODO: Finish with regexp parsing 			//Group 0, Signal 0:
-				//tmpSignal.setGroup(group);
-				
-			}else if (i.startsWith("File: ")) {
-				tmpSignal.setFile(i.replace("File: ",""));
-			}else if (i.startsWith("Description: ")) {
-				tmpSignal.setFile(i.replace("File: ",""));
-			}else if (i.startsWith("Gain: ")) {
-				tmpSignal.setFile(i.replace("Gain: ",""));
-			}else if (i.startsWith("Initial value: ")) {
-				tmpSignal.setFile(i.replace("Initial value: ",""));
-			}else if (i.startsWith("Storage format: ")) {
-				tmpSignal.setFile(i.replace("Storage format: ",""));
-			}else if (i.startsWith("I/O:  ")) {
-				tmpSignal.setFile(i.replace("I/O:  ",""));
-			}else if (i.startsWith("ADC resolution:  ")) {
-				tmpSignal.setFile(i.replace("ADC resolution:  ",""));
-			}else if (i.startsWith("ADC zero:  ")) {
-				tmpSignal.setFile(i.replace("ADC zero:  ",""));
-			}else if (i.startsWith("Baseline:  ")) {
-				tmpSignal.setFile(i.replace("Baseline:  ",""));
-			}else if (i.startsWith("Checksum:  ")) {
-				tmpSignal.setFile(i.replace("Checksum:  ",""));
+				groupMatch=groupPattern.matcher(i);
+				groupMatch.find();
+				if(! groupMatch.group(1).isEmpty())
+					tmpSignal.setGroup(groupMatch.group(1));
+				if(! groupMatch.group(2).isEmpty())
+					tmpSignal.setSignalIndex(groupMatch.group(2));
+			}else if (i.startsWith(" File: ")) {
+				tmpSignal.setFile(i.replace(" File: ",""));
+			}else if (i.startsWith(" Description: ")) {
+				tmpSignal.setDescription(i.replace(" Description: ",""));
+				System.out.println("desc= " + tmpSignal.getDescription());
+			}else if (i.startsWith(" Gain: ")) {
+				tmpSignal.setGain(i.replace(" Gain: ",""));
+			}else if (i.startsWith(" Initial value: ")) {
+				tmpSignal.setInitialValue(i.replace(" Initial value: ",""));
+			}else if (i.startsWith(" Storage format: ")) {
+				tmpSignal.setFormat(i.replace(" Storage format: ",""));
+			}else if (i.startsWith(" I/O: ")) {
+				tmpSignal.setIo(i.replace(" I/O: ",""));
+			}else if (i.startsWith(" ADC resolution: ")) {
+				tmpSignal.setAdcResolution(i.replace(" ADC resolution: ",""));
+			}else if (i.startsWith(" ADC zero: ")) {
+				tmpSignal.setAdcZero(i.replace(" ADC zero: ",""));
+			}else if (i.startsWith(" Baseline: ")) {
+				tmpSignal.setBaseline(i.replace(" Baseline: ",""));
+			}else if (i.startsWith(" Checksum: ")) {
+				tmpSignal.setChecksum(i.replace(" Checksum: ",""));
 			}			
-		}
+		} //end of for loop
 
+		tmpSignal.printSignalInfo();
 	}
 
 
