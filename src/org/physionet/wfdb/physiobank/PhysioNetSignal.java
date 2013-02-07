@@ -26,19 +26,19 @@ public class PhysioNetSignal {
 	private String adcZero=null;
 	private String baseline=null;
 	private String checksum=null;
-	private Double data=null; //data in physical units
-	
+	private double[][] data=null; //data in physical units
+
 	public PhysioNetSignal(Integer mrecordIndex, String mrecName, String mdbName){
 		setRecordIndex(mrecordIndex);
 		recName=mrecName;
 		dbName=mdbName;
 	}
-	
+
 	public PhysioNetSignal(String mrecName, String mdbName){
 		recName=mrecName;
 		dbName=mdbName;
 	}
-	
+
 	public void printSignalInfo(){
 		System.out.println("DB/Record Name: " + dbName + "/" + recName);
 		System.out.println("Record/Signal Index: " + recordIndex + "/" + signalIndex);
@@ -57,29 +57,30 @@ public class PhysioNetSignal {
 		System.out.println("\tADC Zero:\t\t" + adcZero);
 		System.out.println("\tBaseline:\t\t" + baseline);
 		System.out.println("\tChecksum:\t\t" + checksum);
-		
+
 	}
-	
+
 	public void loadPhysicalData(){
-		//Calls RDSAMP to get data for this signal and converts it to Short
-		//Data is return
+		//Calls RDSAMP to get data for this signal
 		Rdsamp rdsampexec = new Rdsamp();
 		rdsampexec.setArgumentValue(Rdsamp.Arguments.stopTime, "s10");
 		rdsampexec.setArgumentValue(Rdsamp.PrintTimeFormatLabel.p);
-		rdsampexec.setArgumentValue(Rdsamp.Arguments.recordName,recName);
-		System.out.println(rdsampexec.execToStringList());
-		
-		//ArrayList<String>[] tmpData= rdsampexec.execTo2DString();
-		/*
-		ArrayList<String> ;
-		for(int i=0;i<tmpData.length;i++){
-			rowData=data[0];	
+		rdsampexec.setArgumentValue(Rdsamp.Arguments.recordName,
+					               dbName + "/" + recName);
+		try {
+			data=rdsampexec.execToDoubleArray();
+		}catch (Exception e){
+			System.err.println("Could not load data for signal: " +
+						recName);
+			e.printStackTrace();
 		}
 		
-		System.out.println(tmp);
-		*/
-		
 	}
+
+	public double[][] getPhysicalData(){
+		return data;
+	}
+
 	public String getRecName() {
 		return recName;
 	}
@@ -223,5 +224,5 @@ public class PhysioNetSignal {
 	public void setSignalIndex(String string) {
 		this.signalIndex = string;
 	}
-	
+
 }

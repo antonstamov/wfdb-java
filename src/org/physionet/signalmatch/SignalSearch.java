@@ -45,6 +45,17 @@ public class SignalSearch {
 
 	public static void main(String[] args) {
 
+		PhysioNetSignal sg= new PhysioNetSignal(0,"100","mitdb");
+		sg.loadPhysicalData();
+		double[][] data=sg.getPhysicalData();
+		for(int i=0;i<data.length;i++){
+			for(int k=0;k<data[0].length;k++){
+				System.out.print(i+" =" +data[i][k] +" ");	
+			}
+			System.out.println("");
+		}
+
+		/*s
 		String db="mitdb";
 		String signalType="V5";
 		PhysioNetDB pnDBMap=new PhysioNetDB(db);	
@@ -58,6 +69,7 @@ public class SignalSearch {
 				list.get(0).loadPhysicalData();
 			break;
 		}
+		 */
 	}
 
 }

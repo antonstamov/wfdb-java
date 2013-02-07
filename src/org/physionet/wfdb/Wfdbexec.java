@@ -181,7 +181,12 @@ public class Wfdbexec {
 				tmpArr=new Double[tmpStr.length];
 				//loop through columns
 				for(colInd=0;colInd<tmpStr.length;colInd++){
-					tmpArr[colInd]= Double.valueOf(tmpStr[colInd]);
+					try{	
+						tmpArr[colInd]= Double.valueOf(tmpStr[colInd]);
+					}catch (Exception e){
+						System.err.println("Could not convert: " +tmpStr[colInd]);
+						e.printStackTrace();
+					}
 				}
 				results.add(tmpArr);	
 			}
