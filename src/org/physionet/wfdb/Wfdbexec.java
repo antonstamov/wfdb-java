@@ -157,6 +157,53 @@ public class Wfdbexec {
 		return results;
 	}
 
+	public double[][] execToDoubleArray() {
+		gen_exec_arguments();
+		ProcessBuilder launcher = new ProcessBuilder();
+		launcher.redirectErrorStream(true);
+		ArrayList<Double[]>  results= new ArrayList<Double[]>();
+		double[][] data=null;
+		env = launcher.environment();
+		env.put(LIBRARY_PATH,arch_library_path);
+		launcher.command(getCommandInput());
+
+		try {
+			Process p = launcher.start();
+			BufferedReader output = new BufferedReader(new InputStreamReader(
+					p.getInputStream()));
+			String line;
+			String[] tmpStr=null;
+			Double[] tmpArr=null;
+			int colInd;
+			while ((line = output.readLine()) != null){
+				line=line.replaceFirst("\\s+","");
+				tmpStr=line.split("\\s+");
+				tmpArr=new Double[tmpStr.length];
+				//loop through columns
+				for(colInd=0;colInd<tmpStr.length;colInd++){
+					tmpArr[colInd]= Double.valueOf(tmpStr[colInd]);
+				}
+				results.add(tmpArr);	
+			}
+			p.waitFor();	
+
+			//Convert data to Double Array
+			data=new double[results.size()][tmpStr.length];
+			for(int i=0;i<results.size();i++){
+				Double[] tmpData=new Double[tmpStr.length];
+				tmpData=results.get(i);
+				 for(int k=0;k<tmpData.length;k++){
+					 data[i][k]=tmpData[k];
+				 }
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		return data;
+	}
+
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public ArrayList[] execTo2DString() {
 		gen_exec_arguments();
@@ -225,7 +272,7 @@ public class Wfdbexec {
 		String jar_bin_dir;
 		String path = Wfdbexec.class.getProtectionDomain().getCodeSource().getLocation().getPath();
 		URL pp = Wfdbexec.class.getProtectionDomain().getCodeSource().getLocation();
-	
+
 		try {
 			jar_bin_dir=URLDecoder.decode(path, "UTF-8");
 		} catch (UnsupportedEncodingException e) {
@@ -234,7 +281,7 @@ public class Wfdbexec {
 			e.printStackTrace();
 		}
 
-		
+
 
 		if(jar_bin_dir.endsWith(".jar")){
 			//In JAR package, remove jar directory to get root location
@@ -242,7 +289,7 @@ public class Wfdbexec {
 			String tmpStr=fileSeparator + jar_name[jar_name.length-2] 
 					+fileSeparator+ jar_name[jar_name.length-1];
 			WFDB_JAVA_HOME=jar_bin_dir.replace(tmpStr,"")+fileSeparator;
-			
+
 		} else{
 			String[] jar_name=jar_bin_dir.split(fileSeparator);
 			String tmpStr=fileSeparator + "build";

@@ -55,9 +55,9 @@ public class SignalSearch {
 			thisRec.setSignalList(signalType);
 			list = thisRec.getSignalList();
 			if(list.size()>0)
-				count++;
+				list.get(0).loadPhysicalData();
+			break;
 		}
-		System.out.println("C= " + count);
 	}
 
 }
