@@ -35,6 +35,8 @@
 //Very basic example of how to print 10 samples of a WFDB record
 //into the standard output
 package org.physionet.wfdb.examples;
+import java.util.ArrayList;
+
 import org.physionet.wfdb.Rdsamp;
 
 
@@ -46,7 +48,16 @@ public class RdsampEx1 {
 		rdsampexec.setArgumentValue(Rdsamp.Arguments.stopTime, "s10");
 		rdsampexec.setArgumentValue(Rdsamp.PrintTimeFormatLabel.p);
 		rdsampexec.setArgumentValue(Rdsamp.Arguments.recordName, "mitdb/100");
-		System.out.println(rdsampexec.execToString());
+		double[][] data = rdsampexec.execToDoubleArray();
+		
+		for(int i=0;i<data.length;i++){
+			for(int k=0;k<data[0].length;k++){
+				System.out.print(data[i][k] +" ");	
+			}
+			System.out.println("");
+		}
+		
+			
 	}
 	
 }

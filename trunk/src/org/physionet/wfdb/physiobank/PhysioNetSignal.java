@@ -1,5 +1,9 @@
 package org.physionet.wfdb.physiobank;
 
+import java.util.ArrayList;
+
+import org.physionet.wfdb.Rdsamp;
+
 
 public class PhysioNetSignal {
 
@@ -22,6 +26,7 @@ public class PhysioNetSignal {
 	private String adcZero=null;
 	private String baseline=null;
 	private String checksum=null;
+	private Double data=null; //data in physical units
 	
 	public PhysioNetSignal(Integer mrecordIndex, String mrecName, String mdbName){
 		setRecordIndex(mrecordIndex);
@@ -55,7 +60,26 @@ public class PhysioNetSignal {
 		
 	}
 	
-
+	public void loadPhysicalData(){
+		//Calls RDSAMP to get data for this signal and converts it to Short
+		//Data is return
+		Rdsamp rdsampexec = new Rdsamp();
+		rdsampexec.setArgumentValue(Rdsamp.Arguments.stopTime, "s10");
+		rdsampexec.setArgumentValue(Rdsamp.PrintTimeFormatLabel.p);
+		rdsampexec.setArgumentValue(Rdsamp.Arguments.recordName,recName);
+		System.out.println(rdsampexec.execToStringList());
+		
+		//ArrayList<String>[] tmpData= rdsampexec.execTo2DString();
+		/*
+		ArrayList<String> ;
+		for(int i=0;i<tmpData.length;i++){
+			rowData=data[0];	
+		}
+		
+		System.out.println(tmp);
+		*/
+		
+	}
 	public String getRecName() {
 		return recName;
 	}
